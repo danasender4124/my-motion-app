@@ -1,0 +1,35 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg:       #07080C;
+  --orange:   #FF4D00;
+  --gold:     #FFB300;
+  --white:    #F2EDE6;
+  --muted:    rgba(242, 237, 230, 0.45);
+  --font:     'Heebo', system-ui, sans-serif;
+}
+
+html, body, #root {
+  width: 100%;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
