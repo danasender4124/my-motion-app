@@ -68,7 +68,7 @@ const Results: React.FC = () => {
                     className="px-4 py-2 flex items-center justify-between text-xs"
                     style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(242,237,230,0.45)' }}
                   >
-                    <span>מחזור {g.round}</span>
+                    <span>{g.round}</span>
                     <span>{g.date}</span>
                   </div>
 
@@ -125,7 +125,7 @@ const Results: React.FC = () => {
                   className="px-4 py-2 flex items-center justify-between text-xs"
                   style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(242,237,230,0.45)' }}
                 >
-                  <span>מחזור {g.round}</span>
+                  <span>{g.round}</span>
                   <span>{g.date} · {g.time}</span>
                 </div>
                 <div className="px-4 py-4 flex items-center justify-between gap-3">

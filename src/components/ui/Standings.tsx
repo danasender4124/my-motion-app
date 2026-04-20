@@ -12,7 +12,7 @@ const Standings: React.FC = () => {
           טבלת הליגה · עונת 2024/25
         </h2>
         <span className="text-xs font-medium px-3 py-1 rounded-full" style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00', border: '1px solid rgba(255,77,0,0.3)' }}>
-          מחזור 22 מתוך 26
+          עונה 2025 · פלייאוף
         </span>
       </div>
 
