@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TOP_SCORERS } from '../../data/league';
+import SectionTabs, { Tab } from './SectionTabs';
 
 type StatKey = 'ppg' | 'rpg' | 'apg';
+
+const STAT_TABS: Tab[] = [
+  { id: 'ppg', label: 'נקודות' },
+  { id: 'rpg', label: 'ריבאונדים' },
+  { id: 'apg', label: 'בישולים' },
+];
 
 const STAT_LABELS: Record<StatKey, string> = {
   ppg: 'נקודות למשחק',
@@ -20,21 +27,11 @@ const Stats: React.FC = () => {
     <section id="stats" className="py-12 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>מובילות הליגה</h2>
-        <div className="flex rounded-xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
-          {(Object.keys(STAT_LABELS) as StatKey[]).map(key => (
-            <button
-              key={key}
-              onClick={() => setStat(key)}
-              className="px-4 py-2 text-xs font-semibold transition-all duration-200"
-              style={{
-                background: stat === key ? '#FF4D00' : 'transparent',
-                color: stat === key ? '#fff' : 'rgba(242,237,230,0.55)',
-              }}
-            >
-              {key.toUpperCase()}
-            </button>
-          ))}
-        </div>
+        <SectionTabs
+          tabs={STAT_TABS}
+          active={stat}
+          onChange={(id) => setStat(id as StatKey)}
+        />
       </div>
 
       <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
