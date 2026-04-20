@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { RECENT_RESULTS, UPCOMING_GAMES } from '../../data/league';
+import SectionTabs from './SectionTabs';
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 20 },
@@ -16,25 +17,30 @@ const Results: React.FC = () => {
   return (
     <section id="results" className="py-12 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
       {/* Section header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>
-          משחקים · מחזור 22
+          משחקים
         </h2>
-        <div className="flex rounded-xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
-          {(['results', 'schedule'] as const).map(t => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className="px-4 py-2 text-sm font-semibold transition-all duration-200"
+        <SectionTabs
+          tabs={[
+            { id: 'results', label: 'תוצאות' },
+            { id: 'schedule', label: 'לוח משחקים' },
+          ]}
+          active={tab}
+          onChange={(id) => setTab(id as 'results' | 'schedule')}
+          suffix={
+            <span
+              className="px-4 py-2 rounded-lg text-sm font-bold"
               style={{
-                background: tab === t ? '#FF4D00' : 'transparent',
-                color: tab === t ? '#fff' : 'rgba(242,237,230,0.55)',
+                background: 'rgba(255,255,255,0.07)',
+                color: 'rgba(242,237,230,0.55)',
+                border: '1px solid rgba(255,255,255,0.08)',
               }}
             >
-              {t === 'results' ? 'תוצאות' : 'לוח משחקים'}
-            </button>
-          ))}
-        </div>
+              מחזור 22 ▾
+            </span>
+          }
+        />
       </div>
 
       {/* Games grid */}
