@@ -144,19 +144,10 @@ const HeadlineWord: React.FC<{ children: React.ReactNode; delay: number }> = ({ 
 
 // ─── Main Hero ────────────────────────────────────────────────────────────────
 export const HeroSection: React.FC = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const videoOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const textY = useTransform(scrollYProgress, [0, 0.5], [0, -60]);
-
-  const navLinks = [
-    { label: 'בית', active: true },
-    { label: 'קבוצות' },
-    { label: 'לוח משחקים' },
-    { label: 'טבלת הליגה' },
-    { label: 'כרטיסים' },
-  ];
 
   return (
     <div ref={heroRef} className="relative w-full min-h-svh overflow-hidden" style={{ background: '#07080C' }} dir="rtl">
@@ -189,121 +180,6 @@ export const HeroSection: React.FC = () => {
           background: 'radial-gradient(ellipse 55% 45% at 50% 62%, rgba(255,77,0,0.18) 0%, transparent 70%)',
         }}
       />
-
-      {/* ── Navigation ── */}
-      <motion.header
-        className="relative z-30 flex items-center justify-between px-5 md:px-10 pt-6"
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2, ease: EASE_OUT_EXPO }}
-      >
-        {/* Logo */}
-        <div className="flex flex-col leading-none">
-          <span className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: '#FF4D00' }}>
-            מנהלת
-          </span>
-          <span className="text-lg font-black" style={{ color: '#F2EDE6' }}>
-            ליגת העל
-          </span>
-          <span className="text-[10px] tracking-widest" style={{ color: 'rgba(242,237,230,0.45)' }}>
-            כדורסל נשים · ישראל
-          </span>
-        </div>
-
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1" aria-label="ניווט ראשי">
-          {navLinks.map(link => (
-            <a
-              key={link.label}
-              href="#"
-              className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
-              style={{
-                background: link.active ? 'rgba(255,77,0,0.15)' : 'transparent',
-                color: link.active ? '#FF4D00' : 'rgba(242,237,230,0.65)',
-                border: link.active ? '1px solid rgba(255,77,0,0.3)' : '1px solid transparent',
-              }}
-              onMouseEnter={e => { if (!link.active) (e.currentTarget as HTMLElement).style.color = '#F2EDE6'; }}
-              onMouseLeave={e => { if (!link.active) (e.currentTarget as HTMLElement).style.color = 'rgba(242,237,230,0.65)'; }}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-
-        {/* CTA + mobile toggle */}
-        <div className="flex items-center gap-3">
-          <motion.a
-            href="#"
-            className="hidden md:block px-5 py-2 rounded-full text-sm font-bold"
-            style={{ background: '#FF4D00', color: '#07080C' }}
-            whileHover={{ scale: 1.04, background: '#FF6A30' } as any}
-            whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.15 }}
-          >
-            רכישת כרטיסים
-          </motion.a>
-          <button
-            className="md:hidden p-2 rounded-lg"
-            style={{ background: 'rgba(255,255,255,0.07)' }}
-            onClick={() => setMenuOpen(v => !v)}
-            aria-label="תפריט"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <motion.rect
-                animate={menuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-                x="2" y="4" width="16" height="2" rx="1" fill="#F2EDE6"
-                transition={{ duration: 0.25 }}
-                style={{ originX: '50%', originY: '50%' }}
-              />
-              <motion.rect
-                animate={{ opacity: menuOpen ? 0 : 1 }}
-                x="2" y="9" width="16" height="2" rx="1" fill="#F2EDE6"
-                transition={{ duration: 0.2 }}
-              />
-              <motion.rect
-                animate={menuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-                x="2" y="14" width="16" height="2" rx="1" fill="#F2EDE6"
-                transition={{ duration: 0.25 }}
-                style={{ originX: '50%', originY: '50%' }}
-              />
-            </svg>
-          </button>
-        </div>
-      </motion.header>
-
-      {/* ── Mobile menu ── */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25, ease: EASE_OUT_QUART }}
-            className="absolute inset-x-0 top-20 z-40 mx-4 rounded-2xl overflow-hidden"
-            style={{ background: 'rgba(12,13,18,0.95)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)' }}
-          >
-            <nav className="flex flex-col p-4 gap-1" dir="rtl">
-              {navLinks.map(link => (
-                <a
-                  key={link.label}
-                  href="#"
-                  className="px-4 py-3 rounded-xl text-sm font-medium transition-colors"
-                  style={{
-                    color: link.active ? '#FF4D00' : '#F2EDE6',
-                    background: link.active ? 'rgba(255,77,0,0.1)' : 'transparent',
-                  }}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </a>
-              ))}
-              <a href="#" className="mt-2 px-4 py-3 rounded-xl text-sm font-bold text-center" style={{ background: '#FF4D00', color: '#07080C' }}>
-                רכישת כרטיסים
-              </a>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* ── Feature items (floating) ── */}
       <motion.div
