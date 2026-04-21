@@ -14,17 +14,17 @@ export const TEAMS = [
 ];
 
 export const RECENT_RESULTS = [
-  { id: 1, date: '19.4', home: 'מ. אשדוד',  homeScore: 67, away: 'ה. ראשל"צ', awayScore: 74, round: 'פלייאוף' },
-  { id: 2, date: '16.4', home: 'א. רמלה',   homeScore: 70, away: 'א. חולון',  awayScore: 80, round: 'פלייאוף' },
-  { id: 3, date: '19.1', home: 'ה. ראשל"צ', homeScore: 92, away: 'מ. כרמיאל', awayScore: 54, round: 'מ׳ 17' },
-  { id: 4, date: '19.1', home: 'מ. חיפה',   homeScore: 80, away: 'מ. רמת גן', awayScore: 71, round: 'מ׳ 17' },
-  { id: 5, date: '19.1', home: 'ב. פ"ת',    homeScore: 75, away: 'ה. ב"ש',   awayScore: 68, round: 'מ׳ 17' },
-  { id: 6, date: '12.1', home: 'מ. אשדוד',  homeScore: 76, away: 'מ. רמת גן', awayScore: 86, round: 'מ׳ 16' },
+  { id: 1, date: '20.4', home: 'מ. רמת גן', homeScore: 58, away: 'א. חולון',  awayScore: 79, round: 'פלייאוף' },
+  { id: 3, date: '19.4', home: 'מ. אשדוד',  homeScore: 67, away: 'ה. ראשל"צ', awayScore: 74, round: 'פלייאוף' },
+  { id: 4, date: '16.4', home: 'א. רמלה',   homeScore: 70, away: 'א. חולון',  awayScore: 80, round: 'פלייאוף' },
+  { id: 5, date: '19.1', home: 'ה. ראשל"צ', homeScore: 92, away: 'מ. כרמיאל', awayScore: 54, round: 'מ׳ 17' },
+  { id: 6, date: '19.1', home: 'מ. חיפה',   homeScore: 80, away: 'מ. רמת גן', awayScore: 71, round: 'מ׳ 17' },
+  { id: 7, date: '19.1', home: 'ב. פ"ת',    homeScore: 75, away: 'ה. ב"ש',   awayScore: 68, round: 'מ׳ 17' },
+  { id: 8, date: '12.1', home: 'מ. אשדוד',  homeScore: 76, away: 'מ. רמת גן', awayScore: 86, round: 'מ׳ 16' },
 ];
 
 export const UPCOMING_GAMES = [
-  { id: 1, date: '20.4', time: '16:00', home: 'מ. רמת גן', away: 'א. חולון',  round: 'פלייאוף' },
-  { id: 2, date: '23.4', time: '19:00', home: 'ה. ראשל"צ', away: 'מ. אשדוד', round: 'פלייאוף' },
+  { id: 1, date: '23.4', time: '19:00', home: 'ה. ראשל"צ', away: 'מ. אשדוד', round: 'פלייאוף' },
   { id: 3, date: '23.4', time: '20:10', home: 'א. חולון',  away: 'מ. רמת גן', round: 'פלייאוף' },
   { id: 4, date: '26.4', time: '19:00', home: 'מ. אשדוד',  away: 'ה. ראשל"צ', round: 'פלייאוף' },
 ];
