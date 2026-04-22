@@ -229,13 +229,15 @@ export const HeroSection: React.FC = () => {
           className="text-[clamp(3rem,10vw,7.5rem)] font-black leading-none tracking-tight mb-4"
           style={{ color: '#F2EDE6' }}
         >
-          <HeadlineWord delay={0}>כדורסל</HeadlineWord>
+          <HeadlineWord delay={0}>ליגת</HeadlineWord>
           {' '}
           <HeadlineWord delay={0.12}>
-            <span style={{ color: '#FF4D00' }}>נשים</span>
+            <span style={{ color: '#FF4D00' }}>אתנה</span>
           </HeadlineWord>
+          {' '}
+          <HeadlineWord delay={0.24}>ווינר</HeadlineWord>
           <br />
-          <HeadlineWord delay={0.24}>ישראל</HeadlineWord>
+          <HeadlineWord delay={0.36}>בכדורסל לנשים</HeadlineWord>
         </motion.h1>
 
         {/* Subheadline */}
