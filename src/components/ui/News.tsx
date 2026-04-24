@@ -4,15 +4,26 @@ import { NEWS } from '../../data/league';
 
 const TAG_COLORS: Record<string, string> = {
   'תוצאה':   '#FF4D00',
+  'פלייאוף': '#FF4D00',
   'חדשות':   '#3B82F6',
   'ראיון':   '#8B5CF6',
   'העברות':  '#10B981',
+  'עונה סדירה': '#FFB300',
+  'סטטיסטיקה': '#FFB300',
 };
 
 const News: React.FC = () => (
-  <section id="news" className="py-12 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
-    <div className="flex items-center justify-between mb-6">
-      <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>חדשות וכתבות</h2>
+  <section id="news" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
+    <div className="flex items-center justify-between mb-10">
+      <motion.h2
+        className="text-2xl md:text-3xl font-black border-r-4 pr-4"
+        style={{ color: '#F2EDE6', borderColor: '#FF4D00' }}
+        initial={{ opacity: 0, x: 16 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+      >
+        חדשות וכתבות
+      </motion.h2>
       <a
         href="#"
         className="text-sm font-medium transition-colors"
@@ -24,14 +35,14 @@ const News: React.FC = () => (
       </a>
     </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {NEWS.map((article, i) => (
         <motion.article
           key={article.id}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: i * 0.08, ease: [0.25, 1, 0.5, 1] }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.5, delay: i * 0.07, ease: [0.25, 1, 0.5, 1] }}
           whileHover={{ y: -4 }}
           className="rounded-2xl overflow-hidden cursor-pointer group"
           style={{
@@ -40,7 +51,7 @@ const News: React.FC = () => (
           }}
         >
           {/* Image */}
-          <div className="relative overflow-hidden" style={{ height: '180px' }}>
+          <div className="relative overflow-hidden" style={{ height: '200px' }}>
             <img
               src={article.image}
               alt={article.title}
@@ -56,7 +67,7 @@ const News: React.FC = () => (
           </div>
 
           {/* Content */}
-          <div className="p-4">
+          <div className="p-5">
             <h3
               className="text-sm font-bold leading-snug mb-2 line-clamp-2 transition-colors duration-150"
               style={{ color: '#F2EDE6' }}
