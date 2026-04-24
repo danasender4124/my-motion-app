@@ -7,7 +7,7 @@ const fadeUp = {
   hidden:  { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1, y: 0,
-    transition: { duration: 0.5, delay: i * 0.06, ease: [0.25, 1, 0.5, 1] },
+    transition: { duration: 0.5, delay: i * 0.07, ease: [0.25, 1, 0.5, 1] },
   }),
 };
 
@@ -15,10 +15,13 @@ const Results: React.FC = () => {
   const [tab, setTab] = useState<'results' | 'schedule'>('results');
 
   return (
-    <section id="results" className="py-12 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
+    <section id="results" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
       {/* Section header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-10">
+        <h2
+          className="text-2xl md:text-3xl font-black border-r-4 pr-4"
+          style={{ color: '#F2EDE6', borderColor: '#FF4D00' }}
+        >
           משחקים
         </h2>
         <SectionTabs
@@ -44,7 +47,7 @@ const Results: React.FC = () => {
       </div>
 
       {/* Games grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {tab === 'results'
           ? RECENT_RESULTS.map((g, i) => {
               const homeWon = g.homeScore > g.awayScore;
@@ -55,7 +58,7 @@ const Results: React.FC = () => {
                   variants={fadeUp}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: true }}
+                  viewport={{ once: true, amount: 0.1 }}
                   whileHover={{ y: -2 }}
                   className="relative rounded-2xl overflow-hidden cursor-pointer"
                   style={{
@@ -65,7 +68,7 @@ const Results: React.FC = () => {
                 >
                   {/* Date strip */}
                   <div
-                    className="px-4 py-2 flex items-center justify-between text-xs"
+                    className="px-5 py-3 flex items-center justify-between text-xs"
                     style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(242,237,230,0.45)' }}
                   >
                     <span>{g.round}</span>
@@ -73,7 +76,7 @@ const Results: React.FC = () => {
                   </div>
 
                   {/* Score */}
-                  <div className="px-4 py-4 flex items-center justify-between gap-3">
+                  <div className="px-5 py-6 flex items-center justify-between gap-3">
                     {/* Home */}
                     <div className="flex-1 text-right">
                       <p className="text-sm font-bold" style={{ color: homeWon ? '#F2EDE6' : 'rgba(242,237,230,0.5)' }}>
@@ -114,7 +117,7 @@ const Results: React.FC = () => {
                 variants={fadeUp}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true }}
+                viewport={{ once: true, amount: 0.1 }}
                 className="rounded-2xl overflow-hidden"
                 style={{
                   background: 'rgba(255,255,255,0.04)',
@@ -122,13 +125,13 @@ const Results: React.FC = () => {
                 }}
               >
                 <div
-                  className="px-4 py-2 flex items-center justify-between text-xs"
+                  className="px-5 py-3 flex items-center justify-between text-xs"
                   style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(242,237,230,0.45)' }}
                 >
                   <span>{g.round}</span>
                   <span>{g.date} · {g.time}</span>
                 </div>
-                <div className="px-4 py-4 flex items-center justify-between gap-3">
+                <div className="px-5 py-6 flex items-center justify-between gap-3">
                   <p className="flex-1 text-right text-sm font-bold" style={{ color: '#F2EDE6' }}>{g.home}</p>
                   <div
                     className="px-3 py-1 rounded-lg text-xs font-black"
