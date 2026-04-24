@@ -6,11 +6,17 @@ const Standings: React.FC = () => {
   const sorted = [...TEAMS].sort((a, b) => b.wins - a.wins || (b.pf - b.pa) - (a.pf - a.pa));
 
   return (
-    <section id="standings" className="py-12 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>
+    <section id="standings" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
+      <div className="flex items-center justify-between mb-10">
+        <motion.h2
+          className="text-2xl md:text-3xl font-black border-r-4 pr-4"
+          style={{ color: '#F2EDE6', borderColor: '#FF4D00' }}
+          initial={{ opacity: 0, x: 16 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+        >
           טבלת הליגה · עונת 2024/25
-        </h2>
+        </motion.h2>
         <span className="text-xs font-medium px-3 py-1 rounded-full" style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00', border: '1px solid rgba(255,77,0,0.3)' }}>
           עונה 2025 · פלייאוף
         </span>
@@ -19,7 +25,7 @@ const Standings: React.FC = () => {
       <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
         {/* Table header */}
         <div
-          className="grid text-xs font-bold uppercase tracking-wider px-4 py-3"
+          className="grid text-xs font-bold uppercase tracking-wider px-4 py-4"
           style={{
             gridTemplateColumns: '2rem 1fr 2.5rem 2.5rem 2.5rem 3.5rem',
             background: 'rgba(255,255,255,0.05)',
@@ -48,7 +54,7 @@ const Standings: React.FC = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.04, ease: [0.25, 1, 0.5, 1] }}
-              className="grid items-center px-4 py-3 transition-colors duration-150 cursor-pointer"
+              className="grid items-center px-4 py-5 transition-colors duration-150 cursor-pointer"
               style={{
                 gridTemplateColumns: '2rem 1fr 2.5rem 2.5rem 2.5rem 3.5rem',
                 gap: '0.5rem',
