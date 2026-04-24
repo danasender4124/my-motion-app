@@ -24,9 +24,17 @@ const Stats: React.FC = () => {
   const maxVal = sorted[0][stat];
 
   return (
-    <section id="stats" className="py-12 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>מובילות הליגה</h2>
+    <section id="stats" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
+        <motion.h2
+          className="text-2xl md:text-3xl font-black border-r-4 pr-4"
+          style={{ color: '#F2EDE6', borderColor: '#FF4D00' }}
+          initial={{ opacity: 0, x: 16 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+        >
+          מובילות הליגה
+        </motion.h2>
         <SectionTabs
           tabs={STAT_TABS}
           active={stat}
@@ -35,18 +43,18 @@ const Stats: React.FC = () => {
       </div>
 
       <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
-        <div className="px-4 py-3 text-xs font-bold uppercase tracking-wider" style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(242,237,230,0.4)' }}>
+        <div className="px-4 py-4 text-xs font-bold uppercase tracking-wider" style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(242,237,230,0.4)' }}>
           {STAT_LABELS[stat]} · עונה סדירה
         </div>
 
         {sorted.map((player, i) => (
           <motion.div
             key={player.name}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: i * 0.06 }}
-            className="flex items-center gap-4 px-4 py-4"
+            initial={{ opacity: 0, x: 16 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.4, delay: i * 0.05, ease: [0.25, 1, 0.5, 1] }}
+            className="flex items-center gap-4 px-4 py-5"
             style={{ borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}
           >
             {/* Rank */}
@@ -72,7 +80,7 @@ const Stats: React.FC = () => {
                   initial={{ width: 0 }}
                   whileInView={{ width: `${(player[stat] / maxVal) * 100}%` }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.7, delay: i * 0.06 + 0.2, ease: [0.25, 1, 0.5, 1] }}
+                  transition={{ duration: 0.7, delay: i * 0.05 + 0.2, ease: [0.25, 1, 0.5, 1] }}
                 />
               </div>
               <span
