@@ -8,6 +8,10 @@ import News         from '@/components/ui/News'
 import Stats        from '@/components/ui/Stats'
 import Footer       from '@/components/ui/Footer'
 
+const Divider = () => (
+  <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.06)', margin: 0 }} />
+);
+
 function App() {
   return (
     <div style={{ background: '#07080C', minHeight: '100svh' }}>
@@ -15,15 +19,13 @@ function App() {
       <Header />
       <main>
         <HeroSection />
+        <Divider />
         <Results />
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-0 max-w-7xl mx-auto">
-          <div className="xl:col-span-2">
-            <Standings />
-          </div>
-          <div className="xl:col-span-1">
-            <Stats />
-          </div>
-        </div>
+        <Divider />
+        <Standings />
+        <Divider />
+        <Stats />
+        <Divider />
         <News />
       </main>
       <Footer />
