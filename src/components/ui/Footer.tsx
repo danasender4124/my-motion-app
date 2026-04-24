@@ -39,7 +39,7 @@ const Footer: React.FC = () => (
         {[
           { title: 'הליגה', links: ['אודות', 'היסטוריה', 'אלופות לשעבר', 'כללים', 'תקנון'] },
           { title: 'ספורט', links: ['לוח משחקים', 'תוצאות', 'טבלת הליגה', 'סטטיסטיקה', 'פלייאוף'] },
-          { title: 'צרו קשר', links: ['יצירת קשר', 'עיתונאים', 'שיתופי פעולה', 'כרטיסים', 'נגישות'] },
+          { title: 'צרו קשר', links: ['יצירת קשר', 'עיתונאים', 'שיתופי פעולה', 'נגישות'] },
         ].map(col => (
           <div key={col.title}>
             <h4 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#FF4D00' }}>
