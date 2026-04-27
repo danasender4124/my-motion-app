@@ -1,16 +1,16 @@
 // ─── League data — ליגת על נשים 2025 (source: ibasketball.co.il) ─────────────
 
 export const TEAMS = [
-  { id: 1,  name: 'מ. רמת גן',    short: 'מרג',  wins: 17, losses: 1,  pf: 1516, pa: 1233, color: '#005BAA' },
-  { id: 2,  name: 'מ. אשדוד',     short: 'מאש',  wins: 12, losses: 6,  pf: 1375, pa: 1261, color: '#0066CC' },
-  { id: 3,  name: 'א. רמלה',      short: 'ארמ',  wins: 10, losses: 8,  pf: 1376, pa: 1340, color: '#CC0000' },
-  { id: 4,  name: 'ה. ראשל"צ',    short: 'הרל',  wins: 10, losses: 8,  pf: 1296, pa: 1230, color: '#E2001A' },
-  { id: 5,  name: 'א. חולון',     short: 'אחל',  wins: 9,  losses: 9,  pf: 1369, pa: 1377, color: '#FF6600' },
-  { id: 6,  name: 'ב. פ"ת',       short: 'בפת',  wins: 8,  losses: 10, pf: 1253, pa: 1362, color: '#003087' },
-  { id: 7,  name: 'ה. ירושלים',   short: 'היר',  wins: 8,  losses: 10, pf: 1333, pa: 1340, color: '#FFB300' },
-  { id: 8,  name: 'מ. כרמיאל',    short: 'מכר',  wins: 8,  losses: 10, pf: 1278, pa: 1313, color: '#4A90D9' },
-  { id: 9,  name: 'מ. חיפה',      short: 'מחי',  wins: 7,  losses: 11, pf: 1325, pa: 1367, color: '#007A33' },
-  { id: 10, name: 'ה. ב"ש',       short: 'הבש',  wins: 1,  losses: 17, pf: 1218, pa: 1516, color: '#CC0000' },
+  { id: 1,  name: 'מכבי עירוני רמת גן',    short: 'מרג',  wins: 21, losses: 2,  pf: 1913, pa: 1573, color: '#005BAA' },
+  { id: 2,  name: 'מכבי אשדוד נשים',       short: 'מאש',  wins: 15, losses: 8,  pf: 1749, pa: 1629, color: '#0066CC' },
+  { id: 3,  name: 'הפועל ראשון לציון',      short: 'הרל',  wins: 13, losses: 10, pf: 1668, pa: 1580, color: '#E2001A' },
+  { id: 4,  name: 'אליצור נוה דוד רמלה',   short: 'ארמ',  wins: 12, losses: 11, pf: 1792, pa: 1752, color: '#CC0000' },
+  { id: 5,  name: 'אליצור חולון',           short: 'אחל',  wins: 10, losses: 13, pf: 1748, pa: 1791, color: '#FF6600' },
+  { id: 6,  name: 'בנות פתח תקווה בני',    short: 'בפת',  wins: 10, losses: 13, pf: 1603, pa: 1766, color: '#003087' },
+  { id: 7,  name: 'ה. ירושלים',            short: 'היר',  wins: 9,  losses: 14, pf: 1540, pa: 1625, color: '#FFB300' },
+  { id: 8,  name: 'מ. כרמיאל',             short: 'מכר',  wins: 9,  losses: 14, pf: 1478, pa: 1553, color: '#4A90D9' },
+  { id: 9,  name: 'מ. חיפה',               short: 'מחי',  wins: 9,  losses: 14, pf: 1495, pa: 1562, color: '#007A33' },
+  { id: 10, name: 'ה. ב"ש',                short: 'הבש',  wins: 7,  losses: 16, pf: 1318, pa: 1469, color: '#CC0000' },
 ];
 
 export const RECENT_RESULTS = [
