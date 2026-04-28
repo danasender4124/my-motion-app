@@ -1,24 +1,24 @@
+// src/components/ui/Header.tsx
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_LINKS = [
-  { label: 'בית',        href: '#hero' },
-  { label: 'תוצאות',     href: '#results' },
-  { label: 'לוח משחקים', href: '#schedule' },
-  { label: 'טבלת הליגה', href: '#standings' },
-  { label: 'קבוצות',     href: '#teams' },
-  { label: 'חדשות',      href: '#news' },
-  { label: 'סטטיסטיקה',  href: '#stats' },
+  { label: 'בית',        to: '/' },
+  { label: 'תוצאות',     to: '/results' },
+  { label: 'לוח משחקים', to: '/results' },
+  { label: 'טבלת הליגה', to: '/standings' },
+  { label: 'סטטיסטיקה',  to: '/stats' },
+  { label: 'חדשות',      to: '/news' },
 ];
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [active, setActive] = useState('בית');
 
   return (
     <header className="sticky top-0 z-50 w-full" dir="rtl">
 
-      {/* Row 1: Logo only */}
+      {/* Row 1: Logo */}
       <div
         className="w-full flex items-center justify-between px-4 md:px-8"
         style={{
@@ -27,7 +27,7 @@ const Header: React.FC = () => {
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}
       >
-        <a href="#hero" className="flex items-center gap-3">
+        <NavLink to="/" className="flex items-center gap-3">
           <div
             className="w-9 h-9 rounded-full flex items-center justify-center font-black text-base"
             style={{ background: '#FF4D00', color: '#fff' }}
@@ -42,7 +42,7 @@ const Header: React.FC = () => {
               ליגת העל נשים
             </span>
           </div>
-        </a>
+        </NavLink>
 
         {/* Mobile hamburger */}
         <button
@@ -75,26 +75,28 @@ const Header: React.FC = () => {
         aria-label="ניווט ראשי"
       >
         {NAV_LINKS.map(link => (
-          <a
+          <NavLink
             key={link.label}
-            href={link.href}
-            onClick={() => setActive(link.label)}
+            to={link.to}
+            end={link.to === '/'}
+            onClick={() => setMenuOpen(false)}
             className="flex-1 flex items-center justify-center py-2 text-sm font-bold transition-colors duration-150 relative"
-            style={{
-              color: '#fff',
-              borderLeft: '1px solid rgba(255,255,255,0.15)',
-            }}
+            style={{ color: '#fff', borderLeft: '1px solid rgba(255,255,255,0.15)' }}
           >
-            {link.label}
-            {active === link.label && (
-              <motion.div
-                layoutId="orange-nav-indicator"
-                className="absolute bottom-0 left-0 right-0 h-0.5"
-                style={{ background: '#fff' }}
-                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              />
+            {({ isActive }) => (
+              <>
+                {link.label}
+                {isActive && (
+                  <motion.div
+                    layoutId="orange-nav-indicator"
+                    className="absolute bottom-0 left-0 right-0 h-0.5"
+                    style={{ background: '#fff' }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  />
+                )}
+              </>
             )}
-          </a>
+          </NavLink>
         ))}
       </nav>
 
@@ -111,18 +113,19 @@ const Header: React.FC = () => {
           >
             <nav className="flex flex-col gap-1 p-4" dir="rtl">
               {NAV_LINKS.map(link => (
-                <a
+                <NavLink
                   key={link.label}
-                  href={link.href}
-                  onClick={() => { setActive(link.label); setMenuOpen(false); }}
+                  to={link.to}
+                  end={link.to === '/'}
+                  onClick={() => setMenuOpen(false)}
                   className="px-4 py-3 rounded-xl text-sm font-medium"
-                  style={{
-                    color: active === link.label ? '#FF4D00' : '#F2EDE6',
-                    background: active === link.label ? 'rgba(255,77,0,0.1)' : 'transparent',
-                  }}
+                  style={({ isActive }) => ({
+                    color: isActive ? '#FF4D00' : '#F2EDE6',
+                    background: isActive ? 'rgba(255,77,0,0.1)' : 'transparent',
+                  })}
                 >
                   {link.label}
-                </a>
+                </NavLink>
               ))}
             </nav>
           </motion.div>
