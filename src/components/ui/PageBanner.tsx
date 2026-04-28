@@ -35,7 +35,7 @@ const PageBanner: React.FC<PageBannerProps> = ({ title }) => (
       className="relative z-10 font-black text-center"
       style={{
         color: '#F2EDE6',
-        fontSize: 'clamp(2.5rem, 8vw, 5rem)',
+        fontSize: 'clamp(1.8rem, 5vw, 3.2rem)',
         letterSpacing: '-0.02em',
         lineHeight: 1,
         direction: 'rtl',
