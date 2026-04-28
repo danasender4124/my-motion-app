@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_LINKS = [
   { label: 'בית',        to: '/' },
-  { label: 'תוצאות',     to: '/results' },
-  { label: 'לוח משחקים', to: '/results' },
+  { label: 'משחקים',     to: '/results' },
   { label: 'טבלת הליגה', to: '/standings' },
   { label: 'סטטיסטיקה',  to: '/stats' },
   { label: 'חדשות',      to: '/news' },

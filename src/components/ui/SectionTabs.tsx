@@ -13,7 +13,7 @@ interface SectionTabsProps {
 }
 
 const SectionTabs: React.FC<SectionTabsProps> = ({ tabs, active, onChange, suffix }) => (
-  <div className="flex items-center gap-2" dir="rtl">
+  <div className="flex flex-row-reverse items-center gap-2">
     {tabs.map(tab => (
       <button
         key={tab.id}
