@@ -136,56 +136,75 @@ const Results: React.FC = () => {
                 </motion.div>
               );
             })
-          : UPCOMING_GAMES.map((g, i) => (
-              <motion.div
-                key={g.id}
-                custom={i}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.1 }}
-                className="rounded-2xl overflow-hidden"
-                style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.10)',
-                  boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
-                }}
-              >
-                {/* Top accent bar */}
-                <div className="h-1 w-full" style={{ background: 'rgba(255,77,0,0.4)' }} />
+          : (() => {
+              // Group games by round
+              const grouped: Record<string, typeof UPCOMING_GAMES> = {};
+              UPCOMING_GAMES.forEach(g => {
+                if (!grouped[g.round]) grouped[g.round] = [];
+                grouped[g.round].push(g);
+              });
+              return (
+                <div className="col-span-full w-full rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.10)' }}>
+                  {Object.entries(grouped).map(([round, games]) => (
+                    <div key={round}>
+                      {/* Round header */}
+                      <div
+                        className="flex items-center justify-end px-5 py-3"
+                        style={{ background: '#FF4D00' }}
+                      >
+                        <span className="text-base font-black text-white">{round}</span>
+                      </div>
 
-                {/* Round + date */}
-                <div className="px-5 pt-4 pb-2 flex items-center justify-between text-xs font-medium"
-                  style={{ color: 'rgba(242,237,230,0.4)' }}
-                >
-                  <span
-                    className="px-2 py-0.5 rounded-full text-[11px] font-bold"
-                    style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00' }}
-                  >
-                    {g.round}
-                  </span>
-                  <span>{g.date}</span>
-                </div>
+                      {/* Column headers */}
+                      <div
+                        className="grid text-xs font-bold px-5 py-3"
+                        style={{
+                          gridTemplateColumns: '7rem 5rem 1fr 1fr',
+                          background: 'rgba(255,255,255,0.06)',
+                          color: 'rgba(242,237,230,0.45)',
+                          borderBottom: '1px solid rgba(255,255,255,0.07)',
+                        }}
+                        dir="rtl"
+                      >
+                        <span>תאריך</span>
+                        <span>שעה</span>
+                        <span>מארחת</span>
+                        <span>אורחת</span>
+                      </div>
 
-                {/* Teams */}
-                <div className="px-5 pb-5 pt-2">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-base font-bold" style={{ color: '#F2EDE6' }}>{g.home}</span>
-                    <span
-                      className="px-3 py-1.5 rounded-lg text-sm font-black"
-                      style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00', border: '1px solid rgba(255,77,0,0.25)' }}
-                    >
-                      {g.time}
-                    </span>
-                  </div>
-                  <div className="mb-3" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }} />
-                  <div className="flex items-center justify-between">
-                    <span className="text-base font-bold" style={{ color: '#F2EDE6' }}>{g.away}</span>
-                    <span className="text-xs" style={{ color: 'rgba(242,237,230,0.3)' }}>אורחת</span>
-                  </div>
+                      {/* Game rows */}
+                      {games.map((g, i) => (
+                        <motion.div
+                          key={g.id}
+                          initial={{ opacity: 0, x: 10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.3, delay: i * 0.06 }}
+                          className="grid items-center px-5 py-4 cursor-pointer transition-colors duration-150"
+                          style={{
+                            gridTemplateColumns: '7rem 5rem 1fr 1fr',
+                            borderBottom: '1px solid rgba(255,255,255,0.05)',
+                            background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent',
+                          }}
+                          dir="rtl"
+                          whileHover={{ background: 'rgba(255,77,0,0.06)' } as any}
+                        >
+                          <span className="text-sm font-semibold" style={{ color: '#F2EDE6' }}>{g.date}</span>
+                          <span
+                            className="text-sm font-black"
+                            style={{ color: '#FF4D00' }}
+                          >
+                            {g.time}
+                          </span>
+                          <span className="text-sm font-bold" style={{ color: '#F2EDE6' }}>{g.home}</span>
+                          <span className="text-sm font-medium" style={{ color: 'rgba(242,237,230,0.7)' }}>{g.away}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  ))}
                 </div>
-              </motion.div>
-            ))
+              );
+            })()
         }
       </div>
     </section>
