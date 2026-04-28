@@ -76,8 +76,8 @@ const Results: React.FC = () => {
 
                   {/* Round + date */}
                   <div
-                    className="pl-6 pr-10 pt-5 pb-2 flex items-center justify-between text-xs font-medium"
-                    style={{ color: 'rgba(242,237,230,0.4)' }}
+                    className="flex items-center justify-between text-xs font-medium"
+                    style={{ color: 'rgba(242,237,230,0.4)', paddingLeft: '24px', paddingRight: '40px', paddingTop: '20px', paddingBottom: '8px' }}
                   >
                     <span
                       className="px-2 py-0.5 rounded-full text-[11px] font-bold"
@@ -89,7 +89,7 @@ const Results: React.FC = () => {
                   </div>
 
                   {/* Teams + Score */}
-                  <div className="pl-6 pr-10 pb-6 pt-2">
+                  <div style={{ paddingLeft: '24px', paddingRight: '40px', paddingBottom: '24px', paddingTop: '8px' }}>
                     {/* Home team */}
                     <div className="flex items-center justify-between mb-3">
                       <span
