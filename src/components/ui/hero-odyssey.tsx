@@ -235,7 +235,19 @@ export const HeroSection: React.FC = () => {
             <span style={{ color: '#FF4D00' }}>אתנה</span>
           </HeadlineWord>
           {' '}
-          <HeadlineWord delay={0.24}>ווינר</HeadlineWord>
+          <HeadlineWord delay={0.24}>
+            <img
+              src="/winner-logo.png"
+              alt="וינר"
+              style={{
+                height: 'clamp(2.5rem, 8vw, 6rem)',
+                width: 'auto',
+                display: 'inline-block',
+                verticalAlign: 'middle',
+                objectFit: 'contain',
+              }}
+            />
+          </HeadlineWord>
           <br />
           <HeadlineWord delay={0.36}>בכדורסל לנשים</HeadlineWord>
         </motion.h1>
