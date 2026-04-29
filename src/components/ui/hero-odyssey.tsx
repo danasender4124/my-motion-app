@@ -153,7 +153,7 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
     <motion.div
       className="relative z-20 w-full max-w-6xl mx-auto px-4 md:px-8"
       initial={{ opacity: 0, y: 40 }}
-      animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      animate={show ? { opacity: 1, y: -120 } : { opacity: 0, y: 40 }}
       transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
       dir="rtl"
     >
