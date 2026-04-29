@@ -213,14 +213,14 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
           })}
         </div>
 
-        {/* Featured image — LEFT side, 16:9 */}
-        <div className="relative flex-1 overflow-hidden" style={{ aspectRatio: '16/9' }}>
+        {/* Featured image — LEFT side, natural proportions */}
+        <div className="relative flex-1 overflow-hidden" style={{ minHeight: '300px' }}>
           <AnimatePresence mode="wait">
             <motion.img
               key={imgIdx}
               src={HERO_IMAGES[imgIdx]}
               alt=""
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-contain"
               initial={{ opacity: 0, scale: 1.03 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
