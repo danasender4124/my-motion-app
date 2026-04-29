@@ -14,13 +14,18 @@ export const TEAMS = [
 ];
 
 export const RECENT_RESULTS = [
-  { id: 1, date: '20.4', home: 'מ. רמת גן', homeScore: 58, away: 'א. חולון',  awayScore: 79, round: 'פלייאוף' },
-  { id: 3, date: '19.4', home: 'מ. אשדוד',  homeScore: 67, away: 'ה. ראשל"צ', awayScore: 74, round: 'פלייאוף' },
-  { id: 4, date: '16.4', home: 'א. רמלה',   homeScore: 70, away: 'א. חולון',  awayScore: 80, round: 'פלייאוף' },
-  { id: 5, date: '19.1', home: 'ה. ראשל"צ', homeScore: 92, away: 'מ. כרמיאל', awayScore: 54, round: 'מ׳ 17' },
-  { id: 6, date: '19.1', home: 'מ. חיפה',   homeScore: 80, away: 'מ. רמת גן', awayScore: 71, round: 'מ׳ 17' },
-  { id: 7, date: '19.1', home: 'ב. פ"ת',    homeScore: 75, away: 'ה. ב"ש',   awayScore: 68, round: 'מ׳ 17' },
-  { id: 8, date: '12.1', home: 'מ. אשדוד',  homeScore: 76, away: 'מ. רמת גן', awayScore: 86, round: 'מ׳ 16' },
+  // פלייאוף
+  { id: 1,  date: '20/04/2026', time: '19:00', round: 'פלייאוף', venue: 'אולם זיסמן, דרך הטייסים 85, רמת גן',              statsUrl: '', home: 'מ. רמת גן',  homeLogo: '/teams/team-10.png', homeScore: 58, away: 'א. חולון',   awayLogo: '/teams/team-02.png', awayScore: 79 },
+  { id: 2,  date: '19/04/2026', time: '19:30', round: 'פלייאוף', venue: 'מקיף ז\', רח\' העצמאות 62, אשדוד',                statsUrl: '', home: 'מ. אשדוד',   homeLogo: '/teams/team-08.png', homeScore: 67, away: 'ה. ראשל"צ', awayLogo: '/teams/team-03.png', awayScore: 74 },
+  { id: 3,  date: '16/04/2026', time: '19:00', round: 'פלייאוף', venue: 'רח\' יאיר שטרן 29, קרית מנחם, רמלה',             statsUrl: '', home: 'א. רמלה',    homeLogo: '/teams/team-01.png', homeScore: 70, away: 'א. חולון',   awayLogo: '/teams/team-02.png', awayScore: 80 },
+  // מחזור 17
+  { id: 4,  date: '19/01/2026', time: '19:00', round: 'מחזור 17', venue: 'היכל הספורט גן נחום, ראשון לציון',               statsUrl: '', home: 'ה. ראשל"צ', homeLogo: '/teams/team-03.png', homeScore: 92, away: 'מ. כרמיאל',  awayLogo: '/teams/team-07.png', awayScore: 54 },
+  { id: 5,  date: '19/01/2026', time: '20:00', round: 'מחזור 17', venue: 'רח\' ביכורים 19, חיפה (עליון)',                  statsUrl: '', home: 'מ. חיפה',    homeLogo: '/teams/team-09.png', homeScore: 80, away: 'מ. רמת גן',  awayLogo: '/teams/team-10.png', awayScore: 71 },
+  { id: 6,  date: '19/01/2026', time: '18:30', round: 'מחזור 17', venue: 'ביה"ס יצחק שמיר, רח\' אחים בכר 3, פתח תקווה',  statsUrl: '', home: 'ב. פ"ת',     homeLogo: '/teams/team-05.png', homeScore: 75, away: 'ה. ב"ש',    awayLogo: '/teams/team-04.png', awayScore: 68 },
+  // מחזור 16
+  { id: 7,  date: '12/01/2026', time: '19:00', round: 'מחזור 16', venue: 'מקיף ז\', רח\' העצמאות 62, אשדוד',               statsUrl: '', home: 'מ. אשדוד',   homeLogo: '/teams/team-08.png', homeScore: 76, away: 'מ. רמת גן',  awayLogo: '/teams/team-10.png', awayScore: 86 },
+  { id: 8,  date: '12/01/2026', time: '20:00', round: 'מחזור 16', venue: 'היכל הספורט מלחה, רח\' שטרן 3, ירושלים',        statsUrl: '', home: 'ה. ירושלים', homeLogo: '/teams/team-06.png', homeScore: 88, away: 'א. רמלה',    awayLogo: '/teams/team-01.png', awayScore: 79 },
+  { id: 9,  date: '11/01/2026', time: '19:30', round: 'מחזור 16', venue: 'טוטו ארנה, שד\' ירושלים 220, חולון',             statsUrl: '', home: 'א. חולון',   homeLogo: '/teams/team-02.png', homeScore: 83, away: 'מ. כרמיאל',  awayLogo: '/teams/team-07.png', awayScore: 71 },
 ];
 
 export const UPCOMING_GAMES = [

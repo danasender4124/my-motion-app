@@ -30,9 +30,22 @@ const ListIcon: React.FC = () => (
   </svg>
 );
 
-// ─── Grid column template ─────────────────────────────────────────────────────
-// RTL order (right → left): תאריך | שעה | אולם | צפיה | מחזור | מארחת | אורחת | פרטים
-const COLS = '108px 62px 1fr 80px 64px 1.6fr 1.6fr 52px';
+// doc + table-lines icon
+const StatsIcon: React.FC<{ size?: number }> = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <polyline points="14 2 14 8 20 8"/>
+    <line x1="8" y1="13" x2="16" y2="13"/>
+    <line x1="8" y1="17" x2="16" y2="17"/>
+    <line x1="8" y1="9"  x2="11" y2="9"/>
+  </svg>
+);
+
+// ─── Grid column templates ────────────────────────────────────────────────────
+// Schedule: תאריך | שעה | אולם | צפיה | מחזור | מארחת | אורחת | פרטים
+const SCHED_COLS = '108px 62px 1fr 80px 64px 1.6fr 1.6fr 52px';
+// Results:  תאריך | שעה | אולם | מארחת | אורחת | סטטיסטיקה | תוצאה
+const RES_COLS   = '108px 62px 1fr 1.6fr 1.6fr 80px 110px';
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 const Results: React.FC = () => {
@@ -54,56 +67,135 @@ const Results: React.FC = () => {
       </div>
 
       {tab === 'results' ? (
-        /* ── Results: score cards ─────────────────────────────────────────── */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {RECENT_RESULTS.map((g, i) => {
-            const homeWon = g.homeScore > g.awayScore;
-            return (
-              <motion.div
-                key={g.id}
-                custom={i}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.1 }}
-                whileHover={{ y: -3, scale: 1.01 }}
-                transition={{ duration: 0.2 }}
-                className="relative rounded-2xl overflow-hidden cursor-pointer"
-                style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.10)',
-                  boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
-                }}
-              >
-                <div className="h-1 w-full" style={{ background: '#FF4D00' }} />
-                <div
-                  className="flex items-center justify-between text-xs font-medium"
-                  style={{ color: 'rgba(242,237,230,0.4)', padding: '20px 24px 8px' }}
-                >
-                  <span
-                    className="px-2 py-0.5 rounded-full text-[11px] font-bold"
-                    style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00' }}
+        /* ── Results: grouped table ───────────────────────────────────────── */
+        (() => {
+          // Group by round, preserve insertion order
+          const grouped: Record<string, typeof RECENT_RESULTS> = {};
+          RECENT_RESULTS.forEach(g => {
+            if (!grouped[g.round]) grouped[g.round] = [];
+            grouped[g.round].push(g);
+          });
+
+          // Sub-header shared across all groups
+          const SubHeader = () => (
+            <div
+              className="grid items-center px-4 py-2 text-xs font-bold"
+              style={{
+                gridTemplateColumns: RES_COLS,
+                background: 'rgba(255,255,255,0.06)',
+                color: 'rgba(242,237,230,0.5)',
+                borderBottom: '1px solid rgba(255,255,255,0.07)',
+              }}
+            >
+              <span>תאריך</span>
+              <span>שעה</span>
+              <span>אולם</span>
+              <span>מארחת</span>
+              <span>אורחת</span>
+              <span className="text-center">סטטיסטיקה</span>
+              <span className="text-center">תוצאה</span>
+            </div>
+          );
+
+          let rowIndex = 0;
+          return (
+            <div className="w-full overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.10)' }}>
+              {Object.entries(grouped).map(([round, games]) => (
+                <div key={round}>
+                  {/* Round header */}
+                  <div
+                    className="flex items-center justify-end px-5 py-2.5"
+                    style={{ background: '#FF4D00' }}
                   >
-                    {g.round}
-                  </span>
-                  <span>{g.date}</span>
-                </div>
-                <div style={{ padding: '8px 24px 24px' }}>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-base font-bold" style={{ color: homeWon ? '#F2EDE6' : 'rgba(242,237,230,0.45)' }}>{g.home}</span>
-                    <span className="text-2xl font-black tabular-nums" style={{ color: homeWon ? '#FF4D00' : 'rgba(242,237,230,0.35)' }}>{g.homeScore}</span>
+                    <span className="text-base font-black text-white">{round}</span>
                   </div>
-                  <div className="mb-3" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }} />
-                  <div className="flex items-center justify-between">
-                    <span className="text-base font-bold" style={{ color: !homeWon ? '#F2EDE6' : 'rgba(242,237,230,0.45)' }}>{g.away}</span>
-                    <span className="text-2xl font-black tabular-nums" style={{ color: !homeWon ? '#FF4D00' : 'rgba(242,237,230,0.35)' }}>{g.awayScore}</span>
-                  </div>
+
+                  <SubHeader />
+
+                  {games.map((g) => {
+                    const i = rowIndex++;
+                    const homeWon = g.homeScore > g.awayScore;
+                    const evenBg  = 'rgba(255,255,255,0.04)';
+                    const oddBg   = 'rgba(255,255,255,0.01)';
+                    const hoverBg = 'rgba(255,77,0,0.07)';
+                    return (
+                      <motion.div
+                        key={g.id}
+                        initial={{ opacity: 0, x: 10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, delay: (i % games.length) * 0.04 }}
+                        className="grid items-center px-4 py-3"
+                        style={{
+                          gridTemplateColumns: RES_COLS,
+                          background: i % 2 === 0 ? evenBg : oddBg,
+                          borderBottom: '1px solid rgba(255,255,255,0.05)',
+                          cursor: 'default',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = hoverBg)}
+                        onMouseLeave={e => (e.currentTarget.style.background = i % 2 === 0 ? evenBg : oddBg)}
+                      >
+                        {/* תאריך */}
+                        <span className="text-sm font-semibold" style={{ color: '#F2EDE6' }}>{g.date}</span>
+
+                        {/* שעה */}
+                        <span className="text-sm font-black" style={{ color: '#FF4D00' }}>{g.time}</span>
+
+                        {/* אולם */}
+                        <span className="text-sm leading-snug" style={{ color: 'rgba(242,237,230,0.6)' }}>{g.venue}</span>
+
+                        {/* מארחת */}
+                        <div className="flex items-center gap-2 min-w-0">
+                          <img src={g.homeLogo} alt={g.home} style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
+                          <span className="text-sm font-bold truncate" style={{ color: homeWon ? '#F2EDE6' : 'rgba(242,237,230,0.55)' }}>{g.home}</span>
+                        </div>
+
+                        {/* אורחת */}
+                        <div className="flex items-center gap-2 min-w-0">
+                          <img src={g.awayLogo} alt={g.away} style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
+                          <span className="text-sm font-medium truncate" style={{ color: !homeWon ? '#F2EDE6' : 'rgba(242,237,230,0.55)' }}>{g.away}</span>
+                        </div>
+
+                        {/* סטטיסטיקה */}
+                        <div className="flex justify-center">
+                          {g.statsUrl ? (
+                            <a
+                              href={g.statsUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-center w-8 h-8 rounded-lg"
+                              style={{ color: '#FF4D00', background: 'rgba(255,77,0,0.14)' }}
+                              title="סטטיסטיקת משחק"
+                            >
+                              <StatsIcon />
+                            </a>
+                          ) : (
+                            <span
+                              className="flex items-center justify-center w-8 h-8 rounded-lg"
+                              style={{ color: 'rgba(242,237,230,0.25)' }}
+                              title="סטטיסטיקה טרם זמינה"
+                            >
+                              <StatsIcon />
+                            </span>
+                          )}
+                        </div>
+
+                        {/* תוצאה */}
+                        <div className="flex justify-center">
+                          <span className="text-sm font-black tabular-nums px-2 py-1 rounded" style={{ background: 'rgba(255,255,255,0.06)', color: '#F2EDE6', letterSpacing: '0.04em' }}>
+                            <span style={{ color: homeWon ? '#FF4D00' : 'inherit' }}>{g.homeScore}</span>
+                            <span style={{ color: 'rgba(242,237,230,0.4)' }}>–</span>
+                            <span style={{ color: !homeWon ? '#FF4D00' : 'inherit' }}>{g.awayScore}</span>
+                          </span>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </div>
-                <div className="absolute top-0 bottom-0 right-0 w-1 rounded-l" style={{ background: 'rgba(255,77,0,0.25)' }} />
-              </motion.div>
-            );
-          })}
-        </div>
+              ))}
+            </div>
+          );
+        })()
 
       ) : (
         /* ── Schedule: full table ─────────────────────────────────────────── */
@@ -112,7 +204,7 @@ const Results: React.FC = () => {
           {/* Header row */}
           <div
             className="grid items-center px-4 py-3 text-sm font-black text-white"
-            style={{ gridTemplateColumns: COLS, background: '#FF4D00' }}
+            style={{ gridTemplateColumns: SCHED_COLS, background: '#FF4D00' }}
           >
             <span>תאריך</span>
             <span>שעה</span>
@@ -139,7 +231,7 @@ const Results: React.FC = () => {
                 transition={{ duration: 0.3, delay: i * 0.04 }}
                 className="grid items-center px-4 py-3"
                 style={{
-                  gridTemplateColumns: COLS,
+                  gridTemplateColumns: SCHED_COLS,
                   background: i % 2 === 0 ? evenBg : oddBg,
                   borderBottom: '1px solid rgba(255,255,255,0.05)',
                   cursor: 'default',
