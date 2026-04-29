@@ -44,8 +44,8 @@ const Results: React.FC = () => {
       {/* Section header */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-10">
         <motion.h2
-          className="text-2xl md:text-3xl font-black border-r-4 pr-4"
-          style={{ color: '#F2EDE6', borderColor: '#FF4D00' }}
+          className="text-2xl md:text-3xl font-black"
+          style={{ color: '#F2EDE6' }}
           initial={{ opacity: 0, x: 16 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
