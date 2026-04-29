@@ -152,97 +152,115 @@ const HERO_IMAGES = [
   '/news-imgs/news-04.jpeg',
 ];
 
-// ─── Inline news feed ────────────────────────────────────────────────────────
+// ─── Card data: combine news articles with local images ───────────────────────
+const CARDS = NEWS.map((article, i) => ({
+  ...article,
+  image: HERO_IMAGES[i % HERO_IMAGES.length],
+}));
+
+// ─── Card slider ──────────────────────────────────────────────────────────────
 const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
-  const [activeId, setActiveId] = useState(NEWS[0].id);
+  const [current, setCurrent] = useState(0);
+  const total = CARDS.length;
+
+  // Auto-advance every 4 seconds
+  useEffect(() => {
+    if (!show) return;
+    const t = setInterval(() => setCurrent(c => (c + 1) % total), 4000);
+    return () => clearInterval(t);
+  }, [show, total]);
+
+  const prev = () => setCurrent(c => (c - 1 + total) % total);
+  const next = () => setCurrent(c => (c + 1) % total);
+
+  // Show indices: prev, current, next (wrapped)
+  const indices = [
+    (current - 1 + total) % total,
+    current,
+    (current + 1) % total,
+  ];
 
   return (
     <motion.div
-      className="relative z-20 w-full px-4 md:px-8"
+      className="relative z-20 w-full px-2 md:px-6"
       initial={{ opacity: 0, y: 40 }}
       animate={show ? { opacity: 1, y: -120 } : { opacity: 0, y: 40 }}
       transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
       dir="rtl"
     >
-      <div
-        className="flex flex-col lg:flex-row overflow-hidden rounded-2xl"
-        style={{
-          background: 'rgba(7,8,12,0.75)',
-          backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255,255,255,0.1)',
-        }}
-      >
-        {/* Sidebar — RIGHT side */}
-        <div className="lg:w-64 xl:w-72 flex flex-col flex-shrink-0"
-          style={{ borderLeft: '1px solid rgba(255,255,255,0.07)' }}>
-          <div className="px-5 py-3 flex items-center justify-between"
-            style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-            <span className="text-sm font-black" style={{ color: '#F2EDE6' }}>חדשות וכתבות</span>
-            <a href="/news" className="text-xs" style={{ color: 'rgba(242,237,230,0.4)' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#FF4D00')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(242,237,230,0.4)')}>
-              + כתבות נוספות
-            </a>
-          </div>
-          {NEWS.map(article => {
-            const isActive = article.id === activeId;
-            return (
-              <button key={article.id} onClick={() => setActiveId(article.id)}
-                className="text-right px-5 py-4 w-full transition-colors duration-150 flex-1"
-                style={{
-                  background: isActive ? 'rgba(255,77,0,0.1)' : 'transparent',
-                  borderRight: isActive ? '3px solid #FF4D00' : '3px solid transparent',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
-                }}>
-                <p className="text-sm font-bold leading-snug line-clamp-2"
-                  style={{ color: isActive ? '#FF4D00' : '#F2EDE6' }}>
-                  {article.title}
-                </p>
-                <span className="text-xs mt-1 block" style={{ color: 'rgba(242,237,230,0.3)' }}>
-                  {article.date}
-                </span>
-              </button>
-            );
-          })}
+      <div className="relative flex items-center justify-center gap-4">
+
+        {/* Right arrow (RTL: go back) */}
+        <button
+          onClick={prev}
+          className="flex-shrink-0 z-20 flex items-center justify-center rounded-xl transition-colors"
+          style={{ width: 44, height: 44, background: 'rgba(0,0,0,0.7)', color: '#F2EDE6', border: '1px solid rgba(255,255,255,0.15)' }}
+          onMouseEnter={e => (e.currentTarget.style.background = '#FF4D00')}
+          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.7)')}
+        >
+          ‹
+        </button>
+
+        {/* Cards */}
+        <div className="flex gap-4 overflow-hidden" style={{ flex: 1 }}>
+          <AnimatePresence mode="popLayout">
+            {indices.map((idx, pos) => {
+              const card = CARDS[idx];
+              const isCenter = pos === 1;
+              return (
+                <motion.div
+                  key={`${idx}-${pos}`}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: isCenter ? 1 : 0.55, scale: isCenter ? 1 : 0.93 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.45, ease: EASE_OUT_QUART }}
+                  className="relative flex-1 rounded-2xl overflow-hidden cursor-pointer"
+                  style={{ height: '420px', minWidth: 0 }}
+                  onClick={() => setCurrent(idx)}
+                >
+                  {/* Image */}
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0" style={{
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)',
+                  }} />
+                  {/* Text */}
+                  <div className="absolute bottom-0 right-0 left-0 p-6 text-right">
+                    <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold mb-3"
+                      style={{ background: '#FF4D00', color: '#fff' }}>
+                      {card.tag}
+                    </span>
+                    <h3 className="text-lg font-black leading-tight mb-2" style={{ color: '#F2EDE6' }}>
+                      {card.title}
+                    </h3>
+                    <p className="text-sm line-clamp-2 mb-4" style={{ color: 'rgba(242,237,230,0.6)' }}>
+                      {card.excerpt}
+                    </p>
+                    <span className="text-sm font-bold flex items-center gap-1 justify-end" style={{ color: '#FF4D00' }}>
+                      קרא עוד →
+                    </span>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
         </div>
 
-        {/* Infinite image scroll — LEFT side */}
-        <div className="relative flex-1 overflow-hidden flex items-center" style={{ minHeight: '300px' }}>
-          {/* Edge fade masks */}
-          <div className="absolute inset-0 z-10 pointer-events-none" style={{
-            background: 'linear-gradient(90deg, rgba(7,8,12,0.85) 0%, transparent 15%, transparent 85%, rgba(7,8,12,0.85) 100%)',
-          }} />
-          {/* Scrolling strip — each image sized so one set fills the container */}
-          <div
-            className="flex gap-3"
-            style={{
-              width: 'max-content',
-              animation: `hero-scroll ${HERO_IMAGES.length * 5}s linear infinite`,
-            }}
-          >
-            {[...HERO_IMAGES, ...HERO_IMAGES].map((src, i) => (
-              <div
-                key={i}
-                className="flex-shrink-0 rounded-xl overflow-hidden"
-                style={{
-                  width: '260px',
-                  height: '260px',
-                  transition: 'transform 0.3s ease, filter 0.3s ease',
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.04)';
-                  (e.currentTarget as HTMLDivElement).style.filter = 'brightness(1.15)';
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)';
-                  (e.currentTarget as HTMLDivElement).style.filter = 'brightness(1)';
-                }}
-              >
-                <img src={src} alt="" className="w-full h-full object-cover" />
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Left arrow (RTL: go forward) */}
+        <button
+          onClick={next}
+          className="flex-shrink-0 z-20 flex items-center justify-center rounded-xl transition-colors"
+          style={{ width: 44, height: 44, background: 'rgba(0,0,0,0.7)', color: '#F2EDE6', border: '1px solid rgba(255,255,255,0.15)' }}
+          onMouseEnter={e => (e.currentTarget.style.background = '#FF4D00')}
+          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.7)')}
+        >
+          ›
+        </button>
       </div>
     </motion.div>
   );
