@@ -237,6 +237,8 @@ export const HeroSection: React.FC = () => {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
+              fontFamily: '"Rubik", sans-serif',
+              fontWeight: 900,
             }}>אתנה</span>
           </HeadlineWord>
           {' '}
