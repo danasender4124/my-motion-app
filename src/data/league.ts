@@ -24,9 +24,18 @@ export const RECENT_RESULTS = [
 ];
 
 export const UPCOMING_GAMES = [
-  { id: 1, date: '23.4', time: '19:00', home: 'ה. ראשל"צ', away: 'מ. אשדוד', round: 'פלייאוף' },
-  { id: 3, date: '23.4', time: '20:10', home: 'א. חולון',  away: 'מ. רמת גן', round: 'פלייאוף' },
-  { id: 4, date: '26.4', time: '19:00', home: 'מ. אשדוד',  away: 'ה. ראשל"צ', round: 'פלייאוף' },
+  { id: 1,  date: '30/04/2026', time: '19:30', round: '24', venue: 'אולם פייס, כפר בלום',       watchUrl: '', home: 'ה. ראשל"צ',  homeLogo: '/teams/team-03.png', away: 'מ. רמת גן',   awayLogo: '/teams/team-10.png' },
+  { id: 2,  date: '01/05/2026', time: '13:30', round: '18', venue: 'לב המחשבה, נס ציונה',       watchUrl: '', home: 'מ. חיפה',    homeLogo: '/teams/team-09.png', away: 'ה. ב"ש',     awayLogo: '/teams/team-04.png' },
+  { id: 3,  date: '02/05/2026', time: '20:40', round: '19', venue: 'היכל טוטו, חולון',          watchUrl: '', home: 'א. חולון',   homeLogo: '/teams/team-02.png', away: 'ה. ראשל"צ',  awayLogo: '/teams/team-03.png' },
+  { id: 4,  date: '03/05/2026', time: '18:35', round: '23', venue: 'הקונדציה, באר שבע',         watchUrl: '', home: 'ה. ב"ש',    homeLogo: '/teams/team-04.png', away: 'מ. כרמיאל',  awayLogo: '/teams/team-07.png' },
+  { id: 5,  date: '03/05/2026', time: '21:00', round: '23', venue: 'פייס ארנה, ירושלים',        watchUrl: '', home: 'ה. ירושלים', homeLogo: '/teams/team-06.png', away: 'מ. חיפה',    awayLogo: '/teams/team-09.png' },
+  { id: 6,  date: '04/05/2026', time: '18:00', round: '20', venue: 'ארנה מ. אשדוד',             watchUrl: '', home: 'מ. אשדוד',   homeLogo: '/teams/team-08.png', away: 'א. רמלה',    awayLogo: '/teams/team-01.png' },
+  { id: 7,  date: '04/05/2026', time: '21:00', round: '23', venue: 'זיסמן, רמת גן',             watchUrl: '', home: 'מ. רמת גן',  homeLogo: '/teams/team-10.png', away: 'ב. פ"ת',     awayLogo: '/teams/team-05.png' },
+  { id: 8,  date: '05/05/2026', time: '20:10', round: '25', venue: 'היכל טוטו, חולון',          watchUrl: '', home: 'א. חולון',   homeLogo: '/teams/team-02.png', away: 'מ. אשדוד',   awayLogo: '/teams/team-08.png' },
+  { id: 9,  date: '06/05/2026', time: '19:00', round: '25', venue: 'אולם מ. כרמיאל',            watchUrl: '', home: 'מ. כרמיאל',  homeLogo: '/teams/team-07.png', away: 'מ. רמת גן',  awayLogo: '/teams/team-10.png' },
+  { id: 10, date: '06/05/2026', time: '19:10', round: '25', venue: 'בית מכבי, ראשל"צ',          watchUrl: '', home: 'ה. ראשל"צ', homeLogo: '/teams/team-03.png', away: 'ה. ירושלים', awayLogo: '/teams/team-06.png' },
+  { id: 11, date: '07/05/2026', time: '18:30', round: '25', venue: 'ארנה מ. ב"ש',              watchUrl: '', home: 'ה. ב"ש',    homeLogo: '/teams/team-04.png', away: 'ב. פ"ת',     awayLogo: '/teams/team-05.png' },
+  { id: 12, date: '07/05/2026', time: '20:00', round: '25', venue: 'מגרש ב. פ"ת',              watchUrl: '', home: 'ב. פ"ת',    homeLogo: '/teams/team-05.png', away: 'א. רמלה',    awayLogo: '/teams/team-01.png' },
 ];
 
 export const TOP_SCORERS = [
