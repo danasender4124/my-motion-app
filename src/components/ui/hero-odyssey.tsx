@@ -212,12 +212,12 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
           <div className="absolute inset-0 z-10 pointer-events-none" style={{
             background: 'linear-gradient(90deg, rgba(7,8,12,0.85) 0%, transparent 15%, transparent 85%, rgba(7,8,12,0.85) 100%)',
           }} />
-          {/* Scrolling strip — duplicated internally for seamless loop */}
+          {/* Scrolling strip — each image sized so one set fills the container */}
           <div
-            className="flex gap-4"
+            className="flex gap-3"
             style={{
               width: 'max-content',
-              animation: `hero-scroll ${HERO_IMAGES.length * 4}s linear infinite`,
+              animation: `hero-scroll ${HERO_IMAGES.length * 5}s linear infinite`,
             }}
           >
             {[...HERO_IMAGES, ...HERO_IMAGES].map((src, i) => (
@@ -225,12 +225,12 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
                 key={i}
                 className="flex-shrink-0 rounded-xl overflow-hidden"
                 style={{
-                  width: '220px',
-                  height: '220px',
+                  width: `calc((100vw - 300px) / ${HERO_IMAGES.length} - 12px)`,
+                  height: '260px',
                   transition: 'transform 0.3s ease, filter 0.3s ease',
                 }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.05)';
+                  (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.04)';
                   (e.currentTarget as HTMLDivElement).style.filter = 'brightness(1.15)';
                 }}
                 onMouseLeave={e => {
