@@ -197,8 +197,8 @@ export const HeroSection: React.FC = () => {
 
       {/* ── Hero content ── */}
       <motion.div
-        style={{ y: textY }}
-        className="relative z-20 flex flex-col items-center text-center px-5 md:px-8 pt-48 md:pt-56 pb-32"
+        style={{ y: textY, paddingTop: '13rem', paddingBottom: '8rem' }}
+        className="relative z-20 flex flex-col items-center text-center px-5 md:px-8"
       >
         {/* Main headline */}
         <motion.h1
