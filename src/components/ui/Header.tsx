@@ -34,6 +34,13 @@ const Header: React.FC = () => {
           />
         </NavLink>
 
+        {/* Left: Athena Winner logo */}
+        <img
+          src="/athena-winner-logo.png"
+          alt="ליגת אתנה וינר"
+          style={{ height: '64px', width: 'auto', objectFit: 'contain' }}
+        />
+
         {/* Mobile hamburger */}
         <button
           className="lg:hidden flex flex-col justify-center items-center w-9 h-9 rounded-lg gap-1.5"
