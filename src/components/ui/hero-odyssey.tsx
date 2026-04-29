@@ -150,7 +150,7 @@ export const HeroSection: React.FC = () => {
   const textY = useTransform(scrollYProgress, [0, 0.5], [0, -60]);
 
   return (
-    <div ref={heroRef} className="relative w-full overflow-hidden" style={{ background: '#07080C' }} dir="rtl">
+    <div ref={heroRef} className="relative w-full min-h-svh overflow-hidden" style={{ background: '#07080C' }} dir="rtl">
 
       {/* ── Video layer ── */}
       <motion.div
@@ -183,7 +183,7 @@ export const HeroSection: React.FC = () => {
 
       {/* ── Hero content ── */}
       <motion.div
-        style={{ y: textY, paddingTop: '2rem', paddingBottom: '3rem' }}
+        style={{ y: textY, paddingTop: '3.5rem', paddingBottom: '8rem' }}
         className="relative z-20 flex flex-col items-center text-center px-5 md:px-8"
       >
         {/* Main headline */}
@@ -191,7 +191,7 @@ export const HeroSection: React.FC = () => {
           variants={stagger(0.75, 0.12)}
           initial="hidden"
           animate="visible"
-          className="text-[clamp(1.8rem,5vw,4rem)] font-black leading-none tracking-tight mb-4"
+          className="text-[clamp(3rem,10vw,7.5rem)] font-black leading-none tracking-tight mb-4"
           style={{ color: '#F2EDE6' }}
         >
           <HeadlineWord delay={0}>ליגת</HeadlineWord>
