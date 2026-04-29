@@ -12,7 +12,7 @@ const PageBanner: React.FC<PageBannerProps> = ({ title }) => (
   <div
     className="relative w-full flex items-center justify-center overflow-hidden border-b-4"
     style={{
-      height: 'clamp(90px, 12vw, 140px)',
+      height: 'clamp(56px, 7vw, 80px)',
       borderColor: '#FF4D00',
       background: 'linear-gradient(135deg, #0f1117 0%, #1a1f2e 50%, #0f1117 100%)',
     }}
@@ -33,7 +33,7 @@ const PageBanner: React.FC<PageBannerProps> = ({ title }) => (
       className="relative z-10 font-black text-center"
       style={{
         color: '#F2EDE6',
-        fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+        fontSize: 'clamp(1.1rem, 2.2vw, 1.6rem)',
         letterSpacing: '-0.02em',
         lineHeight: 1,
         direction: 'rtl',
