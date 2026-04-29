@@ -24,38 +24,24 @@ const TEAM_LOGOS = [
   '/teams/team-10.png',
 ];
 
-const TeamMarquee: React.FC = () => {
-  // Duplicate for seamless loop
-  const logos = [...TEAM_LOGOS, ...TEAM_LOGOS];
-  return (
-    <div
-      className="flex-1 overflow-hidden flex items-center"
-      style={{ minWidth: 0 }}
-    >
-      <motion.div
-        className="flex items-center gap-4"
-        animate={{ x: ['0%', '-50%'] }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-        style={{ willChange: 'transform' }}
-      >
-        {logos.map((src, i) => (
-          <img
-            key={i}
-            src={src}
-            alt=""
-            style={{
-              height: '70px',
-              width: '70px',
-              objectFit: 'contain',
-              flexShrink: 0,
-              filter: 'drop-shadow(0 1px 4px rgba(0,0,0,0.4))',
-            }}
-          />
-        ))}
-      </motion.div>
-    </div>
-  );
-};
+const TeamLogos: React.FC = () => (
+  <div className="flex-1 flex items-center justify-center gap-3" style={{ minWidth: 0 }}>
+    {TEAM_LOGOS.map((src, i) => (
+      <img
+        key={i}
+        src={src}
+        alt=""
+        style={{
+          height: '70px',
+          width: '70px',
+          objectFit: 'contain',
+          flexShrink: 0,
+          filter: 'drop-shadow(0 1px 4px rgba(0,0,0,0.4))',
+        }}
+      />
+    ))}
+  </div>
+);
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -82,8 +68,8 @@ const Header: React.FC = () => {
         </NavLink>
 
         {/* Center: scrolling team logos */}
-        <div className="hidden lg:flex flex-1 overflow-hidden items-center" style={{ minWidth: 0 }}>
-          <TeamMarquee />
+        <div className="hidden lg:flex flex-1 items-center" style={{ minWidth: 0 }}>
+          <TeamLogos />
         </div>
 
         {/* Left: Athena Winner logo */}
