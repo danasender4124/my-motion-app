@@ -151,8 +151,6 @@ const HERO_IMAGES = [
   '/news-imgs/news-03.jpeg',
   '/news-imgs/news-04.jpeg',
 ];
-// Duplicate for seamless CSS loop — works for any image count
-const SLIDER_IMAGES = [...HERO_IMAGES, ...HERO_IMAGES];
 
 // ─── Inline news feed ────────────────────────────────────────────────────────
 const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
@@ -214,7 +212,7 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
           <div className="absolute inset-0 z-10 pointer-events-none" style={{
             background: 'linear-gradient(90deg, rgba(7,8,12,0.85) 0%, transparent 15%, transparent 85%, rgba(7,8,12,0.85) 100%)',
           }} />
-          {/* Scrolling strip — translateX(-50%) always equals exactly one full set */}
+          {/* Scrolling strip — duplicated internally for seamless loop */}
           <div
             className="flex gap-4"
             style={{
@@ -222,7 +220,7 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
               animation: `hero-scroll ${HERO_IMAGES.length * 4}s linear infinite`,
             }}
           >
-            {SLIDER_IMAGES.map((src, i) => (
+            {[...HERO_IMAGES, ...HERO_IMAGES].map((src, i) => (
               <div
                 key={i}
                 className="flex-shrink-0 rounded-xl overflow-hidden"
