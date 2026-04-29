@@ -232,7 +232,10 @@ export const HeroSection: React.FC = () => {
           <HeadlineWord delay={0}>ליגת</HeadlineWord>
           {' '}
           <HeadlineWord delay={0.12}>
-            <span style={{ color: '#FF4D00' }}>אתנה</span>
+            <span style={{ color: '#E5197D' }}>א</span>
+            <span style={{ color: '#F7941D' }}>ת</span>
+            <span style={{ color: '#8DC63F' }}>נ</span>
+            <span style={{ color: '#00AEEF' }}>ה</span>
           </HeadlineWord>
           {' '}
           <HeadlineWord delay={0.24}>
