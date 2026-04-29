@@ -26,21 +26,12 @@ const Header: React.FC = () => {
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}
       >
-        <NavLink to="/" className="flex items-center gap-3">
-          <div
-            className="w-9 h-9 rounded-full flex items-center justify-center font-black text-base"
-            style={{ background: '#FF4D00', color: '#fff' }}
-          >
-            🏀
-          </div>
-          <div className="flex flex-col leading-none">
-            <span className="text-xs font-semibold" style={{ color: '#FF4D00', letterSpacing: '0.12em' }}>
-              מנהלת
-            </span>
-            <span className="text-sm font-black" style={{ color: '#F2EDE6' }}>
-              ליגת העל נשים
-            </span>
-          </div>
+        <NavLink to="/" className="flex items-center">
+          <img
+            src="/league-logo.png"
+            alt="מנהלת הליגה נשים"
+            style={{ height: '40px', width: 'auto', objectFit: 'contain' }}
+          />
         </NavLink>
 
         {/* Mobile hamburger */}
