@@ -233,7 +233,7 @@ export const HeroSection: React.FC = () => {
           {' '}
           <HeadlineWord delay={0.12}>
             <span style={{
-              background: 'linear-gradient(to left, #87CEEB 0%, #87CEEB 22%, #8A4F9E 24%, #8A4F9E 27%, #CC2200 29%, #CC2200 62%, #E84B1F 64%, #E84B1F 67%, #F5A623 69%, #F5A623 100%)',
+              background: 'linear-gradient(to left, #87CEEB 0%, #87CEEB 22%, #C084DC 24%, #C084DC 27%, #CC2200 29%, #CC2200 62%, #E84B1F 64%, #E84B1F 67%, #F5A623 69%, #F5A623 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
