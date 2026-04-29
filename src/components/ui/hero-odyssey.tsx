@@ -144,10 +144,24 @@ const HeadlineWord: React.FC<{ children: React.ReactNode; delay: number }> = ({ 
   </motion.span>
 );
 
+// ─── Local rotating images ───────────────────────────────────────────────────
+const HERO_IMAGES = [
+  '/news-imgs/news-01.jpg',
+  '/news-imgs/news-02.jpg',
+  '/news-imgs/news-03.jpeg',
+  '/news-imgs/news-04.jpeg',
+];
+
 // ─── Inline news feed ────────────────────────────────────────────────────────
 const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
   const [activeId, setActiveId] = useState(NEWS[0].id);
+  const [imgIdx, setImgIdx] = useState(0);
   const featured = NEWS.find(n => n.id === activeId) ?? NEWS[0];
+
+  useEffect(() => {
+    const t = setInterval(() => setImgIdx(i => (i + 1) % HERO_IMAGES.length), 4000);
+    return () => clearInterval(t);
+  }, []);
 
   return (
     <motion.div
@@ -203,14 +217,14 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
         <div className="relative flex-1 overflow-hidden" style={{ aspectRatio: '16/9' }}>
           <AnimatePresence mode="wait">
             <motion.img
-              key={featured.id}
-              src={featured.image}
-              alt={featured.title}
+              key={imgIdx}
+              src={HERO_IMAGES[imgIdx]}
+              alt=""
               className="absolute inset-0 w-full h-full object-cover"
-              initial={{ opacity: 0, scale: 1.04 }}
+              initial={{ opacity: 0, scale: 1.03 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.45, ease: EASE_OUT_QUART }}
+              transition={{ duration: 0.8, ease: EASE_OUT_QUART }}
             />
           </AnimatePresence>
           <div className="absolute inset-0" style={{
