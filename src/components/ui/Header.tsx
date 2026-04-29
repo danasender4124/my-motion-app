@@ -11,6 +11,52 @@ const NAV_LINKS = [
   { label: 'חדשות',      to: '/news' },
 ];
 
+const TEAM_LOGOS = [
+  '/teams/team-01.png',
+  '/teams/team-02.png',
+  '/teams/team-03.png',
+  '/teams/team-04.png',
+  '/teams/team-05.png',
+  '/teams/team-06.png',
+  '/teams/team-07.png',
+  '/teams/team-08.png',
+  '/teams/team-09.png',
+  '/teams/team-10.png',
+];
+
+const TeamMarquee: React.FC = () => {
+  // Duplicate for seamless loop
+  const logos = [...TEAM_LOGOS, ...TEAM_LOGOS];
+  return (
+    <div
+      className="flex-1 overflow-hidden flex items-center"
+      style={{ minWidth: 0 }}
+    >
+      <motion.div
+        className="flex items-center gap-4"
+        animate={{ x: ['0%', '-50%'] }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+        style={{ willChange: 'transform' }}
+      >
+        {logos.map((src, i) => (
+          <img
+            key={i}
+            src={src}
+            alt=""
+            style={{
+              height: '70px',
+              width: '70px',
+              objectFit: 'contain',
+              flexShrink: 0,
+              filter: 'drop-shadow(0 1px 4px rgba(0,0,0,0.4))',
+            }}
+          />
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -19,14 +65,15 @@ const Header: React.FC = () => {
 
       {/* Row 1: Logo */}
       <div
-        className="w-full flex items-center justify-between px-4 md:px-8"
+        className="w-full flex items-center gap-4 px-4 md:px-6"
         style={{
           height: '110px',
           background: '#0A0E1A',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}
       >
-        <NavLink to="/" className="flex items-center">
+        {/* Right: League management logo */}
+        <NavLink to="/" className="flex items-center flex-shrink-0">
           <img
             src="/league-logo.png"
             alt="מנהלת הליגה נשים"
@@ -34,16 +81,22 @@ const Header: React.FC = () => {
           />
         </NavLink>
 
+        {/* Center: scrolling team logos */}
+        <div className="hidden lg:flex flex-1 overflow-hidden items-center" style={{ minWidth: 0 }}>
+          <TeamMarquee />
+        </div>
+
         {/* Left: Athena Winner logo */}
         <img
           src="/athena-winner-logo.png"
           alt="ליגת אתנה וינר"
+          className="flex-shrink-0"
           style={{ height: '95px', width: 'auto', objectFit: 'contain' }}
         />
 
         {/* Mobile hamburger */}
         <button
-          className="lg:hidden flex flex-col justify-center items-center w-9 h-9 rounded-lg gap-1.5"
+          className="lg:hidden flex flex-col justify-center items-center w-9 h-9 rounded-lg gap-1.5 flex-shrink-0"
           style={{ background: 'rgba(255,255,255,0.07)' }}
           onClick={() => setMenuOpen(v => !v)}
           aria-label="תפריט"
