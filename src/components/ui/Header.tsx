@@ -21,7 +21,7 @@ const Header: React.FC = () => {
       <div
         className="w-full flex items-center justify-between px-4 md:px-8"
         style={{
-          height: '56px',
+          height: '80px',
           background: '#0A0E1A',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}
@@ -30,7 +30,7 @@ const Header: React.FC = () => {
           <img
             src="/league-logo.png"
             alt="מנהלת הליגה נשים"
-            style={{ height: '40px', width: 'auto', objectFit: 'contain' }}
+            style={{ height: '64px', width: 'auto', objectFit: 'contain' }}
           />
         </NavLink>
 
