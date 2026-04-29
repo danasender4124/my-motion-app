@@ -229,18 +229,6 @@ export const HeroSection: React.FC = () => {
           <HeadlineWord delay={0.36}>בכדורסל לנשים</HeadlineWord>
         </motion.h1>
 
-        {/* Subheadline */}
-        <motion.h2
-          variants={fadeUp(1.0)}
-          initial="hidden"
-          animate="visible"
-          className="text-[clamp(1.1rem,3vw,1.6rem)] font-light mb-6 max-w-xl"
-          style={{ color: 'rgba(242,237,230,0.6)', letterSpacing: '-0.01em' }}
-        >
-          התרגשות, כישרון, ואהבה לכדורסל.
-          <br />
-          עקבי אחרי כל מחזור בליגה.
-        </motion.h2>
 
       </motion.div>
 
