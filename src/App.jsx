@@ -2,7 +2,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import './index.css'
-import ScoreTicker     from '@/components/ui/ScoreTicker'
 import Header          from '@/components/ui/Header'
 import { HeroSection } from '@/components/ui/hero-odyssey'
 import Results         from '@/components/ui/Results'
@@ -39,7 +38,6 @@ function App() {
   return (
     <BrowserRouter>
       <div style={{ background: '#07080C', minHeight: '100svh' }}>
-        <ScoreTicker />
         <Header />
         <main>
           <AnimatedRoutes />
