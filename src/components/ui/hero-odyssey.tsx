@@ -259,7 +259,7 @@ export const HeroSection: React.FC = () => {
         style={{ opacity: videoOpacity }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 1.75, ease: EASE_OUT_QUART }}
+        transition={{ duration: 1.2, ease: EASE_OUT_QUART }}
       >
         <FlameVideo />
         {/* Layered gradients for depth */}
