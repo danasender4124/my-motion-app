@@ -232,14 +232,17 @@ export const HeroSection: React.FC = () => {
           <HeadlineWord delay={0}>ליגת</HeadlineWord>
           {' '}
           <HeadlineWord delay={0.12}>
-            <span style={{
-              background: 'linear-gradient(to left, #87CEEB 0%, #87CEEB 22%, #C084DC 24%, #C084DC 27%, #CC2200 29%, #CC2200 62%, #E84B1F 64%, #E84B1F 67%, #F5A623 69%, #F5A623 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              fontFamily: '"Fredoka", sans-serif',
-              fontWeight: 700,
-            }}>אתנה</span>
+            <img
+              src="/athena-logo.png"
+              alt="אתנה"
+              style={{
+                height: 'clamp(3rem, 10vw, 7.5rem)',
+                width: 'auto',
+                display: 'inline-block',
+                verticalAlign: 'middle',
+                objectFit: 'contain',
+              }}
+            />
           </HeadlineWord>
           {' '}
           <HeadlineWord delay={0.24}>
