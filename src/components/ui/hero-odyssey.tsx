@@ -166,8 +166,42 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
           minHeight: '320px',
         }}
       >
-        {/* Featured image */}
-        <div className="relative flex-1 overflow-hidden" style={{ minHeight: '220px' }}>
+        {/* Sidebar — RIGHT side */}
+        <div className="lg:w-64 xl:w-72 flex flex-col flex-shrink-0"
+          style={{ borderLeft: '1px solid rgba(255,255,255,0.07)' }}>
+          <div className="px-5 py-3 flex items-center justify-between"
+            style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+            <span className="text-sm font-black" style={{ color: '#F2EDE6' }}>חדשות וכתבות</span>
+            <a href="/news" className="text-xs" style={{ color: 'rgba(242,237,230,0.4)' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#FF4D00')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(242,237,230,0.4)')}>
+              + כתבות נוספות
+            </a>
+          </div>
+          {NEWS.map(article => {
+            const isActive = article.id === activeId;
+            return (
+              <button key={article.id} onClick={() => setActiveId(article.id)}
+                className="text-right px-5 py-4 w-full transition-colors duration-150 flex-1"
+                style={{
+                  background: isActive ? 'rgba(255,77,0,0.1)' : 'transparent',
+                  borderRight: isActive ? '3px solid #FF4D00' : '3px solid transparent',
+                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                }}>
+                <p className="text-sm font-bold leading-snug line-clamp-2"
+                  style={{ color: isActive ? '#FF4D00' : '#F2EDE6' }}>
+                  {article.title}
+                </p>
+                <span className="text-xs mt-1 block" style={{ color: 'rgba(242,237,230,0.3)' }}>
+                  {article.date}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Featured image — LEFT side, landscape */}
+        <div className="relative flex-1 overflow-hidden" style={{ minHeight: '280px', maxHeight: '380px' }}>
           <AnimatePresence mode="wait">
             <motion.img
               key={featured.id}
@@ -204,40 +238,6 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
               </p>
             </motion.div>
           </AnimatePresence>
-        </div>
-
-        {/* Sidebar */}
-        <div className="lg:w-64 xl:w-72 flex flex-col"
-          style={{ borderRight: '1px solid rgba(255,255,255,0.07)' }}>
-          <div className="px-5 py-3 flex items-center justify-between"
-            style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-            <span className="text-sm font-black" style={{ color: '#F2EDE6' }}>חדשות וכתבות</span>
-            <a href="/news" className="text-xs" style={{ color: 'rgba(242,237,230,0.4)' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#FF4D00')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(242,237,230,0.4)')}>
-              + כתבות נוספות
-            </a>
-          </div>
-          {NEWS.map(article => {
-            const isActive = article.id === activeId;
-            return (
-              <button key={article.id} onClick={() => setActiveId(article.id)}
-                className="text-right px-5 py-4 w-full transition-colors duration-150 flex-1"
-                style={{
-                  background: isActive ? 'rgba(255,77,0,0.1)' : 'transparent',
-                  borderRight: isActive ? '3px solid #FF4D00' : '3px solid transparent',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
-                }}>
-                <p className="text-sm font-bold leading-snug line-clamp-2"
-                  style={{ color: isActive ? '#FF4D00' : '#F2EDE6' }}>
-                  {article.title}
-                </p>
-                <span className="text-xs mt-1 block" style={{ color: 'rgba(242,237,230,0.3)' }}>
-                  {article.date}
-                </span>
-              </button>
-            );
-          })}
         </div>
       </div>
     </motion.div>
