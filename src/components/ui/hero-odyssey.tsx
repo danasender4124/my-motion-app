@@ -163,7 +163,6 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
           background: 'rgba(7,8,12,0.75)',
           backdropFilter: 'blur(16px)',
           border: '1px solid rgba(255,255,255,0.1)',
-          minHeight: '320px',
         }}
       >
         {/* Sidebar — RIGHT side */}
@@ -200,8 +199,8 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
           })}
         </div>
 
-        {/* Featured image — LEFT side, landscape */}
-        <div className="relative flex-1 overflow-hidden" style={{ minHeight: '280px', maxHeight: '380px' }}>
+        {/* Featured image — LEFT side, 16:9 */}
+        <div className="relative flex-1 overflow-hidden" style={{ aspectRatio: '16/9' }}>
           <AnimatePresence mode="wait">
             <motion.img
               key={featured.id}
