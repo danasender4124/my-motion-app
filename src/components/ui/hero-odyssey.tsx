@@ -242,7 +242,7 @@ export const HeroSection: React.FC = () => {
                 verticalAlign: 'bottom',
                 objectFit: 'contain',
                 objectPosition: 'bottom',
-                transform: 'translateY(-18%)',
+                transform: 'translateY(-8%)',
               }}
             />
           </HeadlineWord>
