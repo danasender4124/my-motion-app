@@ -42,16 +42,7 @@ const Results: React.FC = () => {
     <section id="results" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
 
       {/* Section header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-10">
-        <motion.h2
-          className="text-2xl md:text-3xl font-black"
-          style={{ color: '#F2EDE6' }}
-          initial={{ opacity: 0, x: 16 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
-          משחקים
-        </motion.h2>
+      <div className="flex justify-center mb-10">
         <SectionTabs
           tabs={[
             { id: 'schedule', label: 'המשחקים הבאים' },
