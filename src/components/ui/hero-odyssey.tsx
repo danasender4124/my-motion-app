@@ -223,7 +223,7 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
                   <img
                     src={card.image}
                     alt={card.title}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-contain object-top"
                   />
                   {/* Gradient overlay */}
                   <div className="absolute inset-0" style={{
