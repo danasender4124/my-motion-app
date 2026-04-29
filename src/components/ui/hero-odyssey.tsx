@@ -144,24 +144,18 @@ const HeadlineWord: React.FC<{ children: React.ReactNode; delay: number }> = ({ 
   </motion.span>
 );
 
-// ─── Local rotating images ───────────────────────────────────────────────────
+// ─── Local images for infinite scroll ────────────────────────────────────────
 const HERO_IMAGES = [
   '/news-imgs/news-01.jpg',
   '/news-imgs/news-02.jpg',
   '/news-imgs/news-03.jpeg',
   '/news-imgs/news-04.jpeg',
 ];
+const SLIDER_IMAGES = [...HERO_IMAGES, ...HERO_IMAGES]; // duplicate for seamless loop
 
 // ─── Inline news feed ────────────────────────────────────────────────────────
 const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
   const [activeId, setActiveId] = useState(NEWS[0].id);
-  const [imgIdx, setImgIdx] = useState(0);
-  const featured = NEWS.find(n => n.id === activeId) ?? NEWS[0];
-
-  useEffect(() => {
-    const t = setInterval(() => setImgIdx(i => (i + 1) % HERO_IMAGES.length), 4000);
-    return () => clearInterval(t);
-  }, []);
 
   return (
     <motion.div
@@ -213,44 +207,41 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
           })}
         </div>
 
-        {/* Featured image — LEFT side, natural proportions */}
-        <div className="relative flex-1 overflow-hidden" style={{ minHeight: '300px' }}>
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={imgIdx}
-              src={HERO_IMAGES[imgIdx]}
-              alt=""
-              className="absolute inset-0 w-full h-full object-contain"
-              initial={{ opacity: 0, scale: 1.03 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8, ease: EASE_OUT_QUART }}
-            />
-          </AnimatePresence>
-          <div className="absolute inset-0" style={{
-            background: 'linear-gradient(to top, rgba(7,8,12,0.95) 0%, rgba(7,8,12,0.3) 50%, transparent 100%)',
+        {/* Infinite image scroll — LEFT side */}
+        <div className="relative flex-1 overflow-hidden flex items-center" style={{ minHeight: '300px' }}>
+          {/* Edge fade masks */}
+          <div className="absolute inset-0 z-10 pointer-events-none" style={{
+            background: 'linear-gradient(90deg, rgba(7,8,12,0.85) 0%, transparent 15%, transparent 85%, rgba(7,8,12,0.85) 100%)',
           }} />
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={featured.id}
-              className="absolute bottom-0 right-0 left-0 p-5 md:p-7"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.35, ease: EASE_OUT_QUART }}
-            >
-              <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold mb-2"
-                style={{ background: '#FF4D00', color: '#fff' }}>
-                {featured.tag}
-              </span>
-              <h3 className="text-lg md:text-2xl font-black leading-tight mb-1" style={{ color: '#F2EDE6' }}>
-                {featured.title}
-              </h3>
-              <p className="text-sm line-clamp-2" style={{ color: 'rgba(242,237,230,0.55)' }}>
-                {featured.excerpt}
-              </p>
-            </motion.div>
-          </AnimatePresence>
+          {/* Scrolling strip */}
+          <div
+            className="flex gap-4 w-max"
+            style={{
+              animation: 'hero-scroll 18s linear infinite',
+            }}
+          >
+            {SLIDER_IMAGES.map((src, i) => (
+              <div
+                key={i}
+                className="flex-shrink-0 rounded-xl overflow-hidden"
+                style={{
+                  width: '220px',
+                  height: '220px',
+                  transition: 'transform 0.3s ease, filter 0.3s ease',
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.05)';
+                  (e.currentTarget as HTMLDivElement).style.filter = 'brightness(1.15)';
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)';
+                  (e.currentTarget as HTMLDivElement).style.filter = 'brightness(1)';
+                }}
+              >
+                <img src={src} alt="" className="w-full h-full object-cover" />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </motion.div>
