@@ -154,7 +154,7 @@ const HeroNewsFeed: React.FC = () => {
       className="relative z-20 w-full max-w-6xl mx-auto px-4 md:px-8"
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, delay: 7.25, ease: EASE_OUT_EXPO }}
+      transition={{ duration: 0.7, delay: 5.0, ease: EASE_OUT_EXPO }}
       dir="rtl"
     >
       <div
