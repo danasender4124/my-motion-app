@@ -214,7 +214,7 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
                   initial={{ opacity: 0, scale: 0.94, y: 12 }}
                   animate={{ opacity: isCenter ? 1 : 0.5, scale: isCenter ? 1 : 0.93, y: 0 }}
                   exit={{ opacity: 0, scale: 0.94, y: -12 }}
-                  transition={{ duration: 0.85, ease: EASE_OUT_EXPO }}
+                  transition={{ duration: 1.15, ease: EASE_OUT_EXPO }}
                   className="relative flex-1 rounded-2xl overflow-hidden cursor-pointer"
                   style={{ height: '420px', minWidth: 0 }}
                   onClick={() => setCurrent(idx)}
