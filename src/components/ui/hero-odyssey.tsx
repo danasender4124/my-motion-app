@@ -237,7 +237,7 @@ export const HeroSection: React.FC = () => {
               alt="אתנה"
               style={{
                 height: 'clamp(3rem, 9vw, 7rem)',
-                width: 'auto',
+                width: 'clamp(8rem, 18vw, 14rem)',
                 display: 'inline-block',
                 verticalAlign: 'middle',
                 objectFit: 'contain',
@@ -251,7 +251,7 @@ export const HeroSection: React.FC = () => {
               alt="וינר"
               style={{
                 height: 'clamp(3rem, 9vw, 7rem)',
-                width: 'auto',
+                width: 'clamp(8rem, 18vw, 14rem)',
                 display: 'inline-block',
                 verticalAlign: 'middle',
                 objectFit: 'contain',
