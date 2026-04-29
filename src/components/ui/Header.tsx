@@ -36,7 +36,7 @@ const TeamLogos: React.FC = () => (
           width: '70px',
           objectFit: 'contain',
           flexShrink: 0,
-          filter: 'drop-shadow(0 0 1px white) drop-shadow(0 0 1px white)',
+          filter: 'none',
         }}
       />
     ))}
