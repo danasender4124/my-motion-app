@@ -125,9 +125,10 @@ const FeatureItem: React.FC<FeatureItemProps> = ({ name, value, side, top }) => 
 // ─── Flame video ──────────────────────────────────────────────────────────────
 const FlameVideo: React.FC = () => (
   <video
-    autoPlay loop muted playsInline
+    autoPlay muted playsInline
     className="absolute inset-0 w-full h-full object-cover"
     style={{ filter: 'brightness(0.75) contrast(1.1) saturate(1.2)' }}
+    onEnded={e => e.currentTarget.pause()}
   >
     <source src="/flame.mp4" type="video/mp4" />
   </video>
