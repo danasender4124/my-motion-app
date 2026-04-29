@@ -200,27 +200,6 @@ export const HeroSection: React.FC = () => {
         style={{ y: textY }}
         className="relative z-20 flex flex-col items-center text-center px-5 md:px-8 pt-20 md:pt-28 pb-32"
       >
-        {/* Live ticker */}
-        <motion.div
-          variants={fadeIn(0.5)}
-          initial="hidden"
-          animate="visible"
-          className="mb-8"
-        >
-          <MatchTicker />
-        </motion.div>
-
-        {/* Eyebrow */}
-        <motion.p
-          variants={fadeUp(0.65)}
-          initial="hidden"
-          animate="visible"
-          className="text-xs font-semibold tracking-[0.25em] uppercase mb-4"
-          style={{ color: '#FF4D00' }}
-        >
-          ליגת הנשים המקצועית · ישראל
-        </motion.p>
-
         {/* Main headline */}
         <motion.h1
           variants={stagger(0.75, 0.12)}
