@@ -15,7 +15,7 @@ const TEAM_LOGOS: { src: string; size?: number }[] = [
   { src: '/teams/team-01.png' },
   { src: '/teams/team-02.png' },
   { src: '/teams/team-03.png' },
-  { src: '/teams/team-04.png' },
+  { src: '/teams/team-04.png', size: 100 },
   { src: '/teams/team-05.png' },
   { src: '/teams/team-06.png' },
   { src: '/teams/team-07.png' },
