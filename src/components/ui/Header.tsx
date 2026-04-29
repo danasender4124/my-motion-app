@@ -11,14 +11,14 @@ const NAV_LINKS = [
   { label: 'חדשות',      to: '/news' },
 ];
 
-const TEAM_LOGOS: { src: string; size?: number }[] = [
+const TEAM_LOGOS: { src: string; size?: number; outline?: boolean }[] = [
   { src: '/teams/team-01.png', size: 100 },
   { src: '/teams/team-02.png' },
   { src: '/teams/team-03.png' },
   { src: '/teams/team-04.png' },
   { src: '/teams/team-05.png' },
-  { src: '/teams/team-06.png' },
-  { src: '/teams/team-07.png' },
+  { src: '/teams/team-06.png', outline: true },
+  { src: '/teams/team-07.png', outline: true },
   { src: '/teams/team-08.png', size: 100 },
   { src: '/teams/team-09.png' },
   { src: '/teams/team-10.png' },
@@ -38,7 +38,7 @@ const TeamLogos: React.FC = () => (
             width: `${size}px`,
             objectFit: 'contain',
             flexShrink: 0,
-            filter: 'none',
+            filter: logo.outline ? 'drop-shadow(0 0 1px white) drop-shadow(0 0 1px white)' : 'none',
           }}
         />
       );
