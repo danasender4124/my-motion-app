@@ -11,35 +11,38 @@ const NAV_LINKS = [
   { label: 'חדשות',      to: '/news' },
 ];
 
-const TEAM_LOGOS = [
-  '/teams/team-01.png',
-  '/teams/team-02.png',
-  '/teams/team-03.png',
-  '/teams/team-04.png',
-  '/teams/team-05.png',
-  '/teams/team-06.png',
-  '/teams/team-07.png',
-  '/teams/team-08.png',
-  '/teams/team-09.png',
-  '/teams/team-10.png',
+const TEAM_LOGOS: { src: string; size?: number }[] = [
+  { src: '/teams/team-01.png' },
+  { src: '/teams/team-02.png' },
+  { src: '/teams/team-03.png' },
+  { src: '/teams/team-04.png' },
+  { src: '/teams/team-05.png' },
+  { src: '/teams/team-06.png' },
+  { src: '/teams/team-07.png' },
+  { src: '/teams/team-08.png', size: 100 },
+  { src: '/teams/team-09.png' },
+  { src: '/teams/team-10.png' },
 ];
 
 const TeamLogos: React.FC = () => (
   <div className="flex-1 flex items-center justify-center gap-3" style={{ minWidth: 0 }}>
-    {TEAM_LOGOS.map((src, i) => (
-      <img
-        key={i}
-        src={src}
-        alt=""
-        style={{
-          height: '70px',
-          width: '70px',
-          objectFit: 'contain',
-          flexShrink: 0,
-          filter: 'none',
-        }}
-      />
-    ))}
+    {TEAM_LOGOS.map((logo, i) => {
+      const size = logo.size ?? 70;
+      return (
+        <img
+          key={i}
+          src={logo.src}
+          alt=""
+          style={{
+            height: `${size}px`,
+            width: `${size}px`,
+            objectFit: 'contain',
+            flexShrink: 0,
+            filter: 'none',
+          }}
+        />
+      );
+    })}
   </div>
 );
 
