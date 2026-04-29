@@ -145,7 +145,7 @@ const HeadlineWord: React.FC<{ children: React.ReactNode; delay: number }> = ({ 
 );
 
 // ─── Inline news feed ────────────────────────────────────────────────────────
-const HeroNewsFeed: React.FC = () => {
+const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
   const [activeId, setActiveId] = useState(NEWS[0].id);
   const featured = NEWS.find(n => n.id === activeId) ?? NEWS[0];
 
@@ -153,8 +153,8 @@ const HeroNewsFeed: React.FC = () => {
     <motion.div
       className="relative z-20 w-full max-w-6xl mx-auto px-4 md:px-8"
       initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, delay: 5.5, ease: EASE_OUT_EXPO }}
+      animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
       dir="rtl"
     >
       <div
@@ -250,6 +250,12 @@ export const HeroSection: React.FC = () => {
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const videoOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const textY = useTransform(scrollYProgress, [0, 0.5], [0, -60]);
+  const [newsShown, setNewsShown] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setNewsShown(true), 5500);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
     <div ref={heroRef} className="relative w-full min-h-svh overflow-hidden" style={{ background: '#07080C' }} dir="rtl">
@@ -288,7 +294,12 @@ export const HeroSection: React.FC = () => {
         style={{ y: textY, paddingTop: '1.75rem', paddingBottom: '2rem' }}
         className="relative z-20 flex flex-col items-center text-center px-5 md:px-8 gap-8"
       >
-        {/* Main headline */}
+        {/* Main headline — shrinks when news appears */}
+        <motion.div
+          animate={{ scale: newsShown ? 0.5 : 1, y: newsShown ? -20 : 0 }}
+          transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
+          style={{ transformOrigin: 'top center' }}
+        >
         <motion.h1
           variants={stagger(0.75, 0.12)}
           initial="hidden"
@@ -330,9 +341,10 @@ export const HeroSection: React.FC = () => {
           <br />
           <HeadlineWord delay={0.36}>בכדורסל לנשים</HeadlineWord>
         </motion.h1>
+        </motion.div>
 
         {/* News feed — appears after headline animation */}
-        <HeroNewsFeed />
+        <HeroNewsFeed show={newsShown} />
       </motion.div>
 
       {/* ── Scroll indicator ── */}
