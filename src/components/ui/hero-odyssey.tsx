@@ -236,7 +236,7 @@ export const HeroSection: React.FC = () => {
               src="/athena-logo.png"
               alt="אתנה"
               style={{
-                height: 'clamp(3rem, 10vw, 7.5rem)',
+                height: 'clamp(3rem, 9vw, 7rem)',
                 width: 'auto',
                 display: 'inline-block',
                 verticalAlign: 'middle',
@@ -250,7 +250,7 @@ export const HeroSection: React.FC = () => {
               src="/winner-logo.png"
               alt="וינר"
               style={{
-                height: 'clamp(2.5rem, 8vw, 6rem)',
+                height: 'clamp(3rem, 9vw, 7rem)',
                 width: 'auto',
                 display: 'inline-block',
                 verticalAlign: 'middle',
