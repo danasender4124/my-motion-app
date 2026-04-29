@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { NEWS } from '../../data/league';
 
 // ─── Easing curves (natural deceleration, not bounce) ────────────────────────
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -142,6 +143,106 @@ const HeadlineWord: React.FC<{ children: React.ReactNode; delay: number }> = ({ 
   </motion.span>
 );
 
+// ─── Inline news feed ────────────────────────────────────────────────────────
+const HeroNewsFeed: React.FC = () => {
+  const [activeId, setActiveId] = useState(NEWS[0].id);
+  const featured = NEWS.find(n => n.id === activeId) ?? NEWS[0];
+
+  return (
+    <motion.div
+      className="relative z-20 w-full max-w-6xl mx-auto px-4 md:px-8"
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, delay: 2.0, ease: EASE_OUT_EXPO }}
+      dir="rtl"
+    >
+      <div
+        className="flex flex-col lg:flex-row overflow-hidden rounded-2xl"
+        style={{
+          background: 'rgba(7,8,12,0.75)',
+          backdropFilter: 'blur(16px)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          minHeight: '320px',
+        }}
+      >
+        {/* Featured image */}
+        <div className="relative flex-1 overflow-hidden" style={{ minHeight: '220px' }}>
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={featured.id}
+              src={featured.image}
+              alt={featured.title}
+              className="absolute inset-0 w-full h-full object-cover"
+              initial={{ opacity: 0, scale: 1.04 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.45, ease: EASE_OUT_QUART }}
+            />
+          </AnimatePresence>
+          <div className="absolute inset-0" style={{
+            background: 'linear-gradient(to top, rgba(7,8,12,0.95) 0%, rgba(7,8,12,0.3) 50%, transparent 100%)',
+          }} />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={featured.id}
+              className="absolute bottom-0 right-0 left-0 p-5 md:p-7"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35, ease: EASE_OUT_QUART }}
+            >
+              <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold mb-2"
+                style={{ background: '#FF4D00', color: '#fff' }}>
+                {featured.tag}
+              </span>
+              <h3 className="text-lg md:text-2xl font-black leading-tight mb-1" style={{ color: '#F2EDE6' }}>
+                {featured.title}
+              </h3>
+              <p className="text-sm line-clamp-2" style={{ color: 'rgba(242,237,230,0.55)' }}>
+                {featured.excerpt}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Sidebar */}
+        <div className="lg:w-64 xl:w-72 flex flex-col"
+          style={{ borderRight: '1px solid rgba(255,255,255,0.07)' }}>
+          <div className="px-5 py-3 flex items-center justify-between"
+            style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+            <span className="text-sm font-black" style={{ color: '#F2EDE6' }}>חדשות וכתבות</span>
+            <a href="/news" className="text-xs" style={{ color: 'rgba(242,237,230,0.4)' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#FF4D00')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(242,237,230,0.4)')}>
+              + כתבות נוספות
+            </a>
+          </div>
+          {NEWS.map(article => {
+            const isActive = article.id === activeId;
+            return (
+              <button key={article.id} onClick={() => setActiveId(article.id)}
+                className="text-right px-5 py-4 w-full transition-colors duration-150 flex-1"
+                style={{
+                  background: isActive ? 'rgba(255,77,0,0.1)' : 'transparent',
+                  borderRight: isActive ? '3px solid #FF4D00' : '3px solid transparent',
+                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                }}>
+                <p className="text-sm font-bold leading-snug line-clamp-2"
+                  style={{ color: isActive ? '#FF4D00' : '#F2EDE6' }}>
+                  {article.title}
+                </p>
+                <span className="text-xs mt-1 block" style={{ color: 'rgba(242,237,230,0.3)' }}>
+                  {article.date}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 // ─── Main Hero ────────────────────────────────────────────────────────────────
 export const HeroSection: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -183,15 +284,15 @@ export const HeroSection: React.FC = () => {
 
       {/* ── Hero content ── */}
       <motion.div
-        style={{ y: textY, paddingTop: '1.75rem', paddingBottom: '8rem' }}
-        className="relative z-20 flex flex-col items-center text-center px-5 md:px-8"
+        style={{ y: textY, paddingTop: '1.75rem', paddingBottom: '2rem' }}
+        className="relative z-20 flex flex-col items-center text-center px-5 md:px-8 gap-8"
       >
         {/* Main headline */}
         <motion.h1
           variants={stagger(0.75, 0.12)}
           initial="hidden"
           animate="visible"
-          className="text-[clamp(2.16rem,7.2vw,5.4rem)] font-black leading-none tracking-tight mb-4"
+          className="text-[clamp(2.16rem,7.2vw,5.4rem)] font-black leading-none tracking-tight"
           style={{ color: '#F2EDE6' }}
         >
           <HeadlineWord delay={0}>ליגת</HeadlineWord>
@@ -229,7 +330,8 @@ export const HeroSection: React.FC = () => {
           <HeadlineWord delay={0.36}>בכדורסל לנשים</HeadlineWord>
         </motion.h1>
 
-
+        {/* News feed — appears after headline animation */}
+        <HeroNewsFeed />
       </motion.div>
 
       {/* ── Scroll indicator ── */}
