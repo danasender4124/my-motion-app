@@ -68,7 +68,7 @@ const Header: React.FC = () => {
       {/* Row 2: Orange nav bar (desktop) */}
       <nav
         className="hidden lg:flex items-stretch w-full"
-        style={{ background: '#FF4D00', height: '50px' }}
+        style={{ background: '#FF4D00' }}
         aria-label="ניווט ראשי"
       >
         {NAV_LINKS.map(link => (
