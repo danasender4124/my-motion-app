@@ -144,14 +144,15 @@ const HeadlineWord: React.FC<{ children: React.ReactNode; delay: number }> = ({ 
   </motion.span>
 );
 
-// ─── Local images for infinite scroll ────────────────────────────────────────
+// ─── Add / remove images here freely ─────────────────────────────────────────
 const HERO_IMAGES = [
   '/news-imgs/news-01.jpg',
   '/news-imgs/news-02.jpg',
   '/news-imgs/news-03.jpeg',
   '/news-imgs/news-04.jpeg',
 ];
-const SLIDER_IMAGES = [...HERO_IMAGES, ...HERO_IMAGES]; // duplicate for seamless loop
+// Duplicate for seamless CSS loop — works for any image count
+const SLIDER_IMAGES = [...HERO_IMAGES, ...HERO_IMAGES];
 
 // ─── Inline news feed ────────────────────────────────────────────────────────
 const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
@@ -213,11 +214,12 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
           <div className="absolute inset-0 z-10 pointer-events-none" style={{
             background: 'linear-gradient(90deg, rgba(7,8,12,0.85) 0%, transparent 15%, transparent 85%, rgba(7,8,12,0.85) 100%)',
           }} />
-          {/* Scrolling strip */}
+          {/* Scrolling strip — translateX(-50%) always equals exactly one full set */}
           <div
-            className="flex gap-4 w-max"
+            className="flex gap-4"
             style={{
-              animation: 'hero-scroll 18s linear infinite',
+              width: 'max-content',
+              animation: `hero-scroll ${HERO_IMAGES.length * 4}s linear infinite`,
             }}
           >
             {SLIDER_IMAGES.map((src, i) => (
