@@ -116,7 +116,7 @@ const Results: React.FC = () => {
 
       ) : (
         /* ── Schedule: full table ─────────────────────────────────────────── */
-        <div className="w-full rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.10)' }}>
+        <div className="w-full overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.10)' }}>
 
           {/* Header row */}
           <div
