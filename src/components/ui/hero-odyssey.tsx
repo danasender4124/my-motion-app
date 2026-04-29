@@ -185,7 +185,7 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
       className="relative z-20 w-full px-2 md:px-6"
       initial={{ opacity: 0, y: 40 }}
       animate={show ? { opacity: 1, y: -120 } : { opacity: 0, y: 40 }}
-      transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
+      transition={{ duration: 1.0, ease: EASE_OUT_EXPO }}
       dir="rtl"
     >
       <div className="relative flex items-center justify-center gap-4">
@@ -211,10 +211,10 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
                 <motion.div
                   key={`${idx}-${pos}`}
                   layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: isCenter ? 1 : 0.55, scale: isCenter ? 1 : 0.93 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.45, ease: EASE_OUT_QUART }}
+                  initial={{ opacity: 0, scale: 0.94, y: 12 }}
+                  animate={{ opacity: isCenter ? 1 : 0.5, scale: isCenter ? 1 : 0.93, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.94, y: -12 }}
+                  transition={{ duration: 0.85, ease: EASE_OUT_EXPO }}
                   className="relative flex-1 rounded-2xl overflow-hidden cursor-pointer"
                   style={{ height: '420px', minWidth: 0 }}
                   onClick={() => setCurrent(idx)}
