@@ -191,7 +191,7 @@ export const HeroSection: React.FC = () => {
           variants={stagger(0.75, 0.12)}
           initial="hidden"
           animate="visible"
-          className="text-[clamp(3rem,10vw,7.5rem)] font-black leading-none tracking-tight mb-4"
+          className="text-[clamp(2.4rem,8vw,6rem)] font-black leading-none tracking-tight mb-4"
           style={{ color: '#F2EDE6' }}
         >
           <HeadlineWord delay={0}>ליגת</HeadlineWord>
@@ -201,8 +201,8 @@ export const HeroSection: React.FC = () => {
               src="/athena-logo.png"
               alt="אתנה"
               style={{
-                height: 'clamp(3rem, 9vw, 7rem)',
-                width: 'clamp(8rem, 18vw, 14rem)',
+                height: 'clamp(2.4rem, 7.2vw, 5.6rem)',
+                width: 'clamp(6.4rem, 14.4vw, 11.2rem)',
                 display: 'inline-block',
                 verticalAlign: 'bottom',
                 objectFit: 'contain',
@@ -217,8 +217,8 @@ export const HeroSection: React.FC = () => {
               src="/winner-logo.png"
               alt="וינר"
               style={{
-                height: 'clamp(3rem, 9vw, 7rem)',
-                width: 'clamp(8rem, 18vw, 14rem)',
+                height: 'clamp(2.4rem, 7.2vw, 5.6rem)',
+                width: 'clamp(6.4rem, 14.4vw, 11.2rem)',
                 display: 'inline-block',
                 verticalAlign: 'middle',
                 objectFit: 'contain',
