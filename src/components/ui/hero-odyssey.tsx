@@ -181,20 +181,6 @@ export const HeroSection: React.FC = () => {
         }}
       />
 
-      {/* ── Feature items (floating) ── */}
-      <motion.div
-        variants={stagger(1.4, 0.15)}
-        initial="hidden"
-        animate="visible"
-        className="absolute inset-x-0 z-20 pointer-events-none hidden md:block"
-        style={{ top: '38%' }}
-      >
-        <FeatureItem name="12 קבוצות" value="בליגת העל" side="right" top="" />
-        <FeatureItem name="עונת 2024/25" value="מחזור 18" side="right" top="top-12" />
-        <FeatureItem name="אלופת ישראל" value="מ. רמת גן" side="left" top="" />
-        <FeatureItem name="הגמר · מאי 2025" value="הצטרפי לחגיגה" side="left" top="top-12" />
-      </motion.div>
-
       {/* ── Hero content ── */}
       <motion.div
         style={{ y: textY, paddingTop: '7rem', paddingBottom: '8rem' }}
@@ -256,60 +242,6 @@ export const HeroSection: React.FC = () => {
           עקבי אחרי כל מחזור בליגה.
         </motion.h2>
 
-        {/* CTAs */}
-        <motion.div
-          variants={fadeUp(1.15)}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-wrap gap-3 justify-center mb-16"
-        >
-          <motion.a
-            href="#"
-            className="flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm"
-            style={{ background: '#FF4D00', color: '#07080C' }}
-            whileHover={{ scale: 1.04, backgroundColor: '#FF6A30' } as any}
-            whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.15 }}
-          >
-            לוח המשחקים
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M8 13L3 8L8 3M3 8H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </motion.a>
-          <motion.a
-            href="#"
-            className="flex items-center gap-2 px-7 py-3.5 rounded-full font-medium text-sm"
-            style={{
-              background: 'rgba(242,237,230,0.07)',
-              color: '#F2EDE6',
-              border: '1px solid rgba(242,237,230,0.12)',
-              backdropFilter: 'blur(8px)',
-            }}
-            whileHover={{ backgroundColor: 'rgba(242,237,230,0.12)' } as any}
-            whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.15 }}
-          >
-            הקבוצות
-          </motion.a>
-        </motion.div>
-
-        {/* Season stats bar */}
-        <motion.div
-          variants={fadeUp(1.3)}
-          initial="hidden"
-          animate="visible"
-          className="flex items-stretch rounded-2xl overflow-hidden"
-          style={{
-            background: 'rgba(242,237,230,0.04)',
-            border: '1px solid rgba(242,237,230,0.08)',
-            backdropFilter: 'blur(12px)',
-          }}
-        >
-          <StatPill value="18" label="מחזורים" />
-          <StatPill value="72" label="משחקים" />
-          <StatPill value="12" label="קבוצות" />
-          <StatPill value="4" label="לגמר" />
-        </motion.div>
       </motion.div>
 
       {/* ── Scroll indicator ── */}
