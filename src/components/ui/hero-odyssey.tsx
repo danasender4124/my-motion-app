@@ -239,8 +239,9 @@ export const HeroSection: React.FC = () => {
                 height: 'clamp(3rem, 9vw, 7rem)',
                 width: 'clamp(8rem, 18vw, 14rem)',
                 display: 'inline-block',
-                verticalAlign: 'middle',
+                verticalAlign: 'bottom',
                 objectFit: 'contain',
+                objectPosition: 'bottom',
               }}
             />
           </HeadlineWord>
