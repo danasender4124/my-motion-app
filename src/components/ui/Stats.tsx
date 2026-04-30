@@ -8,13 +8,13 @@ type StatKey = 'ppg' | 'rpg' | 'apg';
 const STAT_TABS: Tab[] = [
   { id: 'ppg', label: 'נקודות' },
   { id: 'rpg', label: 'ריבאונדים' },
-  { id: 'apg', label: 'בישולים' },
+  { id: 'apg', label: 'אסיסטים' },
 ];
 
 const STAT_LABELS: Record<StatKey, string> = {
   ppg: 'נקודות למשחק',
   rpg: 'ריבאונדים למשחק',
-  apg: 'בישולים למשחק',
+  apg: 'אסיסטים למשחק',
 };
 
 const Stats: React.FC = () => {
