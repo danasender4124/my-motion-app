@@ -99,7 +99,8 @@ const Results: React.FC = () => {
 
           let rowIndex = 0;
           return (
-            <div className="w-full overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.10)' }}>
+            <div className="w-full overflow-x-auto" style={{ border: '1px solid rgba(255,255,255,0.10)' }}>
+            <div style={{ minWidth: '700px' }}>
               {Object.entries(grouped).map(([round, games]) => (
                 <div key={round}>
                   {/* Round header */}
@@ -194,12 +195,14 @@ const Results: React.FC = () => {
                 </div>
               ))}
             </div>
+            </div>
           );
         })()
 
       ) : (
         /* ── Schedule: full table ─────────────────────────────────────────── */
-        <div className="w-full overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.10)' }}>
+        <div className="w-full overflow-x-auto" style={{ border: '1px solid rgba(255,255,255,0.10)' }}>
+        <div style={{ minWidth: '700px' }}>
 
           {/* Header row */}
           <div
@@ -216,7 +219,7 @@ const Results: React.FC = () => {
             <span />
           </div>
 
-          {/* Game rows */}
+          {/* Game rows — close minWidth wrapper after last row */}
           {UPCOMING_GAMES.map((g, i) => {
             const evenBg  = 'rgba(255,255,255,0.04)';
             const oddBg   = 'rgba(255,255,255,0.01)';
@@ -333,6 +336,7 @@ const Results: React.FC = () => {
               </motion.div>
             );
           })}
+        </div>
         </div>
       )}
     </section>
