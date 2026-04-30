@@ -6,9 +6,9 @@ import SectionTabs, { Tab } from './SectionTabs';
 type StatKey = 'ppg' | 'rpg' | 'apg';
 
 const STAT_TABS: Tab[] = [
-  { id: 'ppg', label: 'נקודות' },
-  { id: 'rpg', label: 'ריבאונדים' },
   { id: 'apg', label: 'אסיסטים' },
+  { id: 'rpg', label: 'ריבאונדים' },
+  { id: 'ppg', label: 'נקודות' },
 ];
 
 const STAT_LABELS: Record<StatKey, string> = {
@@ -25,16 +25,7 @@ const Stats: React.FC = () => {
 
   return (
     <section id="stats" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
-        <motion.h2
-          className="text-2xl md:text-3xl font-black border-r-4 pr-4"
-          style={{ color: '#F2EDE6', borderColor: '#FF4D00' }}
-          initial={{ opacity: 0, x: 16 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
-          מובילות הליגה
-        </motion.h2>
+      <div className="flex justify-center mb-10">
         <SectionTabs
           tabs={STAT_TABS}
           active={stat}
