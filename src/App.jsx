@@ -1,6 +1,7 @@
 // src/App.jsx
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './index.css'
 import Header          from '@/components/ui/Header'
 import { HeroSection } from '@/components/ui/hero-odyssey'
@@ -10,6 +11,13 @@ import Stats           from '@/components/ui/Stats'
 import News            from '@/components/ui/News'
 import Footer          from '@/components/ui/Footer'
 import PageBanner      from '@/components/ui/PageBanner'
+import MatchPage       from './pages/MatchPage'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: 1, staleTime: 1000 * 60 * 5 },
+  },
+})
 
 const AnimatedRoutes = () => {
   const location = useLocation()
@@ -28,6 +36,7 @@ const AnimatedRoutes = () => {
           <Route path="/standings" element={<><PageBanner title="טבלת הליגה" /><Standings /></>} />
           <Route path="/stats"     element={<><PageBanner title="סטטיסטיקה" /><Stats /></>} />
           <Route path="/news"      element={<><PageBanner title="חדשות וכתבות" /><News /></>} />
+          <Route path="/match/:id" element={<MatchPage />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
@@ -36,15 +45,17 @@ const AnimatedRoutes = () => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <div style={{ background: '#07080C', minHeight: '100svh' }}>
-        <Header />
-        <main>
-          <AnimatedRoutes />
-        </main>
-        <Footer />
-      </div>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <div style={{ background: '#07080C', minHeight: '100svh' }}>
+          <Header />
+          <main>
+            <AnimatedRoutes />
+          </main>
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </QueryClientProvider>
   )
 }
 
