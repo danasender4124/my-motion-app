@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import type { PlayerGameStat } from '../../lib/queries';
 
 const fg = (m: number | null, a: number | null) => (m == null || a == null ? '—' : `${m}-${a}`);
@@ -77,7 +78,15 @@ const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows, j
         >
           <Cell>{jerseyByPlayerId?.get(s.player_id) ?? '—'}</Cell>
           <span className="text-right truncate" style={{ color: '#F2EDE6' }}>
-            {s.player ? `${s.player.first_name} ${s.player.last_name}` : '—'}
+            {s.player ? (
+              <Link
+                to={`/player/${s.player.id}`}
+                className="hover:underline"
+                style={{ color: '#F2EDE6' }}
+              >
+                {s.player.first_name} {s.player.last_name}
+              </Link>
+            ) : '—'}
           </span>
           <Cell>{safe(s.minutes)}</Cell>
           <Cell bold>{safe(s.points)}</Cell>
