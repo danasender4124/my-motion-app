@@ -54,6 +54,65 @@ export interface PlayerGameStat {
   player: { id: string; first_name: string; last_name: string } | null;
 }
 
+export interface PlayerProfile {
+  id: string;
+  first_name: string;
+  last_name: string;
+  birth_date: string | null;
+  nationality: string | null;
+  country_of_origin: string | null;
+  height: number | null;
+  position: 'point_guard' | 'shooting_guard' | 'small_forward' | 'power_forward' | 'center' | null;
+  status: string;
+  classification: 'israeli' | 'naturalized' | 'foreign' | 'bosman';
+  photo: string | null;
+  current_team: { id: string; name: string; logo: string | null } | null;
+  current_jersey: number | null;
+}
+
+export interface PlayerStatRow extends PlayerGameStat {
+  game: {
+    id: string;
+    date: string | null;
+    home_team_id: string;
+    away_team_id: string;
+    home_score: number | null;
+    away_score: number | null;
+    home_team: { id: string; name: string } | null;
+    away_team: { id: string; name: string } | null;
+  } | null;
+}
+
+export interface SeasonAverages {
+  games: number;
+  ppg: number;
+  rpg: number;
+  apg: number;
+  spg: number;
+  bpg: number;
+  mpg: number;
+  eff_avg: number;
+}
+
+const round1 = (n: number) => Math.round(n * 10) / 10;
+const sumKey = (rows: PlayerGameStat[], key: keyof PlayerGameStat): number =>
+  rows.reduce((acc, r) => acc + (Number(r[key]) || 0), 0);
+
+export const calcAverages = (rows: PlayerGameStat[]): SeasonAverages => {
+  const games = rows.length;
+  if (games === 0) return { games: 0, ppg: 0, rpg: 0, apg: 0, spg: 0, bpg: 0, mpg: 0, eff_avg: 0 };
+  return {
+    games,
+    ppg: round1(sumKey(rows, 'points') / games),
+    rpg: round1(sumKey(rows, 'rebounds') / games),
+    apg: round1(sumKey(rows, 'assists') / games),
+    spg: round1(sumKey(rows, 'steals') / games),
+    bpg: round1(sumKey(rows, 'blocks') / games),
+    mpg: round1(sumKey(rows, 'minutes') / games),
+    eff_avg: round1(sumKey(rows, 'efficiency') / games),
+  };
+};
+
 const SELECT_GAME =
   '*, home_team:teams!games_home_team_id_fkey(id, name, logo, home_color, away_color),' +
   ' away_team:teams!games_away_team_id_fkey(id, name, logo, home_color, away_color)';
@@ -147,5 +206,73 @@ export const useTeamJerseys = (seasonId: string | undefined, teamId: string | un
         map.set(r.player_id, r.jersey_number);
       });
       return map;
+    },
+  });
+
+export const usePlayer = (id: string | undefined) =>
+  useQuery({
+    queryKey: ['player', id],
+    enabled: !!id,
+    queryFn: async (): Promise<PlayerProfile | null> => {
+      const { data: player, error } = await supabase
+        .from('players')
+        .select('*')
+        .eq('id', id!)
+        .maybeSingle();
+      if (error) throw error;
+      if (!player) return null;
+
+      // Fetch the current-season team + jersey
+      const { data: activeSeason } = await supabase
+        .from('seasons').select('id').eq('status', 'active').maybeSingle();
+      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      let current_team: PlayerProfile['current_team'] = null;
+      let current_jersey: number | null = null;
+      if (seasonId) {
+        const { data: pts } = await supabase
+          .from('player_team_seasons')
+          .select('jersey_number, team:teams(id, name, logo)')
+          .eq('player_id', id!)
+          .eq('season_id', seasonId)
+          .maybeSingle();
+        if (pts) {
+          const row = pts as { jersey_number: number | null; team: { id: string; name: string; logo: string | null } | null };
+          current_team = row.team;
+          current_jersey = row.jersey_number;
+        }
+      }
+
+      return { ...(player as Omit<PlayerProfile, 'current_team' | 'current_jersey'>), current_team, current_jersey };
+    },
+  });
+
+export const usePlayerStats = (id: string | undefined) =>
+  useQuery({
+    queryKey: ['player_stats', id],
+    enabled: !!id,
+    queryFn: async (): Promise<PlayerStatRow[]> => {
+      const { data: activeSeason } = await supabase
+        .from('seasons').select('id').eq('status', 'active').maybeSingle();
+      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      if (!seasonId) return [];
+
+      const { data: gameIds } = await supabase
+        .from('games').select('id').eq('season_id', seasonId);
+      const ids = (gameIds ?? []).map((r: { id: string }) => r.id);
+      if (ids.length === 0) return [];
+
+      const { data, error } = await supabase
+        .from('player_game_stats')
+        .select(
+          '*, game:games(id, date, home_team_id, away_team_id, home_score, away_score,' +
+            ' home_team:teams!games_home_team_id_fkey(id, name),' +
+            ' away_team:teams!games_away_team_id_fkey(id, name))'
+        )
+        .eq('player_id', id!)
+        .in('game_id', ids);
+      if (error) throw error;
+      const rows = (data ?? []) as unknown as PlayerStatRow[];
+      rows.sort((a, b) => (b.game?.date ?? '').localeCompare(a.game?.date ?? ''));
+      return rows;
     },
   });
