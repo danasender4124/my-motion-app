@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@21st-sdk/react": "^0.2.3",
+    "@supabase/supabase-js": "^2.105.1",
     "@tailwindcss/vite": "^4.2.2",
+    "@tanstack/react-query": "^5.100.8",
     "ai": "^5.0.173",
     "framer-motion": "^12.38.0",
     "motion": "^12.38.0",
