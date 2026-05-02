@@ -16,9 +16,22 @@ interface Props {
   rows: PlayerGameStat[];
 }
 
+// Returns black for light hex backgrounds, white for dark — using YIQ luminance.
+const contrastText = (hex: string): string => {
+  const m = hex.match(/^#?([0-9a-f]{6})$/i);
+  if (!m) return '#fff';
+  const v = parseInt(m[1], 16);
+  const r = (v >> 16) & 255;
+  const g = (v >> 8) & 255;
+  const b = v & 255;
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 160 ? '#07080C' : '#fff';
+};
+
 const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows }) => {
   const header = '# שחקנית דק׳ נק׳ 2נק 3נק עונשין רבד רבת אס חט חס איב עב מדד'.split(' ');
   const accent = teamColor || '#FF4D00';
+  const titleTextColor = contrastText(accent);
 
   const Cell: React.FC<{ children: React.ReactNode; bold?: boolean }> = ({ children, bold }) => (
     <span className={`text-center tabular-nums ${bold ? 'font-black' : ''}`} style={{ color: bold ? '#F2EDE6' : 'rgba(242,237,230,0.7)' }}>
@@ -35,7 +48,7 @@ const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows })
             <img src={teamLogo} alt={teamName} className="w-full h-full object-contain" />
           </div>
         )}
-        <span className="font-black text-white">{teamName}</span>
+        <span className="font-black" style={{ color: titleTextColor }}>{teamName}</span>
       </div>
 
       {/* Header row */}
