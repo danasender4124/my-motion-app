@@ -14,6 +14,7 @@ interface Props {
   teamLogo: string | null;
   teamColor: string | null;
   rows: PlayerGameStat[];
+  jerseyByPlayerId?: Map<string, number | null>;
 }
 
 // Returns black for light hex backgrounds, white for dark — using YIQ luminance.
@@ -28,7 +29,7 @@ const contrastText = (hex: string): string => {
   return yiq >= 160 ? '#07080C' : '#fff';
 };
 
-const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows }) => {
+const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows, jerseyByPlayerId }) => {
   const header = '# שחקנית דק׳ נק׳ 2נק 3נק עונשין רבד רבת אס חט חס איב עב מדד'.split(' ');
   const accent = teamColor || '#FF4D00';
   const titleTextColor = contrastText(accent);
@@ -74,7 +75,7 @@ const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows })
             minWidth: '900px',
           }}
         >
-          <Cell>{/* jersey not stored in player_game_stats — leave dash */}—</Cell>
+          <Cell>{jerseyByPlayerId?.get(s.player_id) ?? '—'}</Cell>
           <span className="text-right truncate" style={{ color: '#F2EDE6' }}>
             {s.player ? `${s.player.first_name} ${s.player.last_name}` : '—'}
           </span>

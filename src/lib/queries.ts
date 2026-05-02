@@ -129,3 +129,23 @@ export const useMatchStats = (id: string | undefined) =>
       return (data ?? []) as unknown as PlayerGameStat[];
     },
   });
+
+/** Returns a Map<player_id, jersey_number> for a given (season, team). */
+export const useTeamJerseys = (seasonId: string | undefined, teamId: string | undefined) =>
+  useQuery({
+    queryKey: ['team_jerseys', seasonId, teamId],
+    enabled: !!seasonId && !!teamId,
+    queryFn: async (): Promise<Map<string, number | null>> => {
+      const { data, error } = await supabase
+        .from('player_team_seasons')
+        .select('player_id, jersey_number')
+        .eq('season_id', seasonId!)
+        .eq('team_id', teamId!);
+      if (error) throw error;
+      const map = new Map<string, number | null>();
+      ((data ?? []) as Array<{ player_id: string; jersey_number: number | null }>).forEach((r) => {
+        map.set(r.player_id, r.jersey_number);
+      });
+      return map;
+    },
+  });

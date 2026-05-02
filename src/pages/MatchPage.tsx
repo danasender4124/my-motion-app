@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useMatch, useMatchStats } from '../lib/queries';
+import { useMatch, useMatchStats, useTeamJerseys } from '../lib/queries';
 import MatchHeader from '../components/match/MatchHeader';
 import QuarterScoresTable from '../components/match/QuarterScoresTable';
 import BoxScoreTable from '../components/match/BoxScoreTable';
@@ -9,6 +9,8 @@ const MatchPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const matchQ = useMatch(id);
   const statsQ = useMatchStats(id);
+  const homeJerseysQ = useTeamJerseys(matchQ.data?.season_id, matchQ.data?.home_team_id);
+  const awayJerseysQ = useTeamJerseys(matchQ.data?.season_id, matchQ.data?.away_team_id);
 
   if (matchQ.isLoading) {
     return (
@@ -45,6 +47,7 @@ const MatchPage: React.FC = () => {
                 teamLogo={game.home_team?.logo ?? null}
                 teamColor={game.home_team?.home_color ?? null}
                 rows={homeStats}
+                jerseyByPlayerId={homeJerseysQ.data ?? new Map()}
               />
             )}
             {awayStats.length > 0 && (
@@ -53,6 +56,7 @@ const MatchPage: React.FC = () => {
                 teamLogo={game.away_team?.logo ?? null}
                 teamColor={game.away_team?.away_color ?? null}
                 rows={awayStats}
+                jerseyByPlayerId={awayJerseysQ.data ?? new Map()}
               />
             )}
           </>
