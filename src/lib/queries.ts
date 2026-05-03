@@ -70,6 +70,18 @@ export interface PlayerProfile {
   current_jersey: number | null;
 }
 
+export interface TeamProfile {
+  id: string;
+  name: string;
+  logo: string | null;
+  home_color: string | null;
+  away_color: string | null;
+  city: string | null;
+  hall_address: string | null;
+  contact: { phone?: string; email?: string } | null;
+  social_links: { facebook?: string; instagram?: string; youtube?: string; twitter?: string } | null;
+}
+
 export interface PlayerStatRow extends PlayerGameStat {
   game: {
     id: string;
@@ -274,5 +286,34 @@ export const usePlayerStats = (id: string | undefined) =>
       const rows = (data ?? []) as unknown as PlayerStatRow[];
       rows.sort((a, b) => (b.game?.date ?? '').localeCompare(a.game?.date ?? ''));
       return rows;
+    },
+  });
+
+export const useTeams = () =>
+  useQuery({
+    queryKey: ['teams', 'all'],
+    queryFn: async (): Promise<TeamProfile[]> => {
+      const { data, error } = await supabase
+        .from('teams')
+        .select('id, name, logo, home_color, away_color, city, hall_address, contact, social_links')
+        .order('name', { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as unknown as TeamProfile[];
+    },
+    staleTime: 1000 * 60 * 10,
+  });
+
+export const useTeam = (id: string | undefined) =>
+  useQuery({
+    queryKey: ['team', id],
+    enabled: !!id,
+    queryFn: async (): Promise<TeamProfile | null> => {
+      const { data, error } = await supabase
+        .from('teams')
+        .select('id, name, logo, home_color, away_color, city, hall_address, contact, social_links')
+        .eq('id', id!)
+        .maybeSingle();
+      if (error) throw error;
+      return (data ?? null) as TeamProfile | null;
     },
   });
