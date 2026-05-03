@@ -93,7 +93,7 @@ const adapt = (g: GameWithTeams): GameRow => ({
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 const Results: React.FC = () => {
-  const [tab, setTab] = useState<'results' | 'schedule'>('schedule');
+  const [tab, setTab] = useState<'results' | 'schedule'>('results');
 
   const recentQ = useRecentResults();
   const upcomingQ = useUpcomingGames();
