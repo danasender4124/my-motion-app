@@ -116,6 +116,21 @@ export interface SeasonAverages {
   eff_avg: number;
 }
 
+export interface LeaderRow {
+  player_id: string;
+  first_name: string;
+  last_name: string;
+  photo: string | null;
+  avg: number;
+  games: number;
+}
+
+export interface TeamLeaders {
+  ppg: LeaderRow | null;
+  rpg: LeaderRow | null;
+  apg: LeaderRow | null;
+}
+
 const round1 = (n: number) => Math.round(n * 10) / 10;
 const sumKey = (rows: PlayerGameStat[], key: keyof PlayerGameStat): number =>
   rows.reduce((acc, r) => acc + (Number(r[key]) || 0), 0);
@@ -408,5 +423,75 @@ export const useTeamSeasonStats = (teamId: string | undefined) =>
         (g) => g.home_team_id === teamId || g.away_team_id === teamId,
       );
       return computeTeamSeasonStats(teamId!, teamGames, allTeamIds, allGames);
+    },
+  });
+
+export const useTeamLeaders = (teamId: string | undefined) =>
+  useQuery({
+    queryKey: ['team_leaders', teamId],
+    enabled: !!teamId,
+    queryFn: async (): Promise<TeamLeaders> => {
+      const { data: activeSeason } = await supabase
+        .from('seasons').select('id').eq('status', 'active').maybeSingle();
+      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      if (!seasonId) return { ppg: null, rpg: null, apg: null };
+
+      const { data: gameIds } = await supabase
+        .from('games').select('id').eq('season_id', seasonId);
+      const gids = ((gameIds ?? []) as Array<{ id: string }>).map((r) => r.id);
+      if (gids.length === 0) return { ppg: null, rpg: null, apg: null };
+
+      const { data, error } = await supabase
+        .from('player_game_stats')
+        .select('player_id, points, rebounds, assists, player:players(id, first_name, last_name, photo)')
+        .eq('team_id', teamId!)
+        .in('game_id', gids);
+      if (error) throw error;
+
+      type Row = {
+        player_id: string;
+        points: number | null;
+        rebounds: number | null;
+        assists: number | null;
+        player: { id: string; first_name: string; last_name: string; photo: string | null } | null;
+      };
+      const rows = (data ?? []) as Row[];
+
+      // Group by player_id
+      const byPlayer = new Map<string, { sumP: number; sumR: number; sumA: number; games: number; player: Row['player'] }>();
+      for (const r of rows) {
+        const cur = byPlayer.get(r.player_id) ?? { sumP: 0, sumR: 0, sumA: 0, games: 0, player: r.player };
+        cur.sumP += Number(r.points ?? 0);
+        cur.sumR += Number(r.rebounds ?? 0);
+        cur.sumA += Number(r.assists ?? 0);
+        cur.games += 1;
+        cur.player = r.player;
+        byPlayer.set(r.player_id, cur);
+      }
+
+      const round1 = (n: number) => Math.round(n * 10) / 10;
+      const pickTop = (key: 'sumP' | 'sumR' | 'sumA'): LeaderRow | null => {
+        let best: { id: string; v: number; games: number; player: Row['player'] } | null = null;
+        for (const [id, agg] of byPlayer.entries()) {
+          if (agg.games === 0 || !agg.player) continue;
+          const avg = agg[key] / agg.games;
+          if (!best || avg > best.v) best = { id, v: avg, games: agg.games, player: agg.player };
+        }
+        if (!best || !best.player) return null;
+        return {
+          player_id: best.player.id,
+          first_name: best.player.first_name,
+          last_name: best.player.last_name,
+          photo: best.player.photo,
+          avg: round1(best.v),
+          games: best.games,
+        };
+      };
+
+      return {
+        ppg: pickTop('sumP'),
+        rpg: pickTop('sumR'),
+        apg: pickTop('sumA'),
+      };
     },
   });
