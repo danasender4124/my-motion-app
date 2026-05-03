@@ -669,3 +669,27 @@ export const useTeamSupportStaffPublic = (teamId: string | undefined) =>
       return (data ?? []) as PublicStaffMember[];
     },
   });
+
+export type PublicManagementRole = 'chairman' | 'general_manager' | 'basketball_operations' | 'media_manager' | 'community_coordinator';
+
+export interface PublicManagementMember {
+  id: string;
+  role: PublicManagementRole;
+  first_name: string;
+  last_name: string;
+}
+
+export const useTeamManagementPublic = (teamId: string | undefined) =>
+  useQuery({
+    queryKey: ['public_team_management', teamId],
+    enabled: !!teamId,
+    queryFn: async (): Promise<PublicManagementMember[]> => {
+      const { data, error } = await supabase
+        .from('team_management')
+        .select('id, role, first_name, last_name')
+        .eq('team_id', teamId!)
+        .order('role', { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as PublicManagementMember[];
+    },
+  });
