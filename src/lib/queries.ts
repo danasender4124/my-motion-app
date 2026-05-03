@@ -598,3 +598,74 @@ export const useGameVideos = (gameId: string | undefined) =>
       return (data ?? []) as PublicVideo[];
     },
   });
+
+export interface CoachAchievements {
+  state_championships: number;
+  state_cups: number;
+  winner_cups: number;
+  european_cups: number;
+}
+
+export interface PublicHeadCoach {
+  id: string;
+  first_name: string;
+  last_name: string;
+  photo: string | null;
+  nationality: string | null;
+  achievements: CoachAchievements;
+}
+
+export type PublicStaffRole = 'assistant_coach' | 'strength_conditioning' | 'physiotherapist' | 'team_manager';
+
+export interface PublicStaffMember {
+  id: string;
+  role: PublicStaffRole;
+  first_name: string;
+  last_name: string;
+  photo: string | null;
+}
+
+export const useTeamHeadCoachPublic = (teamId: string | undefined) =>
+  useQuery({
+    queryKey: ['public_team_head_coach', teamId],
+    enabled: !!teamId,
+    queryFn: async (): Promise<PublicHeadCoach | null> => {
+      const { data: activeSeason } = await supabase
+        .from('seasons').select('id').eq('status', 'active').maybeSingle();
+      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      if (!seasonId) return null;
+
+      const { data, error } = await supabase
+        .from('coach_team_seasons')
+        .select('coach:coaches(id, first_name, last_name, photo, nationality, achievements)')
+        .eq('team_id', teamId!)
+        .eq('season_id', seasonId)
+        .maybeSingle();
+      if (error) throw error;
+      const row = (data ?? null) as { coach: { id: string; first_name: string; last_name: string; photo: string | null; nationality: string | null; achievements: CoachAchievements } | null } | null;
+      if (!row?.coach) return null;
+      return {
+        id: row.coach.id,
+        first_name: row.coach.first_name,
+        last_name: row.coach.last_name,
+        photo: row.coach.photo,
+        nationality: row.coach.nationality,
+        achievements: row.coach.achievements ?? { state_championships: 0, state_cups: 0, winner_cups: 0, european_cups: 0 },
+      };
+    },
+  });
+
+export const useTeamSupportStaffPublic = (teamId: string | undefined) =>
+  useQuery({
+    queryKey: ['public_team_staff', teamId],
+    enabled: !!teamId,
+    queryFn: async (): Promise<PublicStaffMember[]> => {
+      const { data, error } = await supabase
+        .from('team_staff')
+        .select('id, role, first_name, last_name, photo')
+        .eq('team_id', teamId!)
+        .order('role', { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as PublicStaffMember[];
+    },
+  });
