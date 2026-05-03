@@ -1,0 +1,59 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import type { RosterPlayer } from '../../lib/queries';
+
+const POSITION_LABEL: Record<NonNullable<RosterPlayer['position']>, string> = {
+  point_guard: 'PG',
+  shooting_guard: 'G',
+  small_forward: 'F',
+  power_forward: 'PF',
+  center: 'C',
+};
+
+const initials = (first: string, last: string) =>
+  (first?.[0] ?? '') + (last?.[0] ?? '');
+
+interface Props { players: RosterPlayer[] }
+
+const TeamRoster: React.FC<Props> = ({ players }) => {
+  if (players.length === 0) {
+    return (
+      <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }} dir="rtl">
+        טרם שובץ סגל לעונה זו
+      </div>
+    );
+  }
+  return (
+    <div dir="rtl">
+      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>סגל</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        {players.map((p) => (
+          <Link
+            key={p.id}
+            to={`/player/${p.id}`}
+            className="rounded-xl p-3 flex flex-col items-center gap-2 transition-colors"
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            <div
+              className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center"
+              style={{ background: 'rgba(255,255,255,0.06)' }}
+            >
+              {p.photo
+                ? <img src={p.photo} alt={`${p.first_name} ${p.last_name}`} className="w-full h-full object-cover" />
+                : <span className="text-base font-black" style={{ color: 'rgba(242,237,230,0.55)' }}>{initials(p.first_name, p.last_name)}</span>}
+            </div>
+            <div className="text-xs font-black" style={{ color: '#FF4D00' }}>
+              {p.jersey_number != null ? `#${p.jersey_number}` : '—'}
+              {p.position && <span className="mr-2" style={{ color: 'rgba(242,237,230,0.5)' }}>{POSITION_LABEL[p.position]}</span>}
+            </div>
+            <div className="text-sm font-semibold text-center truncate w-full" style={{ color: '#F2EDE6' }}>
+              {p.first_name} {p.last_name}
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default TeamRoster;
