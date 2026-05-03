@@ -82,6 +82,15 @@ export interface TeamProfile {
   social_links: { facebook?: string; instagram?: string; youtube?: string; twitter?: string } | null;
 }
 
+export interface RosterPlayer {
+  id: string;
+  first_name: string;
+  last_name: string;
+  photo: string | null;
+  position: PlayerProfile['position'];
+  jersey_number: number | null;
+}
+
 export interface PlayerStatRow extends PlayerGameStat {
   game: {
     id: string;
@@ -315,5 +324,41 @@ export const useTeam = (id: string | undefined) =>
         .maybeSingle();
       if (error) throw error;
       return (data ?? null) as TeamProfile | null;
+    },
+  });
+
+export const useTeamRoster = (teamId: string | undefined) =>
+  useQuery({
+    queryKey: ['team_roster', teamId],
+    enabled: !!teamId,
+    queryFn: async (): Promise<RosterPlayer[]> => {
+      const { data: activeSeason } = await supabase
+        .from('seasons').select('id').eq('status', 'active').maybeSingle();
+      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      if (!seasonId) return [];
+
+      const { data, error } = await supabase
+        .from('player_team_seasons')
+        .select('jersey_number, player:players(id, first_name, last_name, photo, position)')
+        .eq('team_id', teamId!)
+        .eq('season_id', seasonId);
+      if (error) throw error;
+
+      const rows = (data ?? []) as Array<{
+        jersey_number: number | null;
+        player: { id: string; first_name: string; last_name: string; photo: string | null; position: PlayerProfile['position'] } | null;
+      }>;
+
+      return rows
+        .filter((r) => r.player)
+        .map((r) => ({
+          id: r.player!.id,
+          first_name: r.player!.first_name,
+          last_name: r.player!.last_name,
+          photo: r.player!.photo,
+          position: r.player!.position,
+          jersey_number: r.jersey_number,
+        }))
+        .sort((a, b) => (a.jersey_number ?? 999) - (b.jersey_number ?? 999));
     },
   });
