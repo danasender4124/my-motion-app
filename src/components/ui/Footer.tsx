@@ -1,4 +1,23 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
+interface FooterLink { label: string; to?: string }
+
+const FOOTER_COLUMNS: { title: string; links: FooterLink[] }[] = [
+  { title: 'הליגה', links: [
+    { label: 'אודות' }, { label: 'היסטוריה' }, { label: 'אלופות לשעבר' }, { label: 'כללים' }, { label: 'תקנון' },
+  ]},
+  { title: 'ספורט', links: [
+    { label: 'לוח משחקים', to: '/results' },
+    { label: 'תוצאות',     to: '/results' },
+    { label: 'טבלת הליגה', to: '/standings' },
+    { label: 'סטטיסטיקה',  to: '/stats' },
+    { label: 'VOD',        to: '/vod' },
+  ]},
+  { title: 'צרו קשר', links: [
+    { label: 'יצירת קשר' }, { label: 'עיתונאים' }, { label: 'שיתופי פעולה' }, { label: 'נגישות' },
+  ]},
+];
 
 const Footer: React.FC = () => (
   <footer
@@ -36,27 +55,27 @@ const Footer: React.FC = () => (
         </div>
 
         {/* Links */}
-        {[
-          { title: 'הליגה', links: ['אודות', 'היסטוריה', 'אלופות לשעבר', 'כללים', 'תקנון'] },
-          { title: 'ספורט', links: ['לוח משחקים', 'תוצאות', 'טבלת הליגה', 'סטטיסטיקה', 'פלייאוף'] },
-          { title: 'צרו קשר', links: ['יצירת קשר', 'עיתונאים', 'שיתופי פעולה', 'נגישות'] },
-        ].map(col => (
+        {FOOTER_COLUMNS.map(col => (
           <div key={col.title}>
             <h4 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#FF4D00' }}>
               {col.title}
             </h4>
             <ul className="space-y-2">
               {col.links.map(link => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="text-sm transition-colors"
-                    style={{ color: 'rgba(242,237,230,0.45)' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#F2EDE6')}
-                    onMouseLeave={e => (e.currentTarget.style.color = 'rgba(242,237,230,0.45)')}
-                  >
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  {link.to ? (
+                    <Link
+                      to={link.to}
+                      className="text-sm transition-colors hover:text-white"
+                      style={{ color: 'rgba(242,237,230,0.55)' }}
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <span className="text-sm" style={{ color: 'rgba(242,237,230,0.35)' }}>
+                      {link.label}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
