@@ -362,3 +362,24 @@ export const useTeamRoster = (teamId: string | undefined) =>
         .sort((a, b) => (a.jersey_number ?? 999) - (b.jersey_number ?? 999));
     },
   });
+
+export const useTeamGames = (teamId: string | undefined) =>
+  useQuery({
+    queryKey: ['team_games', teamId],
+    enabled: !!teamId,
+    queryFn: async (): Promise<GameWithTeams[]> => {
+      const { data: activeSeason } = await supabase
+        .from('seasons').select('id').eq('status', 'active').maybeSingle();
+      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      if (!seasonId) return [];
+
+      const { data, error } = await supabase
+        .from('games')
+        .select(SELECT_GAME)
+        .eq('season_id', seasonId)
+        .or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`)
+        .order('date', { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as unknown as GameWithTeams[];
+    },
+  });
