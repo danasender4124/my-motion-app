@@ -61,6 +61,29 @@ const Header: React.FC = () => {
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}
       >
+        {/* Right: hamburger (mobile only) — placed on the start (right) side */}
+        <button
+          className="lg:hidden flex flex-col justify-center items-center w-11 h-11 rounded-lg gap-1.5 flex-shrink-0"
+          style={{ background: '#FF4D00' }}
+          onClick={() => setMenuOpen(v => !v)}
+          aria-label="תפריט"
+        >
+          {[0, 1, 2].map(i => (
+            <motion.span
+              key={i}
+              className="block h-0.5 rounded-full"
+              style={{ background: '#fff' }}
+              animate={{
+                width: menuOpen && i === 1 ? 0 : '20px',
+                rotate: menuOpen ? (i === 0 ? 45 : i === 2 ? -45 : 0) : 0,
+                y: menuOpen ? (i === 0 ? 8 : i === 2 ? -8 : 0) : 0,
+                opacity: menuOpen && i === 1 ? 0 : 1,
+              }}
+              transition={{ duration: 0.2 }}
+            />
+          ))}
+        </button>
+
         {/* Right: League management logo */}
         <NavLink to="/" className="flex items-center flex-shrink-0">
           <img
@@ -70,7 +93,7 @@ const Header: React.FC = () => {
           />
         </NavLink>
 
-        {/* Center: scrolling team logos */}
+        {/* Center: scrolling team logos (desktop only) */}
         <div className="hidden lg:flex flex-1 items-center" style={{ minWidth: 0 }}>
           <TeamLogos />
         </div>
@@ -79,37 +102,14 @@ const Header: React.FC = () => {
         <img
           src="/athena-winner-logo.png"
           alt="ליגת אתנה וינר"
-          className="flex-shrink-0"
+          className="flex-shrink-0 mr-auto lg:mr-0"
           style={{ height: '95px', width: 'auto', objectFit: 'contain' }}
         />
-
-        {/* Mobile hamburger */}
-        <button
-          className="lg:hidden flex flex-col justify-center items-center w-9 h-9 rounded-lg gap-1.5 flex-shrink-0"
-          style={{ background: 'rgba(255,255,255,0.07)' }}
-          onClick={() => setMenuOpen(v => !v)}
-          aria-label="תפריט"
-        >
-          {[0, 1, 2].map(i => (
-            <motion.span
-              key={i}
-              className="block h-0.5 rounded-full"
-              style={{ background: '#F2EDE6' }}
-              animate={{
-                width: menuOpen && i === 1 ? 0 : '16px',
-                rotate: menuOpen ? (i === 0 ? 45 : i === 2 ? -45 : 0) : 0,
-                y: menuOpen ? (i === 0 ? 8 : i === 2 ? -8 : 0) : 0,
-                opacity: menuOpen && i === 1 ? 0 : 1,
-              }}
-              transition={{ duration: 0.2 }}
-            />
-          ))}
-        </button>
       </div>
 
-      {/* Row 2: Orange nav bar (desktop) */}
+      {/* Row 2: Orange nav bar — visible on all screens */}
       <nav
-        className="hidden lg:flex items-stretch w-full"
+        className="flex items-stretch w-full overflow-x-auto"
         style={{ background: '#FF4D00' }}
         aria-label="ניווט ראשי"
       >
@@ -119,8 +119,8 @@ const Header: React.FC = () => {
             to={link.to}
             end={link.to === '/'}
             onClick={() => setMenuOpen(false)}
-            className="flex-1 flex items-center justify-center py-2 text-sm font-bold transition-colors duration-150 relative"
-            style={{ color: '#fff', borderLeft: '1px solid rgba(255,255,255,0.15)' }}
+            className="flex-1 lg:flex-1 flex items-center justify-center py-3 lg:py-2 text-sm font-bold transition-colors duration-150 relative whitespace-nowrap px-3"
+            style={{ color: '#fff', borderLeft: '1px solid rgba(255,255,255,0.15)', minWidth: 'fit-content' }}
           >
             {({ isActive }) => (
               <>
