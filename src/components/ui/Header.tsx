@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { label: 'טבלת הליגה', to: '/standings' },
   { label: 'סטטיסטיקה',  to: '/stats' },
   { label: 'חדשות',      to: '/news' },
+  { label: 'VOD',        to: '/vod' },
 ];
 
 const TeamLogos: React.FC = () => {

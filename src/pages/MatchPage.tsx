@@ -4,6 +4,7 @@ import { useMatch, useMatchStats, useTeamJerseys } from '../lib/queries';
 import MatchHeader from '../components/match/MatchHeader';
 import QuarterScoresTable from '../components/match/QuarterScoresTable';
 import BoxScoreTable from '../components/match/BoxScoreTable';
+import MatchVideos from '../components/match/MatchVideos';
 
 const MatchPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -68,6 +69,8 @@ const MatchPage: React.FC = () => {
             המשחק טרם שוחק.
           </div>
         )}
+
+        <MatchVideos gameId={game.id} />
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import PageBanner      from '@/components/ui/PageBanner'
 import MatchPage       from './pages/MatchPage'
 import PlayerPage from './pages/PlayerPage'
 import TeamPage from './pages/TeamPage'
+import VodPage from './pages/VodPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,6 +42,7 @@ const AnimatedRoutes = () => {
           <Route path="/match/:id" element={<MatchPage />} />
           <Route path="/player/:id" element={<PlayerPage />} />
           <Route path="/team/:id" element={<TeamPage />} />
+          <Route path="/vod" element={<VodPage />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
