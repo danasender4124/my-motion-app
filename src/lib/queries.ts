@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from './supabase';
-import { computeTeamSeasonStats, type TeamSeasonStats } from './aggregations';
+import { computeTeamSeasonStats, computeLeagueLeaders, type TeamSeasonStats, type LeagueLeaders, type LeaderInputRow } from './aggregations';
+
+export type { LeagueLeaders, LeaderInputRow } from './aggregations';
+export type { LeaderCategoryKey, LeagueLeaderRow } from './aggregations';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface TeamRef {
@@ -494,4 +497,49 @@ export const useTeamLeaders = (teamId: string | undefined) =>
         apg: pickTop('sumA'),
       };
     },
+  });
+
+export type SeasonStage = 'regular' | 'all';
+
+export const useLeagueLeaders = (stage: SeasonStage) =>
+  useQuery({
+    queryKey: ['league_leaders', stage],
+    queryFn: async (): Promise<LeagueLeaders> => {
+      const { data: activeSeason } = await supabase
+        .from('seasons').select('id').eq('status', 'active').maybeSingle();
+      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      if (!seasonId) {
+        return computeLeagueLeaders([]);
+      }
+
+      const { data: gamesData, error: gamesErr } = await supabase
+        .from('games')
+        .select('id, round, status')
+        .eq('season_id', seasonId)
+        .eq('status', 'played');
+      if (gamesErr) throw gamesErr;
+
+      const games = (gamesData ?? []) as Array<{ id: string; round: string | null; status: string }>;
+      const filtered = stage === 'regular'
+        ? games.filter((g) => !(g.round ?? '').includes('פלייאוף'))
+        : games;
+      const ids = filtered.map((g) => g.id);
+      if (ids.length === 0) {
+        return computeLeagueLeaders([]);
+      }
+
+      const { data, error } = await supabase
+        .from('player_game_stats')
+        .select(
+          'player_id, team_id, game_id, minutes, points, rebounds, assists, steals, blocks, turnovers, efficiency, fg2_made, fg2_attempted, fg3_made, fg3_attempted, ft_made, ft_attempted,' +
+          ' player:players(id, first_name, last_name, photo),' +
+          ' team:teams(id, name, logo)'
+        )
+        .in('game_id', ids);
+      if (error) throw error;
+
+      const rows = (data ?? []) as unknown as LeaderInputRow[];
+      return computeLeagueLeaders(rows);
+    },
+    staleTime: 1000 * 60 * 5,
   });
