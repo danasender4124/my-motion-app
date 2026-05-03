@@ -1,7 +1,8 @@
 // src/components/ui/Header.tsx
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTeams } from '../../lib/queries';
 
 const NAV_LINKS = [
   { label: 'בית',        to: '/' },
@@ -11,40 +12,38 @@ const NAV_LINKS = [
   { label: 'חדשות',      to: '/news' },
 ];
 
-const TEAM_LOGOS: { src: string; size?: number; outline?: boolean }[] = [
-  { src: '/teams/team-01.png', size: 100 },
-  { src: '/teams/team-02.png' },
-  { src: '/teams/team-03.png' },
-  { src: '/teams/team-04.png' },
-  { src: '/teams/team-05.png', outline: true },
-  { src: '/teams/team-06.png', outline: true },
-  { src: '/teams/team-07.png' },
-  { src: '/teams/team-08.png', size: 100 },
-  { src: '/teams/team-09.png' },
-  { src: '/teams/team-10.png' },
-];
-
-const TeamLogos: React.FC = () => (
-  <div className="flex-1 flex items-center justify-center gap-3" style={{ minWidth: 0 }}>
-    {TEAM_LOGOS.map((logo, i) => {
-      const size = logo.size ?? 70;
-      return (
-        <img
-          key={i}
-          src={logo.src}
-          alt=""
-          style={{
-            height: `${size}px`,
-            width: `${size}px`,
-            objectFit: 'contain',
-            flexShrink: 0,
-            filter: logo.outline ? 'drop-shadow(0 0 1px white) drop-shadow(0 0 1px white)' : 'none',
-          }}
-        />
-      );
-    })}
-  </div>
-);
+const TeamLogos: React.FC = () => {
+  const { data: teams = [] } = useTeams();
+  return (
+    <div className="flex-1 flex items-center justify-center gap-3" style={{ minWidth: 0 }}>
+      {teams.map((team) => (
+        <Link
+          key={team.id}
+          to={`/team/${team.id}`}
+          aria-label={team.name}
+          className="flex-shrink-0"
+        >
+          {team.logo ? (
+            <img
+              src={team.logo}
+              alt={team.name}
+              style={{ height: 70, width: 70, objectFit: 'contain' }}
+            />
+          ) : (
+            <div
+              style={{
+                height: 70, width: 70, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: 'rgba(255,255,255,0.06)', color: '#F2EDE6', fontWeight: 900, fontSize: 12, borderRadius: 8,
+              }}
+            >
+              {team.name.split(' ')[0]?.slice(0, 3) ?? '—'}
+            </div>
+          )}
+        </Link>
+      ))}
+    </div>
+  );
+};
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);

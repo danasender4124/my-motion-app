@@ -8,24 +8,34 @@ const formatDate = (iso: string | null): string => {
   return `${d}/${m}/${y}`;
 };
 
-const TeamBlock: React.FC<{ team: GameWithTeams['home_team']; align: 'right' | 'left' }> = ({ team, align }) => (
-  <div className={`flex flex-col items-center gap-3 flex-1 min-w-0`}>
-    <div
-      className="w-20 h-20 rounded shrink-0 flex items-center justify-center overflow-hidden"
-      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-    >
-      {team?.logo
-        ? <img src={team.logo} alt={team.name} className="w-full h-full object-contain" />
-        : <span className="text-xs" style={{ color: 'rgba(242,237,230,0.4)' }}>—</span>}
-    </div>
-    <div
-      className="text-base font-bold text-center truncate w-full"
-      style={{ color: '#F2EDE6', textAlign: align }}
-    >
-      {team?.name ?? '—'}
-    </div>
-  </div>
-);
+const TeamBlock: React.FC<{ team: GameWithTeams['home_team']; align: 'right' | 'left' }> = ({ team, align }) => {
+  const inner = (
+    <>
+      <div
+        className="w-20 h-20 rounded shrink-0 flex items-center justify-center overflow-hidden"
+        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+      >
+        {team?.logo
+          ? <img src={team.logo} alt={team.name} className="w-full h-full object-contain" />
+          : <span className="text-xs" style={{ color: 'rgba(242,237,230,0.4)' }}>—</span>}
+      </div>
+      <div
+        className="text-base font-bold text-center truncate w-full"
+        style={{ color: '#F2EDE6', textAlign: align }}
+      >
+        {team?.name ?? '—'}
+      </div>
+    </>
+  );
+  if (team?.id) {
+    return (
+      <Link to={`/team/${team.id}`} className="flex flex-col items-center gap-3 flex-1 min-w-0">
+        {inner}
+      </Link>
+    );
+  }
+  return <div className="flex flex-col items-center gap-3 flex-1 min-w-0">{inner}</div>;
+};
 
 interface Props { game: GameWithTeams }
 

@@ -59,9 +59,11 @@ type GameRow = {
   watchUrl: string;
   home: string;
   homeLogo: string;
+  homeId?: string;
   homeScore: number | null;
   away: string;
   awayLogo: string;
+  awayId?: string;
   awayScore: number | null;
 };
 
@@ -81,9 +83,11 @@ const adapt = (g: GameWithTeams): GameRow => ({
   watchUrl: g.watch_url || '',
   home: g.home_team?.name || '',
   homeLogo: g.home_team?.logo || '',
+  homeId: g.home_team?.id,
   homeScore: g.home_score,
   away: g.away_team?.name || '',
   awayLogo: g.away_team?.logo || '',
+  awayId: g.away_team?.id,
   awayScore: g.away_score,
 });
 
@@ -209,13 +213,25 @@ const Results: React.FC = () => {
 
                           {/* מארחת */}
                           <div className="flex items-center gap-2 min-w-0">
-                            <img src={g.homeLogo} alt={g.home} style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
+                            {g.homeId ? (
+                              <Link to={`/team/${g.homeId}`} onClick={(e) => e.stopPropagation()} className="flex-shrink-0">
+                                <img src={g.homeLogo} alt={g.home} style={{ width: 26, height: 26, objectFit: 'contain' }} />
+                              </Link>
+                            ) : (
+                              <img src={g.homeLogo} alt={g.home} style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
+                            )}
                             <span className="text-sm font-bold truncate" style={{ color: homeWon ? '#F2EDE6' : 'rgba(242,237,230,0.55)' }}>{g.home}</span>
                           </div>
 
                           {/* אורחת */}
                           <div className="flex items-center gap-2 min-w-0">
-                            <img src={g.awayLogo} alt={g.away} style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
+                            {g.awayId ? (
+                              <Link to={`/team/${g.awayId}`} onClick={(e) => e.stopPropagation()} className="flex-shrink-0">
+                                <img src={g.awayLogo} alt={g.away} style={{ width: 26, height: 26, objectFit: 'contain' }} />
+                              </Link>
+                            ) : (
+                              <img src={g.awayLogo} alt={g.away} style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
+                            )}
                             <span className="text-sm font-medium truncate" style={{ color: !homeWon ? '#F2EDE6' : 'rgba(242,237,230,0.55)' }}>{g.away}</span>
                           </div>
 
@@ -371,11 +387,21 @@ const Results: React.FC = () => {
 
                     {/* מארחת — logo + name */}
                     <div className="flex items-center gap-2 min-w-0">
-                      <img
-                        src={g.homeLogo}
-                        alt={g.home}
-                        style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }}
-                      />
+                      {g.homeId ? (
+                        <Link to={`/team/${g.homeId}`} onClick={(e) => e.stopPropagation()} className="flex-shrink-0">
+                          <img
+                            src={g.homeLogo}
+                            alt={g.home}
+                            style={{ width: 28, height: 28, objectFit: 'contain' }}
+                          />
+                        </Link>
+                      ) : (
+                        <img
+                          src={g.homeLogo}
+                          alt={g.home}
+                          style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }}
+                        />
+                      )}
                       <span className="text-sm font-bold leading-tight truncate" style={{ color: '#F2EDE6' }}>
                         {g.home}
                       </span>
@@ -383,11 +409,21 @@ const Results: React.FC = () => {
 
                     {/* אורחת — logo + name */}
                     <div className="flex items-center gap-2 min-w-0">
-                      <img
-                        src={g.awayLogo}
-                        alt={g.away}
-                        style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }}
-                      />
+                      {g.awayId ? (
+                        <Link to={`/team/${g.awayId}`} onClick={(e) => e.stopPropagation()} className="flex-shrink-0">
+                          <img
+                            src={g.awayLogo}
+                            alt={g.away}
+                            style={{ width: 28, height: 28, objectFit: 'contain' }}
+                          />
+                        </Link>
+                      ) : (
+                        <img
+                          src={g.awayLogo}
+                          alt={g.away}
+                          style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }}
+                        />
+                      )}
                       <span className="text-sm font-medium leading-tight truncate" style={{ color: 'rgba(242,237,230,0.75)' }}>
                         {g.away}
                       </span>
