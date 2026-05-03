@@ -13,6 +13,7 @@ import Footer          from '@/components/ui/Footer'
 import PageBanner      from '@/components/ui/PageBanner'
 import MatchPage       from './pages/MatchPage'
 import PlayerPage from './pages/PlayerPage'
+import TeamPage from './pages/TeamPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +40,7 @@ const AnimatedRoutes = () => {
           <Route path="/news"      element={<><PageBanner title="חדשות וכתבות" /><News /></>} />
           <Route path="/match/:id" element={<MatchPage />} />
           <Route path="/player/:id" element={<PlayerPage />} />
+          <Route path="/team/:id" element={<TeamPage />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
