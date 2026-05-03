@@ -20,8 +20,6 @@ const ROW_PRIMARY: CardDef[] = [
 
 const ROW_DEFENSE: CardDef[] = [
   { key: 'spg',         label: 'חטיפות' },
-  { key: 'topg',        label: 'איבודים' },
-  { key: 'ato',         label: 'יחס אסי\'/איב\'' },
   { key: 'bpg',         label: 'חסימות' },
   { key: 'ft_pct',      label: '% מהעונשין', format: (n) => `${n.toFixed(1)}%` },
 ];

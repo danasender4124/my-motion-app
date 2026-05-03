@@ -212,7 +212,7 @@ export const computeLeagueLeaders = (rows: LeaderInputRow[]): LeagueLeaders => {
       .filter((a) => eligible(a, key))
       .map((a) => ({ a, v: valueFor(a, key) }));
     candidates.sort((x, y) => ASCENDING_KEYS.includes(key) ? x.v - y.v : y.v - x.v);
-    out[key] = candidates.slice(0, 5).map(({ a, v }) => ({
+    out[key] = candidates.map(({ a, v }) => ({
       player_id: a.player_id,
       first_name: a.first_name,
       last_name: a.last_name,
