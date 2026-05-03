@@ -22,11 +22,11 @@ const ROW_DEFENSE: CardDef[] = [
   { key: 'spg',         label: 'חטיפות' },
   { key: 'bpg',         label: 'חסימות' },
   { key: 'ft_pct',      label: '% מהעונשין', format: (n) => `${n.toFixed(1)}%` },
+  { key: 'fg2_pct',     label: '% מ-2', format: (n) => `${n.toFixed(1)}%` },
+  { key: 'fg3_pct',     label: '% מ-3', format: (n) => `${n.toFixed(1)}%` },
 ];
 
 const ROW_SHOOTING: CardDef[] = [
-  { key: 'fg2_pct',     label: '% מ-2', format: (n) => `${n.toFixed(1)}%` },
-  { key: 'fg3_pct',     label: '% מ-3', format: (n) => `${n.toFixed(1)}%` },
   { key: 'ft_made_pg',  label: 'זריקות עונשין' },
   { key: 'fg2_made_pg', label: 'זריקות מ-2' },
   { key: 'fg3_made_pg', label: 'זריקות מ-3' },
