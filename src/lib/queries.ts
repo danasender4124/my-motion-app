@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from './supabase';
+import { computeTeamSeasonStats, type TeamSeasonStats } from './aggregations';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface TeamRef {
@@ -381,5 +382,31 @@ export const useTeamGames = (teamId: string | undefined) =>
         .order('date', { ascending: false });
       if (error) throw error;
       return (data ?? []) as unknown as GameWithTeams[];
+    },
+  });
+
+export const useTeamSeasonStats = (teamId: string | undefined) =>
+  useQuery({
+    queryKey: ['team_season_stats', teamId],
+    enabled: !!teamId,
+    queryFn: async (): Promise<TeamSeasonStats> => {
+      const { data: activeSeason } = await supabase
+        .from('seasons').select('id').eq('status', 'active').maybeSingle();
+      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      if (!seasonId) return { wins: 0, losses: 0, points_for: 0, points_against: 0, position: null };
+
+      const [gamesRes, teamsRes] = await Promise.all([
+        supabase.from('games').select(SELECT_GAME).eq('season_id', seasonId),
+        supabase.from('teams').select('id'),
+      ]);
+      if (gamesRes.error) throw gamesRes.error;
+      if (teamsRes.error) throw teamsRes.error;
+
+      const allGames = (gamesRes.data ?? []) as unknown as GameWithTeams[];
+      const allTeamIds = ((teamsRes.data ?? []) as Array<{ id: string }>).map((t) => t.id);
+      const teamGames = allGames.filter(
+        (g) => g.home_team_id === teamId || g.away_team_id === teamId,
+      );
+      return computeTeamSeasonStats(teamId!, teamGames, allTeamIds, allGames);
     },
   });
