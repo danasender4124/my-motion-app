@@ -543,3 +543,58 @@ export const useLeagueLeaders = (stage: SeasonStage) =>
     },
     staleTime: 1000 * 60 * 5,
   });
+
+export type VideoCategory = 'highlights' | 'interview' | 'recap' | 'other';
+export type VideoSourceType = 'youtube' | 'upload';
+
+export interface PublicVideo {
+  id: string;
+  title: string;
+  description: string | null;
+  category: VideoCategory;
+  source_type: VideoSourceType;
+  youtube_id: string | null;
+  storage_path: string | null;
+  thumbnail_url: string | null;
+  game_id: string | null;
+  published_at: string;
+  created_at: string;
+}
+
+export const VIDEO_CATEGORY_LABEL: Record<VideoCategory, string> = {
+  highlights: 'היי-לייטס',
+  interview: 'ראיון',
+  recap: 'סיקור',
+  other: 'אחר',
+};
+
+export const usePublishedVideos = (category: VideoCategory | 'all' = 'all') =>
+  useQuery({
+    queryKey: ['videos', 'public', category],
+    queryFn: async (): Promise<PublicVideo[]> => {
+      let q = supabase
+        .from('videos')
+        .select('*')
+        .order('published_at', { ascending: false });
+      if (category !== 'all') q = q.eq('category', category);
+      const { data, error } = await q;
+      if (error) throw error;
+      return (data ?? []) as PublicVideo[];
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+
+export const useGameVideos = (gameId: string | undefined) =>
+  useQuery({
+    queryKey: ['videos', 'game', gameId],
+    enabled: !!gameId,
+    queryFn: async (): Promise<PublicVideo[]> => {
+      const { data, error } = await supabase
+        .from('videos')
+        .select('*')
+        .eq('game_id', gameId!)
+        .order('published_at', { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as PublicVideo[];
+    },
+  });
