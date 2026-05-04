@@ -9,8 +9,15 @@ const News: React.FC = () => {
   return (
     <section
       id="news"
-      className="max-w-7xl mx-auto"
-      style={{ padding: 'clamp(80px, 8vw, 120px) clamp(24px, 5vw, 80px)' }}
+      style={{
+        maxWidth: '1280px',
+        margin: '0 auto',
+        paddingTop: 'clamp(80px, 8vw, 120px)',
+        paddingBottom: 'clamp(80px, 8vw, 120px)',
+        paddingLeft: 'clamp(48px, 6vw, 96px)',
+        paddingRight: 'clamp(48px, 6vw, 96px)',
+        boxSizing: 'border-box',
+      }}
       dir="rtl"
     >
       {postsQ.isLoading && (
