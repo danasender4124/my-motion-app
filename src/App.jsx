@@ -39,7 +39,7 @@ const AnimatedRoutes = () => {
           <Route path="/results"   element={<><PageBanner title="משחקים ותוצאות" /><Results /></>} />
           <Route path="/standings" element={<><PageBanner title="טבלת הליגה" /><Standings /></>} />
           <Route path="/stats"     element={<><PageBanner title="סטטיסטיקה" /><Stats /></>} />
-          <Route path="/news"      element={<><PageBanner title="חדשות וכתבות" /><News /></>} />
+          <Route path="/news"      element={<><PageBanner title="כל החדשות" /><News /></>} />
           <Route path="/news/:id" element={<PostDetailPage />} />
           <Route path="/match/:id" element={<MatchPage />} />
           <Route path="/player/:id" element={<PlayerPage />} />
