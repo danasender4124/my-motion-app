@@ -12,8 +12,8 @@ const News: React.FC = () => {
       style={{
         maxWidth: '1280px',
         margin: '0 auto',
-        paddingTop: 'clamp(80px, 8vw, 120px)',
-        paddingBottom: 'clamp(80px, 8vw, 120px)',
+        paddingTop: 'clamp(48px, 6vw, 96px)',
+        paddingBottom: 'clamp(48px, 6vw, 96px)',
         paddingLeft: 'clamp(48px, 6vw, 96px)',
         paddingRight: 'clamp(48px, 6vw, 96px)',
         boxSizing: 'border-box',
