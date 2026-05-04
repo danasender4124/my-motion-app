@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { usePostById, POST_CATEGORY_LABEL } from '../lib/queries';
+import { usePostById } from '../lib/queries';
 import PostGallery from '../components/news/PostGallery';
 
 const fmtDate = (iso: string) => {
@@ -45,9 +45,6 @@ const PostDetailPage: React.FC = () => {
             <span style={{ color: '#F2EDE6' }}>{data.team.name}</span>
           </Link>
         )}
-        <span className="px-2 py-0.5 rounded-full text-xs font-bold" style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00' }}>
-          {POST_CATEGORY_LABEL[data.category]}
-        </span>
         <span>{fmtDate(data.published_at)}</span>
       </div>
 

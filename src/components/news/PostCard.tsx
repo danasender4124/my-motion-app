@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { POST_CATEGORY_LABEL, type PublicPost } from '../../lib/queries';
+import { type PublicPost } from '../../lib/queries';
 
 const fmtDate = (iso: string) => {
   const [y, m, d] = iso.slice(0, 10).split('-');
@@ -30,12 +30,6 @@ const PostCard: React.FC<Props> = ({ post }) => {
         ) : (
           <div className="w-full h-full flex items-center justify-center" style={{ color: 'rgba(242,237,230,0.3)' }}>📰</div>
         )}
-        <span
-          className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-bold"
-          style={{ background: 'rgba(255,77,0,0.85)', color: '#fff' }}
-        >
-          {POST_CATEGORY_LABEL[post.category]}
-        </span>
       </div>
       <div className="p-3 space-y-2 flex-1 flex flex-col">
         <h3 className="text-sm font-bold line-clamp-2" style={{ color: '#F2EDE6' }}>{post.title}</h3>
