@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { type PublicPost } from '../../lib/queries';
+import { POST_CATEGORY_LABEL, type PublicPost } from '../../lib/queries';
 
 const fmtDate = (iso: string) => {
   const [y, m, d] = iso.slice(0, 10).split('-');
@@ -30,9 +30,17 @@ const PostCard: React.FC<Props> = ({ post }) => {
         ) : (
           <div className="w-full h-full flex items-center justify-center" style={{ color: 'rgba(242,237,230,0.3)' }}>📰</div>
         )}
+        <span
+          className="absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider"
+          style={{ background: 'rgba(7,8,12,0.7)', color: '#FF4D00', backdropFilter: 'blur(4px)' }}
+        >
+          {POST_CATEGORY_LABEL[post.category]}
+        </span>
       </div>
-      <div className="p-3 space-y-2 flex-1 flex flex-col">
-        <h3 className="text-sm font-bold line-clamp-2" style={{ color: '#F2EDE6' }}>{post.title}</h3>
+      <div className="p-4 space-y-3 flex-1 flex flex-col">
+        <h3 className="text-lg font-black leading-tight line-clamp-2" style={{ color: '#F2EDE6' }}>
+          {post.title}
+        </h3>
         <div className="mt-auto flex items-center justify-between text-xs">
           <div className="flex items-center gap-2 min-w-0">
             {post.team?.logo && (

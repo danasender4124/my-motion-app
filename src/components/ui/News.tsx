@@ -8,10 +8,6 @@ const News: React.FC = () => {
 
   return (
     <section id="news" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
-      <h2 className="text-2xl md:text-3xl font-black border-r-4 pr-4 mb-8" style={{ color: '#F2EDE6', borderColor: '#FF4D00' }}>
-        חדשות וכתבות
-      </h2>
-
       {postsQ.isLoading && (
         <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>טוען...</div>
       )}
