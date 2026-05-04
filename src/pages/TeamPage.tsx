@@ -7,6 +7,7 @@ import TeamRoster from '../components/team/TeamRoster';
 import TeamLeaders from '../components/team/TeamLeaders';
 import TeamCoachStaff from '../components/team/TeamCoachStaff';
 import TeamManagement from '../components/team/TeamManagement';
+import TeamLatestPosts from '../components/team/TeamLatestPosts';
 import TeamSchedule from '../components/team/TeamSchedule';
 import TeamContact from '../components/team/TeamContact';
 
@@ -42,6 +43,7 @@ const TeamPage: React.FC = () => {
       {leadersQ.data && <TeamLeaders leaders={leadersQ.data} />}
       <TeamCoachStaff teamId={team.id} />
       <TeamManagement teamId={team.id} />
+      <TeamLatestPosts teamId={team.id} />
       <TeamRoster players={rosterQ.data ?? []} />
       <TeamSchedule games={gamesQ.data ?? []} teamId={team.id} />
       <TeamContact team={team} />

@@ -15,6 +15,7 @@ import MatchPage       from './pages/MatchPage'
 import PlayerPage from './pages/PlayerPage'
 import TeamPage from './pages/TeamPage'
 import VodPage from './pages/VodPage'
+import PostDetailPage from './pages/PostDetailPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +40,7 @@ const AnimatedRoutes = () => {
           <Route path="/standings" element={<><PageBanner title="טבלת הליגה" /><Standings /></>} />
           <Route path="/stats"     element={<><PageBanner title="סטטיסטיקה" /><Stats /></>} />
           <Route path="/news"      element={<><PageBanner title="חדשות וכתבות" /><News /></>} />
+          <Route path="/news/:id" element={<PostDetailPage />} />
           <Route path="/match/:id" element={<MatchPage />} />
           <Route path="/player/:id" element={<PlayerPage />} />
           <Route path="/team/:id" element={<TeamPage />} />

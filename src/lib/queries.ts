@@ -693,3 +693,80 @@ export const useTeamManagementPublic = (teamId: string | undefined) =>
       return (data ?? []) as PublicManagementMember[];
     },
   });
+
+export type PostCategory = 'signing' | 'injury' | 'release' | 'team_announcement' | 'achievement' | 'community' | 'other';
+
+export const POST_CATEGORY_LABEL: Record<PostCategory, string> = {
+  signing: 'החתמה',
+  injury: 'פציעה',
+  release: 'שחרור',
+  team_announcement: 'הודעת קבוצה',
+  achievement: 'הישג',
+  community: 'קבוצה בונה קהילה',
+  other: 'אחר',
+};
+
+export interface PublicPost {
+  id: string;
+  team_id: string;
+  category: PostCategory;
+  tags: string[];
+  title: string;
+  body: string;
+  photos: string[];
+  youtube_id: string | null;
+  video_storage_path: string | null;
+  published_at: string;
+  team: { id: string; name: string; logo: string | null } | null;
+}
+
+export const useApprovedPosts = (category?: PostCategory | 'all', teamId?: string) =>
+  useQuery({
+    queryKey: ['public_posts', category ?? 'all', teamId ?? 'all'],
+    queryFn: async (): Promise<PublicPost[]> => {
+      let q = supabase
+        .from('team_posts')
+        .select('id, team_id, category, tags, title, body, photos, youtube_id, video_storage_path, published_at, team:teams(id, name, logo)')
+        .eq('status', 'published')
+        .order('published_at', { ascending: false });
+      if (category && category !== 'all') q = q.eq('category', category);
+      if (teamId) q = q.eq('team_id', teamId);
+      const { data, error } = await q;
+      if (error) throw error;
+      return (data ?? []) as unknown as PublicPost[];
+    },
+    staleTime: 1000 * 60 * 2,
+  });
+
+export const usePostById = (id: string | undefined) =>
+  useQuery({
+    queryKey: ['public_post', id],
+    enabled: !!id,
+    queryFn: async (): Promise<PublicPost | null> => {
+      const { data, error } = await supabase
+        .from('team_posts')
+        .select('id, team_id, category, tags, title, body, photos, youtube_id, video_storage_path, published_at, team:teams(id, name, logo)')
+        .eq('id', id!)
+        .eq('status', 'published')
+        .maybeSingle();
+      if (error) throw error;
+      return (data ?? null) as unknown as PublicPost | null;
+    },
+  });
+
+export const useTeamLatestPosts = (teamId: string | undefined, limit = 5) =>
+  useQuery({
+    queryKey: ['team_latest_posts', teamId, limit],
+    enabled: !!teamId,
+    queryFn: async (): Promise<PublicPost[]> => {
+      const { data, error } = await supabase
+        .from('team_posts')
+        .select('id, team_id, category, tags, title, body, photos, youtube_id, video_storage_path, published_at, team:teams(id, name, logo)')
+        .eq('status', 'published')
+        .eq('team_id', teamId!)
+        .order('published_at', { ascending: false })
+        .limit(limit);
+      if (error) throw error;
+      return (data ?? []) as unknown as PublicPost[];
+    },
+  });

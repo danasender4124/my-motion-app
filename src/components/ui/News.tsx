@@ -1,90 +1,53 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { NEWS } from '../../data/league';
+import React, { useMemo, useState } from 'react';
+import { useApprovedPosts, useTeams } from '../../lib/queries';
+import PostCard from '../news/PostCard';
+import CategoryChips, { type CategoryFilter } from '../news/CategoryChips';
 
-const TAG_COLORS: Record<string, string> = {
-  'תוצאה':   '#FF4D00',
-  'פלייאוף': '#FF4D00',
-  'חדשות':   '#3B82F6',
-  'ראיון':   '#8B5CF6',
-  'העברות':  '#10B981',
-  'עונה סדירה': '#FFB300',
-  'סטטיסטיקה': '#FFB300',
-};
+const News: React.FC = () => {
+  const [category, setCategory] = useState<CategoryFilter>('all');
+  const [teamId, setTeamId] = useState<string>('');
 
-const News: React.FC = () => (
-  <section id="news" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
-    <div className="flex items-center justify-between mb-10">
-      <motion.h2
-        className="text-2xl md:text-3xl font-black border-r-4 pr-4"
-        style={{ color: '#F2EDE6', borderColor: '#FF4D00' }}
-        initial={{ opacity: 0, x: 16 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-      >
+  const teamsQ = useTeams();
+  const postsQ = useApprovedPosts(category, teamId || undefined);
+  const teams = teamsQ.data ?? [];
+  const posts = useMemo(() => postsQ.data ?? [], [postsQ.data]);
+
+  return (
+    <section id="news" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
+      <h2 className="text-2xl md:text-3xl font-black border-r-4 pr-4 mb-6" style={{ color: '#F2EDE6', borderColor: '#FF4D00' }}>
         חדשות וכתבות
-      </motion.h2>
-      <a
-        href="#"
-        className="text-sm font-medium transition-colors"
-        style={{ color: 'rgba(242,237,230,0.45)' }}
-        onMouseEnter={e => (e.currentTarget.style.color = '#FF4D00')}
-        onMouseLeave={e => (e.currentTarget.style.color = 'rgba(242,237,230,0.45)')}
-      >
-        כל הכתבות ←
-      </a>
-    </div>
+      </h2>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {NEWS.map((article, i) => (
-        <motion.article
-          key={article.id}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.5, delay: i * 0.07, ease: [0.25, 1, 0.5, 1] }}
-          whileHover={{ y: -4 }}
-          className="rounded-2xl overflow-hidden cursor-pointer group"
-          style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
-          }}
+      <div className="flex flex-wrap items-center gap-3 mb-8">
+        <CategoryChips active={category} onChange={setCategory} />
+        <select
+          value={teamId}
+          onChange={(e) => setTeamId(e.target.value)}
+          className="rounded-full text-sm px-3 py-1.5"
+          style={{ background: 'rgba(255,255,255,0.06)', color: '#F2EDE6', border: '1px solid rgba(255,255,255,0.08)' }}
         >
-          {/* Image */}
-          <div className="relative overflow-hidden" style={{ height: '200px' }}>
-            <img
-              src={article.image}
-              alt={article.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(7,8,12,0.7) 0%, transparent 50%)' }} />
-            <span
-              className="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-bold"
-              style={{ background: TAG_COLORS[article.tag] ?? '#FF4D00', color: '#fff' }}
-            >
-              {article.tag}
-            </span>
-          </div>
+          <option value="">כל הקבוצות</option>
+          {teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+        </select>
+      </div>
 
-          {/* Content */}
-          <div className="p-5">
-            <h3
-              className="text-sm font-bold leading-snug mb-2 line-clamp-2 transition-colors duration-150"
-              style={{ color: '#F2EDE6' }}
-            >
-              {article.title}
-            </h3>
-            <p className="text-xs leading-relaxed line-clamp-2 mb-3" style={{ color: 'rgba(242,237,230,0.45)' }}>
-              {article.excerpt}
-            </p>
-            <span className="text-[11px]" style={{ color: 'rgba(242,237,230,0.3)' }}>
-              {article.date}
-            </span>
-          </div>
-        </motion.article>
-      ))}
-    </div>
-  </section>
-);
+      {postsQ.isLoading && (
+        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>טוען...</div>
+      )}
+      {postsQ.error && (
+        <div className="text-center py-12" style={{ color: '#f87171' }}>לא ניתן לטעון חדשות כעת.</div>
+      )}
+      {posts.length === 0 && !postsQ.isLoading && (
+        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>אין פרסומים עדיין</div>
+      )}
+
+      {posts.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {posts.map((p) => <PostCard key={p.id} post={p} />)}
+        </div>
+      )}
+    </section>
+  );
+};
 
 export default News;
