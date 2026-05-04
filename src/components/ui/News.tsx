@@ -8,6 +8,15 @@ const News: React.FC = () => {
 
   return (
     <section id="news" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
+      <div className="flex justify-center mb-12">
+        <span
+          className="text-2xl md:text-3xl font-black pb-2"
+          style={{ color: '#F2EDE6', borderBottom: '3px solid #FF4D00' }}
+        >
+          כל החדשות
+        </span>
+      </div>
+
       {postsQ.isLoading && (
         <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>טוען...</div>
       )}
@@ -19,7 +28,7 @@ const News: React.FC = () => {
       )}
 
       {posts.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
           {posts.map((p) => <PostCard key={p.id} post={p} />)}
         </div>
       )}
