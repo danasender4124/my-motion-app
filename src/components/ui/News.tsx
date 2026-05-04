@@ -7,7 +7,7 @@ const News: React.FC = () => {
   const posts = useMemo(() => postsQ.data ?? [], [postsQ.data]);
 
   return (
-    <section id="news" className="pt-24 md:pt-32 pb-16 md:pb-24 px-6 md:px-12 lg:px-16 max-w-7xl mx-auto" dir="rtl">
+    <section id="news" className="pt-24 md:pt-32 pb-16 md:pb-24 px-8 sm:px-12 md:px-16 lg:px-20 max-w-7xl mx-auto" dir="rtl">
       {postsQ.isLoading && (
         <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>טוען...</div>
       )}
