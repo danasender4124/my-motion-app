@@ -28,13 +28,36 @@ const PostDetailPage: React.FC = () => {
     );
   }
 
+  const heroPhoto = data.photos[0] ?? null;
+  const remainingPhotos = data.photos.slice(1);
+
   return (
-    <main className="max-w-3xl mx-auto px-4 md:px-8 py-8 space-y-6" dir="rtl">
+    <main
+      style={{
+        maxWidth: '900px',
+        margin: '0 auto',
+        paddingTop: 'clamp(48px, 6vw, 96px)',
+        paddingBottom: 'clamp(48px, 6vw, 96px)',
+        paddingLeft: 'clamp(48px, 6vw, 96px)',
+        paddingRight: 'clamp(48px, 6vw, 96px)',
+        boxSizing: 'border-box',
+      }}
+      dir="rtl"
+      className="space-y-6"
+    >
       <Link to="/news" className="text-sm flex items-center gap-1" style={{ color: 'rgba(242,237,230,0.5)' }}>
         ← חזרה לחדשות
       </Link>
 
-      <h1 className="text-3xl font-black leading-tight" style={{ color: '#F2EDE6' }}>{data.title}</h1>
+      {heroPhoto && (
+        <div className="rounded-lg overflow-hidden" style={{ aspectRatio: '5 / 3', background: 'rgba(255,255,255,0.06)' }}>
+          <img src={heroPhoto} alt={data.title} className="w-full h-full object-cover" />
+        </div>
+      )}
+
+      <h1 className="text-3xl md:text-4xl font-black leading-tight" style={{ color: '#F2EDE6' }}>
+        {data.title}
+      </h1>
 
       <div className="flex flex-wrap items-center gap-3 text-sm" style={{ color: 'rgba(242,237,230,0.65)' }}>
         {data.team && (
@@ -64,7 +87,7 @@ const PostDetailPage: React.FC = () => {
         </p>
       )}
 
-      <PostGallery photos={data.photos} />
+      <PostGallery photos={remainingPhotos} />
 
       {data.youtube_id && (
         <div style={{ aspectRatio: '16 / 9' }} className="rounded-xl overflow-hidden">
