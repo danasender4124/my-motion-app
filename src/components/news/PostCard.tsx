@@ -29,7 +29,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
           <div className="w-full h-full flex items-center justify-center" style={{ color: 'rgba(242,237,230,0.3)' }}>📰</div>
         )}
         <span
-          className="absolute top-3 right-3 px-2 py-1 rounded text-[10px] font-black uppercase tracking-wider"
+          className="absolute top-4 right-4 px-4 py-2 rounded text-base md:text-lg font-black uppercase tracking-wider"
           style={{ background: '#FF4D00', color: '#fff' }}
         >
           {POST_CATEGORY_LABEL[post.category]}
