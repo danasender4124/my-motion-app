@@ -29,14 +29,16 @@ const Footer: React.FC = () => (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
         {/* Brand */}
         <div className="md:col-span-1">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center font-black text-sm" style={{ background: '#FF4D00', color: '#fff' }}>
-              🏀
-            </div>
+          <div className="flex items-center gap-3 mb-3">
+            <img
+              src="/league-logo.png"
+              alt="מנהלת ליגת העל"
+              className="h-10 w-auto object-contain shrink-0"
+            />
             <span className="font-black text-sm" style={{ color: '#F2EDE6' }}>ליגת העל נשים</span>
           </div>
           <p className="text-xs leading-relaxed" style={{ color: 'rgba(242,237,230,0.35)' }}>
-            הליגה המקצועית הגבוהה ביותר לכדורסל נשים בישראל. 12 קבוצות, עונת 2024/25.
+            מנהלת ליגת העל בכדורסל לנשים בישראל.
           </p>
           <div className="flex gap-3 mt-4">
             {['פייסבוק', 'אינסטגרם', 'יוטיוב'].map(s => (
