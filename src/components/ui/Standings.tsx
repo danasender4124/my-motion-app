@@ -34,7 +34,9 @@ const Standings: React.FC = () => {
   const gamesQ = useAllSeasonGames();
 
   const teams = teamsQ.data ?? [];
-  const games = gamesQ.data ?? [];
+  // Cut-off: include only games played on or before 2026-03-30 (end of regular season + early playoffs)
+  const STANDINGS_CUTOFF = '2026-03-30';
+  const games = (gamesQ.data ?? []).filter((g) => (g.date ?? '') <= STANDINGS_CUTOFF);
   const allTeamIds = teams.map((t) => t.id);
 
   const rows = teams
