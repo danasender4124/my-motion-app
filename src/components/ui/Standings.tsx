@@ -16,13 +16,18 @@ interface OverrideRow {
   points_against: number;
 }
 
+// The order of this array IS the standings order. Bracket play means that
+// a lower-bracket team can have more wins than an upper-bracket team but still
+// rank below them, so we don't sort — we just pin the order to match basket.co.il.
 const STANDINGS_OVERRIDE: OverrideRow[] = [
+  // ── בית עליון ──
   { match: 'רמת גן',         wins: 21, losses: 2,  points_for: 1913, points_against: 1573 },
   { match: 'אשדוד',          wins: 15, losses: 8,  points_for: 1749, points_against: 1629 },
   { match: 'ראשון',          wins: 13, losses: 10, points_for: 1668, points_against: 1580 },
   { match: 'רמלה',           wins: 12, losses: 11, points_for: 1792, points_against: 1752 },
   { match: 'חולון',          wins: 10, losses: 13, points_for: 1748, points_against: 1791 },
   { match: 'פתח תקווה',      wins: 10, losses: 13, points_for: 1603, points_against: 1766 },
+  // ── בית תחתון ──
   { match: 'כרמיאל',         wins: 12, losses: 12, points_for: 1734, points_against: 1698 },
   { match: 'הפניקס',         wins: 12, losses: 12, points_for: 1758, points_against: 1736 },
   { match: 'ירושלים',        wins: 10, losses: 14, points_for: 1736, points_against: 1782 },
@@ -34,17 +39,14 @@ const Standings: React.FC = () => {
   const teams = teamsQ.data ?? [];
 
   // Match each override entry to a real team (by name substring) so we keep logos + click-through
+  // Order is preserved (no sorting) — STANDINGS_OVERRIDE already in final order.
   const rows = STANDINGS_OVERRIDE
     .map((ov) => {
       const team = teams.find((t) => t.name.includes(ov.match));
       if (!team) return null;
       return { team, wins: ov.wins, losses: ov.losses, points_for: ov.points_for, points_against: ov.points_against };
     })
-    .filter((r): r is { team: typeof teams[number]; wins: number; losses: number; points_for: number; points_against: number } => r !== null)
-    .sort((a, b) => {
-      if (b.wins !== a.wins) return b.wins - a.wins;
-      return (b.points_for - b.points_against) - (a.points_for - a.points_against);
-    });
+    .filter((r): r is { team: typeof teams[number]; wins: number; losses: number; points_for: number; points_against: number } => r !== null);
 
   return (
     <section id="standings" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
