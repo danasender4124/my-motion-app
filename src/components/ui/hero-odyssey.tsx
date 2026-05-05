@@ -195,12 +195,17 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
   const prev = () => setCurrent(c => (c - 1 + total) % total);
   const next = () => setCurrent(c => (c + 1) % total);
 
-  // Show indices: prev, current, next (wrapped)
-  const indices = [
-    (current - 1 + total) % total,
-    current,
-    (current + 1) % total,
-  ];
+  // Show indices: prev, current, next — only include each post once
+  const indices: number[] = (() => {
+    if (total === 1) return [current];
+    if (total === 2) return [current, (current + 1) % total];
+    return [
+      (current - 1 + total) % total,
+      current,
+      (current + 1) % total,
+    ];
+  })();
+  const centerPos = total >= 3 ? 1 : 0;
 
   return (
     <motion.div
@@ -212,23 +217,25 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
     >
       <div className="relative flex items-center justify-center gap-4">
 
-        {/* Right arrow (RTL: go back) */}
-        <button
-          onClick={prev}
-          className="flex-shrink-0 z-20 flex items-center justify-center rounded-xl transition-colors"
-          style={{ width: 44, height: 44, background: 'rgba(0,0,0,0.7)', color: '#F2EDE6', border: '1px solid rgba(255,255,255,0.15)' }}
-          onMouseEnter={e => (e.currentTarget.style.background = '#FF4D00')}
-          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.7)')}
-        >
-          ‹
-        </button>
+        {/* Right arrow (RTL: go back) — only when more than 1 post */}
+        {total > 1 && (
+          <button
+            onClick={prev}
+            className="flex-shrink-0 z-20 flex items-center justify-center rounded-xl transition-colors"
+            style={{ width: 44, height: 44, background: 'rgba(0,0,0,0.7)', color: '#F2EDE6', border: '1px solid rgba(255,255,255,0.15)' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#FF4D00')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.7)')}
+          >
+            ‹
+          </button>
+        )}
 
         {/* Cards */}
-        <div className="flex gap-4 overflow-hidden" style={{ flex: 1 }}>
+        <div className={`flex gap-4 overflow-hidden ${total === 1 ? 'justify-center' : ''}`} style={{ flex: 1, maxWidth: total === 1 ? '720px' : undefined, margin: total === 1 ? '0 auto' : undefined }}>
           <AnimatePresence mode="popLayout">
             {indices.map((idx, pos) => {
               const card = CARDS[idx];
-              const isCenter = pos === 1;
+              const isCenter = pos === centerPos;
               return (
                 <motion.div
                   key={`${idx}-${pos}`}
@@ -237,7 +244,7 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
                   animate={{ opacity: isCenter ? 1 : 0.5, scale: isCenter ? 1 : 0.93, y: 0 }}
                   exit={{ opacity: 0, scale: 0.94, y: -12 }}
                   transition={{ duration: 1.15, ease: EASE_OUT_EXPO }}
-                  className={`relative flex-1 rounded-2xl overflow-hidden${pos !== 1 ? ' hidden md:block' : ''}`}
+                  className={`relative flex-1 rounded-2xl overflow-hidden${pos !== centerPos ? ' hidden md:block' : ''}`}
                   style={{ height: '420px', minWidth: 0 }}
                 >
                   <Link to={`/news/${card.id}`} className="absolute inset-0 cursor-pointer">
@@ -276,16 +283,18 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
           </AnimatePresence>
         </div>
 
-        {/* Left arrow (RTL: go forward) */}
-        <button
-          onClick={next}
-          className="flex-shrink-0 z-20 flex items-center justify-center rounded-xl transition-colors"
-          style={{ width: 44, height: 44, background: 'rgba(0,0,0,0.7)', color: '#F2EDE6', border: '1px solid rgba(255,255,255,0.15)' }}
-          onMouseEnter={e => (e.currentTarget.style.background = '#FF4D00')}
-          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.7)')}
-        >
-          ›
-        </button>
+        {/* Left arrow (RTL: go forward) — only when more than 1 post */}
+        {total > 1 && (
+          <button
+            onClick={next}
+            className="flex-shrink-0 z-20 flex items-center justify-center rounded-xl transition-colors"
+            style={{ width: 44, height: 44, background: 'rgba(0,0,0,0.7)', color: '#F2EDE6', border: '1px solid rgba(255,255,255,0.15)' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#FF4D00')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.7)')}
+          >
+            ›
+          </button>
+        )}
       </div>
     </motion.div>
   );
