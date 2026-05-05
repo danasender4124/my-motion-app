@@ -34,8 +34,7 @@ const Standings: React.FC = () => {
   const gamesQ = useAllSeasonGames();
 
   const teams = teamsQ.data ?? [];
-  // Regular-season standings — exclude playoff games (round contains "פלייאוף")
-  const games = (gamesQ.data ?? []).filter((g) => !(g.round ?? '').includes('פלייאוף'));
+  const games = gamesQ.data ?? [];
   const allTeamIds = teams.map((t) => t.id);
 
   const rows = teams
