@@ -81,78 +81,94 @@ const Standings: React.FC = () => {
 
             {rows.map((r, i) => {
               const isTop = i === 0;
-              const isPlayoff = i < 4;
+              const isUpperHalf = i < 6;
               const diff = r.points_for - r.points_against;
               const pts = r.wins * 2 + r.losses;
               const evenBg = 'rgba(255,255,255,0.04)';
               const oddBg = 'rgba(255,255,255,0.01)';
               return (
-                <Link key={r.team.id} to={`/team/${r.team.id}`}>
-                  <motion.div
-                    initial={{ opacity: 0, x: 16 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: i * 0.04, ease: [0.25, 1, 0.5, 1] }}
-                    className="grid items-center px-4 py-3 cursor-pointer"
-                    style={{
-                      gridTemplateColumns: COLS,
-                      gap: '0.5rem',
-                      background: i % 2 === 0 ? evenBg : oddBg,
-                      borderBottom: '1px solid rgba(255,255,255,0.05)',
-                      borderRight: isTop ? '3px solid #FF4D00' : '3px solid transparent',
-                    }}
-                    whileHover={{ background: 'rgba(255,77,0,0.07)' }}
-                  >
-                    <span
-                      className="text-center text-sm font-black tabular-nums"
-                      style={{ color: isTop ? '#FF4D00' : isPlayoff ? '#FFB300' : 'rgba(242,237,230,0.35)' }}
+                <React.Fragment key={r.team.id}>
+                  {i === 6 && (
+                    <div
+                      className="flex items-center gap-3 px-4 py-2 text-xs font-black uppercase tracking-wider"
+                      style={{
+                        background: 'rgba(255,77,0,0.10)',
+                        color: '#FF4D00',
+                        borderTop: '2px solid #FF4D00',
+                        borderBottom: '2px solid #FF4D00',
+                      }}
                     >
-                      {i + 1}
-                    </span>
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      {r.team.logo && (
-                        <img
-                          src={r.team.logo}
-                          alt={r.team.name}
-                          style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }}
-                        />
-                      )}
-                      <span
-                        className="text-sm font-semibold truncate"
-                        style={{ color: isTop ? '#F2EDE6' : 'rgba(242,237,230,0.85)' }}
-                      >
-                        {r.team.name}
-                      </span>
+                      <span>בית תחתון</span>
+                      <span style={{ color: 'rgba(242,237,230,0.4)', fontWeight: 500 }}>· מקומות 7-10</span>
                     </div>
-                    <span className="text-center text-sm tabular-nums" style={{ color: 'rgba(242,237,230,0.55)' }}>
-                      {r.wins + r.losses}
-                    </span>
-                    <span className="text-center text-sm font-bold tabular-nums" style={{ color: '#F2EDE6' }}>
-                      {r.wins}
-                    </span>
-                    <span className="text-center text-sm tabular-nums" style={{ color: 'rgba(242,237,230,0.55)' }}>
-                      {r.losses}
-                    </span>
-                    <span className="text-center text-sm tabular-nums" style={{ color: 'rgba(242,237,230,0.65)' }}>
-                      {r.points_for}
-                    </span>
-                    <span className="text-center text-sm tabular-nums" style={{ color: 'rgba(242,237,230,0.65)' }}>
-                      {r.points_against}
-                    </span>
-                    <span
-                      className="text-center text-sm font-semibold tabular-nums"
-                      style={{ color: diff > 0 ? '#4ade80' : diff < 0 ? '#f87171' : 'rgba(242,237,230,0.55)' }}
+                  )}
+                  <Link to={`/team/${r.team.id}`}>
+                    <motion.div
+                      initial={{ opacity: 0, x: 16 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: i * 0.04, ease: [0.25, 1, 0.5, 1] }}
+                      className="grid items-center px-4 py-3 cursor-pointer"
+                      style={{
+                        gridTemplateColumns: COLS,
+                        gap: '0.5rem',
+                        background: i % 2 === 0 ? evenBg : oddBg,
+                        borderBottom: '1px solid rgba(255,255,255,0.05)',
+                        borderRight: isTop ? '3px solid #FF4D00' : '3px solid transparent',
+                      }}
+                      whileHover={{ background: 'rgba(255,77,0,0.07)' }}
                     >
-                      {diff > 0 ? '+' : ''}{diff}
-                    </span>
-                    <span
-                      className="text-center text-sm font-black tabular-nums"
-                      style={{ color: isTop ? '#FF4D00' : '#F2EDE6' }}
-                    >
-                      {pts}
-                    </span>
-                  </motion.div>
-                </Link>
+                      <span
+                        className="text-center text-sm font-black tabular-nums"
+                        style={{ color: isTop ? '#FF4D00' : isUpperHalf ? '#FFB300' : 'rgba(242,237,230,0.5)' }}
+                      >
+                        {i + 1}
+                      </span>
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {r.team.logo && (
+                          <img
+                            src={r.team.logo}
+                            alt={r.team.name}
+                            style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }}
+                          />
+                        )}
+                        <span
+                          className="text-sm font-semibold truncate"
+                          style={{ color: isTop ? '#F2EDE6' : 'rgba(242,237,230,0.85)' }}
+                        >
+                          {r.team.name}
+                        </span>
+                      </div>
+                      <span className="text-center text-sm tabular-nums" style={{ color: 'rgba(242,237,230,0.55)' }}>
+                        {r.wins + r.losses}
+                      </span>
+                      <span className="text-center text-sm font-bold tabular-nums" style={{ color: '#F2EDE6' }}>
+                        {r.wins}
+                      </span>
+                      <span className="text-center text-sm tabular-nums" style={{ color: 'rgba(242,237,230,0.55)' }}>
+                        {r.losses}
+                      </span>
+                      <span className="text-center text-sm tabular-nums" style={{ color: 'rgba(242,237,230,0.65)' }}>
+                        {r.points_for}
+                      </span>
+                      <span className="text-center text-sm tabular-nums" style={{ color: 'rgba(242,237,230,0.65)' }}>
+                        {r.points_against}
+                      </span>
+                      <span
+                        className="text-center text-sm font-semibold tabular-nums"
+                        style={{ color: diff > 0 ? '#4ade80' : diff < 0 ? '#f87171' : 'rgba(242,237,230,0.55)' }}
+                      >
+                        {diff > 0 ? '+' : ''}{diff}
+                      </span>
+                      <span
+                        className="text-center text-sm font-black tabular-nums"
+                        style={{ color: isTop ? '#FF4D00' : '#F2EDE6' }}
+                      >
+                        {pts}
+                      </span>
+                    </motion.div>
+                  </Link>
+                </React.Fragment>
               );
             })}
           </div>
