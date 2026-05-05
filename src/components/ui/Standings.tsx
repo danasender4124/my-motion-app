@@ -31,7 +31,7 @@ const STANDINGS_OVERRIDE: OverrideRow[] = [
   { match: 'כרמיאל',         wins: 12, losses: 12, points_for: 1734, points_against: 1698 },
   { match: 'הפניקס',         wins: 12, losses: 12, points_for: 1758, points_against: 1736 },
   { match: 'ירושלים',        wins: 10, losses: 14, points_for: 1736, points_against: 1782 },
-  { match: 'באר שבע',        wins: 2,  losses: 22, points_for: 1639, points_against: 2033 },
+  { match: 'דימונה',         wins: 2,  losses: 22, points_for: 1639, points_against: 2033 },
 ];
 
 const Standings: React.FC = () => {
