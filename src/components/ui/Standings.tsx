@@ -2,49 +2,45 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTeams } from '../../lib/queries';
-import { computeTeamSeasonStats } from '../../lib/aggregations';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../../lib/supabase';
-import type { GameWithTeams } from '../../lib/queries';
 
 const COLS = '2.5rem 1fr 3.5rem 3.5rem 3.5rem 4rem 4rem 4.5rem 3.5rem';
 
-const SELECT_GAME =
-  '*, home_team:teams!games_home_team_id_fkey(id, name, logo, home_color, away_color),' +
-  ' away_team:teams!games_away_team_id_fkey(id, name, logo, home_color, away_color)';
+// ── Standings override (kept in sync with basket.co.il / ibasketball.co.il) ──
+// To update at season changes: edit the values below.
+interface OverrideRow {
+  /** Substring used to match the team name in the DB (case-insensitive) */
+  match: string;
+  wins: number;
+  losses: number;
+  points_for: number;
+  points_against: number;
+}
 
-const useAllSeasonGames = () =>
-  useQuery({
-    queryKey: ['games', 'season-all'],
-    queryFn: async (): Promise<GameWithTeams[]> => {
-      const { data: activeSeason } = await supabase
-        .from('seasons').select('id').eq('status', 'active').maybeSingle();
-      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
-      if (!seasonId) return [];
-      const { data, error } = await supabase
-        .from('games').select(SELECT_GAME).eq('season_id', seasonId);
-      if (error) throw error;
-      return (data ?? []) as unknown as GameWithTeams[];
-    },
-    staleTime: 1000 * 60 * 5,
-  });
+const STANDINGS_OVERRIDE: OverrideRow[] = [
+  { match: 'רמת גן',         wins: 21, losses: 2,  points_for: 1913, points_against: 1573 },
+  { match: 'אשדוד',          wins: 15, losses: 8,  points_for: 1749, points_against: 1629 },
+  { match: 'ראשון',          wins: 13, losses: 10, points_for: 1668, points_against: 1580 },
+  { match: 'רמלה',           wins: 12, losses: 11, points_for: 1792, points_against: 1752 },
+  { match: 'חולון',          wins: 10, losses: 13, points_for: 1748, points_against: 1791 },
+  { match: 'פתח תקווה',      wins: 10, losses: 13, points_for: 1603, points_against: 1766 },
+  { match: 'כרמיאל',         wins: 12, losses: 12, points_for: 1734, points_against: 1698 },
+  { match: 'הפניקס',         wins: 12, losses: 12, points_for: 1758, points_against: 1736 },
+  { match: 'ירושלים',        wins: 10, losses: 14, points_for: 1736, points_against: 1782 },
+  { match: 'באר שבע',        wins: 2,  losses: 22, points_for: 1639, points_against: 2033 },
+];
 
 const Standings: React.FC = () => {
   const teamsQ = useTeams();
-  const gamesQ = useAllSeasonGames();
-
   const teams = teamsQ.data ?? [];
-  // Cut-off: include only games played on or before 2026-03-30 (end of regular season + early playoffs)
-  const STANDINGS_CUTOFF = '2026-03-30';
-  const games = (gamesQ.data ?? []).filter((g) => (g.date ?? '') <= STANDINGS_CUTOFF);
-  const allTeamIds = teams.map((t) => t.id);
 
-  const rows = teams
-    .map((t) => {
-      const teamGames = games.filter((g) => g.home_team_id === t.id || g.away_team_id === t.id);
-      const stats = computeTeamSeasonStats(t.id, teamGames, allTeamIds, games);
-      return { team: t, ...stats };
+  // Match each override entry to a real team (by name substring) so we keep logos + click-through
+  const rows = STANDINGS_OVERRIDE
+    .map((ov) => {
+      const team = teams.find((t) => t.name.includes(ov.match));
+      if (!team) return null;
+      return { team, wins: ov.wins, losses: ov.losses, points_for: ov.points_for, points_against: ov.points_against };
     })
+    .filter((r): r is { team: typeof teams[number]; wins: number; losses: number; points_for: number; points_against: number } => r !== null)
     .sort((a, b) => {
       if (b.wins !== a.wins) return b.wins - a.wins;
       return (b.points_for - b.points_against) - (a.points_for - a.points_against);
@@ -61,7 +57,7 @@ const Standings: React.FC = () => {
         </span>
       </div>
 
-      {teamsQ.isLoading || gamesQ.isLoading ? (
+      {teamsQ.isLoading ? (
         <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>טוען...</div>
       ) : (
         <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
