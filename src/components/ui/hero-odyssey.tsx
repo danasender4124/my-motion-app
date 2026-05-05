@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { NEWS } from '../../data/league';
+import { useApprovedPosts, POST_CATEGORY_LABEL, type PublicPost } from '../../lib/queries';
 
 // ─── Easing curves (natural deceleration, not bounce) ────────────────────────
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -152,23 +153,44 @@ const HERO_IMAGES = [
   '/news-imgs/news-04.jpeg',
 ];
 
-// ─── Card data: combine news articles with local images ───────────────────────
-const CARDS = NEWS.map((article, i) => ({
-  ...article,
-  image: HERO_IMAGES[i % HERO_IMAGES.length],
-}));
+// ─── Map a PublicPost to a hero card ─────────────────────────────────────────
+const fmtDate = (iso: string) => {
+  const [y, m, d] = iso.slice(0, 10).split('-');
+  return `${d}/${m}/${y}`;
+};
+
+const cardFor = (post: PublicPost, fallbackIdx: number) => ({
+  id: post.id,
+  title: post.title,
+  excerpt: post.body || '',
+  tag: POST_CATEGORY_LABEL[post.category],
+  date: fmtDate(post.published_at),
+  image:
+    post.photos[0] ||
+    (post.youtube_id ? `https://img.youtube.com/vi/${post.youtube_id}/maxresdefault.jpg` : null) ||
+    HERO_IMAGES[fallbackIdx % HERO_IMAGES.length],
+});
 
 // ─── Card slider ──────────────────────────────────────────────────────────────
 const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
   const [current, setCurrent] = useState(0);
+  const { data } = useApprovedPosts();
+  const CARDS = useMemo(() => (data ?? []).map((p, i) => cardFor(p, i)), [data]);
   const total = CARDS.length;
 
   // Auto-advance every 4 seconds
   useEffect(() => {
-    if (!show) return;
+    if (!show || total < 2) return;
     const t = setInterval(() => setCurrent(c => (c + 1) % total), 4000);
     return () => clearInterval(t);
   }, [show, total]);
+
+  // Reset index if posts shrink below current
+  useEffect(() => {
+    if (current >= total && total > 0) setCurrent(0);
+  }, [current, total]);
+
+  if (total === 0) return null;
 
   const prev = () => setCurrent(c => (c - 1 + total) % total);
   const next = () => setCurrent(c => (c + 1) % total);
@@ -215,36 +237,39 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
                   animate={{ opacity: isCenter ? 1 : 0.5, scale: isCenter ? 1 : 0.93, y: 0 }}
                   exit={{ opacity: 0, scale: 0.94, y: -12 }}
                   transition={{ duration: 1.15, ease: EASE_OUT_EXPO }}
-                  className={`relative flex-1 rounded-2xl overflow-hidden cursor-pointer${pos !== 1 ? ' hidden md:block' : ''}`}
+                  className={`relative flex-1 rounded-2xl overflow-hidden${pos !== 1 ? ' hidden md:block' : ''}`}
                   style={{ height: '420px', minWidth: 0 }}
-                  onClick={() => setCurrent(idx)}
                 >
-                  {/* Image */}
-                  <img
-                    src={card.image}
-                    alt={card.title}
-                    className="absolute inset-0 w-full h-full object-contain object-top"
-                  />
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0" style={{
-                    background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)',
-                  }} />
-                  {/* Text */}
-                  <div className="absolute bottom-0 right-0 left-0 p-6 text-right">
-                    <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold mb-3"
-                      style={{ background: '#FF4D00', color: '#fff' }}>
-                      {card.tag}
-                    </span>
-                    <h3 className="text-lg font-black leading-tight mb-2" style={{ color: '#F2EDE6' }}>
-                      {card.title}
-                    </h3>
-                    <p className="text-sm line-clamp-2 mb-4" style={{ color: 'rgba(242,237,230,0.6)' }}>
-                      {card.excerpt}
-                    </p>
-                    <span className="text-sm font-bold flex items-center gap-1 justify-end" style={{ color: '#FF4D00' }}>
-                      קרא עוד →
-                    </span>
-                  </div>
+                  <Link to={`/news/${card.id}`} className="absolute inset-0 cursor-pointer">
+                    {/* Image */}
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0" style={{
+                      background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)',
+                    }} />
+                    {/* Text */}
+                    <div className="absolute bottom-0 right-0 left-0 p-6 text-right">
+                      <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold mb-3"
+                        style={{ background: '#FF4D00', color: '#fff' }}>
+                        {card.tag}
+                      </span>
+                      <h3 className="text-lg font-black leading-tight mb-2" style={{ color: '#F2EDE6' }}>
+                        {card.title}
+                      </h3>
+                      {card.excerpt && (
+                        <p className="text-sm line-clamp-2 mb-4" style={{ color: 'rgba(242,237,230,0.6)' }}>
+                          {card.excerpt}
+                        </p>
+                      )}
+                      <span className="text-sm font-bold flex items-center gap-1 justify-end" style={{ color: '#FF4D00' }}>
+                        קרא עוד →
+                      </span>
+                    </div>
+                  </Link>
                 </motion.div>
               );
             })}
