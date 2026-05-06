@@ -5,6 +5,7 @@ import MatchHeader from '../components/match/MatchHeader';
 import QuarterScoresTable from '../components/match/QuarterScoresTable';
 import BoxScoreTable from '../components/match/BoxScoreTable';
 import MatchVideos from '../components/match/MatchVideos';
+import MatchMedia from '../components/match/MatchMedia';
 
 const MatchPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -70,6 +71,7 @@ const MatchPage: React.FC = () => {
           </div>
         )}
 
+        <MatchMedia gameId={game.id} />
         <MatchVideos gameId={game.id} />
       </div>
     </div>

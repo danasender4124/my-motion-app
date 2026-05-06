@@ -789,3 +789,60 @@ export const useTeamLatestPosts = (teamId: string | undefined, limit = 5) =>
       return (data ?? []) as unknown as PublicPost[];
     },
   });
+
+// ── Game media (photos/videos uploaded per game) ──────────────────────────
+export interface PublicGameMediaItem {
+  id: string;
+  game_id: string;
+  type: 'photo' | 'video';
+  storage_path: string | null;
+  youtube_id: string | null;
+  caption: string | null;
+  publish_to_vod: boolean;
+  created_at: string;
+}
+
+export interface PublicGameMediaWithGame extends PublicGameMediaItem {
+  game: {
+    id: string;
+    date: string | null;
+    home_team: { id: string; name: string; logo: string | null } | null;
+    away_team: { id: string; name: string; logo: string | null } | null;
+  } | null;
+}
+
+/** Photos + videos for a single game. */
+export const useGameMediaPublic = (gameId: string | undefined) =>
+  useQuery({
+    queryKey: ['public_game_media', gameId],
+    enabled: !!gameId,
+    queryFn: async (): Promise<PublicGameMediaItem[]> => {
+      const { data, error } = await supabase
+        .from('game_media')
+        .select('id, game_id, type, storage_path, youtube_id, caption, publish_to_vod, created_at')
+        .eq('game_id', gameId!)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as PublicGameMediaItem[];
+    },
+  });
+
+/** All videos from games that have publish_to_vod=true, joined with game + teams. */
+export const usePublishedGameVideos = () =>
+  useQuery({
+    queryKey: ['public_game_videos_for_vod'],
+    queryFn: async (): Promise<PublicGameMediaWithGame[]> => {
+      const { data, error } = await supabase
+        .from('game_media')
+        .select('id, game_id, type, storage_path, youtube_id, caption, publish_to_vod, created_at,' +
+          ' game:games(id, date,' +
+          '   home_team:teams!games_home_team_id_fkey(id, name, logo),' +
+          '   away_team:teams!games_away_team_id_fkey(id, name, logo))')
+        .eq('type', 'video')
+        .eq('publish_to_vod', true)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as unknown as PublicGameMediaWithGame[];
+    },
+    staleTime: 1000 * 60 * 2,
+  });
