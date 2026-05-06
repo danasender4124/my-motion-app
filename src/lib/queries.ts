@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from './supabase';
 import { computeTeamSeasonStats, computeLeagueLeaders, type TeamSeasonStats, type LeagueLeaders, type LeaderInputRow } from './aggregations';
+import { findOverrideForTeam, findOverridePosition } from './standings-override';
 
 export type { LeagueLeaders, LeaderInputRow } from './aggregations';
 export type { LeaderCategoryKey, LeagueLeaderRow } from './aggregations';
@@ -408,6 +409,24 @@ export const useTeamSeasonStats = (teamId: string | undefined) =>
     queryKey: ['team_season_stats', teamId],
     enabled: !!teamId,
     queryFn: async (): Promise<TeamSeasonStats> => {
+      // Single source of truth: pull values from STANDINGS_OVERRIDE so the
+      // team-page stats always match the league standings table, which is
+      // pinned to basket.co.il IBA values.
+      const { data: teamRow } = await supabase
+        .from('teams').select('name').eq('id', teamId!).maybeSingle();
+      const teamName = (teamRow as { name: string } | null)?.name ?? null;
+      const ov = teamName ? findOverrideForTeam(teamName) : null;
+      if (ov) {
+        return {
+          wins: ov.wins,
+          losses: ov.losses,
+          points_for: ov.points_for,
+          points_against: ov.points_against,
+          position: teamName ? findOverridePosition(teamName) : null,
+        };
+      }
+
+      // Fallback — compute from games when no override entry matches.
       const { data: activeSeason } = await supabase
         .from('seasons').select('id').eq('status', 'active').maybeSingle();
       const seasonId = (activeSeason as { id: string } | null)?.id ?? null;

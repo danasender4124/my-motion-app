@@ -2,37 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTeams } from '../../lib/queries';
+import { STANDINGS_OVERRIDE } from '../../lib/standings-override';
 
 const COLS = '2.5rem 1fr 3.5rem 3.5rem 3.5rem 4rem 4rem 4.5rem 3.5rem';
-
-// ── Standings override (kept in sync with basket.co.il / ibasketball.co.il) ──
-// To update at season changes: edit the values below.
-interface OverrideRow {
-  /** Substring used to match the team name in the DB (case-insensitive) */
-  match: string;
-  wins: number;
-  losses: number;
-  points_for: number;
-  points_against: number;
-}
-
-// The order of this array IS the standings order. Bracket play means that
-// a lower-bracket team can have more wins than an upper-bracket team but still
-// rank below them, so we don't sort — we just pin the order to match basket.co.il.
-const STANDINGS_OVERRIDE: OverrideRow[] = [
-  // ── בית עליון ──
-  { match: 'רמת גן',         wins: 21, losses: 2,  points_for: 1913, points_against: 1573 },
-  { match: 'אשדוד',          wins: 15, losses: 8,  points_for: 1749, points_against: 1629 },
-  { match: 'ראשון',          wins: 13, losses: 10, points_for: 1668, points_against: 1580 },
-  { match: 'רמלה',           wins: 12, losses: 11, points_for: 1792, points_against: 1752 },
-  { match: 'חולון',          wins: 10, losses: 13, points_for: 1748, points_against: 1791 },
-  { match: 'פתח תקווה',      wins: 10, losses: 13, points_for: 1603, points_against: 1766 },
-  // ── בית תחתון ──
-  { match: 'כרמיאל',         wins: 12, losses: 12, points_for: 1734, points_against: 1698 },
-  { match: 'הפניקס',         wins: 12, losses: 12, points_for: 1758, points_against: 1736 },
-  { match: 'ירושלים',        wins: 10, losses: 14, points_for: 1736, points_against: 1782 },
-  { match: 'דימונה',         wins: 2,  losses: 22, points_for: 1639, points_against: 2033 },
-];
 
 const Standings: React.FC = () => {
   const teamsQ = useTeams();
