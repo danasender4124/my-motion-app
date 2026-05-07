@@ -415,21 +415,14 @@ const Results: React.FC = () => {
 
                     {/* פרטים */}
                     <div className="flex justify-center">
-                      <button
+                      <Link
+                        to={`/match/${g.id}`}
                         className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors"
-                        style={{ color: 'rgba(242,237,230,0.4)', background: 'rgba(255,255,255,0.06)' }}
-                        title="פרטי משחק"
-                        onMouseEnter={e => {
-                          e.currentTarget.style.color = '#FF4D00';
-                          e.currentTarget.style.background = 'rgba(255,77,0,0.14)';
-                        }}
-                        onMouseLeave={e => {
-                          e.currentTarget.style.color = 'rgba(242,237,230,0.4)';
-                          e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-                        }}
+                        style={{ color: '#FF4D00', background: 'rgba(255,77,0,0.14)' }}
+                        title="פרטי משחק וסגלים"
                       >
                         <ListIcon />
-                      </button>
+                      </Link>
                     </div>
                   </motion.div>
                 );

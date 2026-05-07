@@ -846,3 +846,69 @@ export const usePublishedGameVideos = () =>
     },
     staleTime: 1000 * 60 * 2,
   });
+
+// ── Game lineups (per-game submitted roster) ──────────────────────────────
+export interface GameLineupPlayer {
+  id: string;
+  first_name: string;
+  last_name: string;
+  photo: string | null;
+  jersey_number: number | null;
+}
+
+export const useGameLineupPublic = (
+  gameId: string | undefined,
+  teamId: string | undefined,
+  seasonId: string | null | undefined,
+) =>
+  useQuery({
+    queryKey: ['game_lineup_public', gameId, teamId, seasonId],
+    enabled: !!gameId && !!teamId && !!seasonId,
+    queryFn: async (): Promise<{ submitted_at: string | null; players: GameLineupPlayer[] }> => {
+      const [lineupRes, subRes, jerseysRes] = await Promise.all([
+        supabase
+          .from('game_lineups')
+          .select('player_id, player:players(id, first_name, last_name, photo)')
+          .eq('game_id', gameId!)
+          .eq('team_id', teamId!),
+        supabase
+          .from('game_lineup_submissions')
+          .select('submitted_at')
+          .eq('game_id', gameId!)
+          .eq('team_id', teamId!)
+          .maybeSingle(),
+        supabase
+          .from('player_team_seasons')
+          .select('player_id, jersey_number')
+          .eq('team_id', teamId!)
+          .eq('season_id', seasonId!),
+      ]);
+      if (lineupRes.error) throw lineupRes.error;
+      if (subRes.error) throw subRes.error;
+      if (jerseysRes.error) throw jerseysRes.error;
+
+      const jerseyMap = new Map<string, number | null>();
+      for (const r of (jerseysRes.data ?? []) as Array<{ player_id: string; jersey_number: number | null }>) {
+        jerseyMap.set(r.player_id, r.jersey_number);
+      }
+      const players: GameLineupPlayer[] = ((lineupRes.data ?? []) as Array<{
+        player_id: string;
+        player: { id: string; first_name: string; last_name: string; photo: string | null } | null;
+      }>)
+        .filter((r) => r.player)
+        .map((r) => ({
+          id: r.player!.id,
+          first_name: r.player!.first_name,
+          last_name: r.player!.last_name,
+          photo: r.player!.photo,
+          jersey_number: jerseyMap.get(r.player_id) ?? null,
+        }))
+        .sort((a, b) => (a.jersey_number ?? 999) - (b.jersey_number ?? 999));
+
+      return {
+        submitted_at: (subRes.data as { submitted_at: string } | null)?.submitted_at ?? null,
+        players,
+      };
+    },
+    staleTime: 1000 * 60 * 2,
+  });

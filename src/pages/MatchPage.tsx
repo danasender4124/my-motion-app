@@ -6,6 +6,7 @@ import QuarterScoresTable from '../components/match/QuarterScoresTable';
 import BoxScoreTable from '../components/match/BoxScoreTable';
 import MatchVideos from '../components/match/MatchVideos';
 import MatchMedia from '../components/match/MatchMedia';
+import MatchLineups from '../components/match/MatchLineups';
 
 const MatchPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -63,12 +64,26 @@ const MatchPage: React.FC = () => {
             )}
           </>
         ) : (
-          <div
-            className="rounded-2xl p-8 text-center"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(242,237,230,0.6)' }}
-          >
-            המשחק טרם שוחק.
-          </div>
+          <>
+            <div
+              className="rounded-2xl p-6 text-center"
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(242,237,230,0.6)' }}
+            >
+              המשחק טרם שוחק.
+            </div>
+            {game.home_team && game.away_team && (
+              <MatchLineups
+                gameId={game.id}
+                seasonId={game.season_id ?? null}
+                homeTeamId={game.home_team_id}
+                homeTeamName={game.home_team.name}
+                homeTeamLogo={game.home_team.logo}
+                awayTeamId={game.away_team_id}
+                awayTeamName={game.away_team.name}
+                awayTeamLogo={game.away_team.logo}
+              />
+            )}
+          </>
         )}
 
         <MatchMedia gameId={game.id} />
