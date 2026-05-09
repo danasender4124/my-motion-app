@@ -41,18 +41,36 @@ const Footer: React.FC = () => (
             מנהלת ליגת העל בכדורסל לנשים בישראל.
           </p>
           <div className="flex gap-3 mt-4">
-            {['פייסבוק', 'אינסטגרם', 'יוטיוב'].map(s => (
-              <a
-                key={s}
-                href="#"
-                className="text-xs px-3 py-1.5 rounded-full transition-colors"
-                style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(242,237,230,0.5)' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#FF4D00')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(242,237,230,0.5)')}
-              >
-                {s}
-              </a>
-            ))}
+            <a
+              href="https://www.facebook.com/share/1Gt2jBuLPP/?mibextid=wwXIfr"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="פייסבוק"
+              className="w-9 h-9 rounded-full flex items-center justify-center transition-colors"
+              style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(242,237,230,0.6)' }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = '#1877F2'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(242,237,230,0.6)'; e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.99 22 12z" />
+              </svg>
+            </a>
+            <a
+              href="https://www.instagram.com/wbl_israel?igsh=dHUzd200bzI0cTQw"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="אינסטגרם"
+              className="w-9 h-9 rounded-full flex items-center justify-center transition-colors"
+              style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(242,237,230,0.6)' }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(242,237,230,0.6)'; e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+            </a>
           </div>
         </div>
 
