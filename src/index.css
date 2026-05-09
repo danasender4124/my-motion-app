@@ -39,3 +39,69 @@ html, body, #root {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ─── Accessibility (a11y) preferences ──────────────────────────────────── */
+
+/* High contrast mode — make backgrounds darker, text brighter */
+html.a11y-contrast-high {
+  filter: contrast(1.35);
+}
+html.a11y-contrast-high body {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+/* Inverted (negative) colors */
+html.a11y-contrast-inverted {
+  filter: invert(1) hue-rotate(180deg);
+}
+html.a11y-contrast-inverted img,
+html.a11y-contrast-inverted video,
+html.a11y-contrast-inverted iframe {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Underline all links for clearer affordance */
+html.a11y-links-underline a {
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}
+
+/* Readable font — switch to a high-legibility sans-serif */
+html.a11y-readable-font,
+html.a11y-readable-font body,
+html.a11y-readable-font * {
+  font-family: 'Arial', 'Tahoma', sans-serif !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Big cursor */
+html.a11y-big-cursor,
+html.a11y-big-cursor * {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'><path fill='%23000' stroke='%23fff' stroke-width='1.5' d='M5 2l14 10-6 1 4 8-3 1-4-8-5 4z'/></svg>") 4 4, auto !important;
+}
+
+/* Skip-to-content link — visible only on focus */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  right: 8px;
+  z-index: 99999;
+  background: #1565C0;
+  color: #fff !important;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: top 0.15s;
+}
+.skip-to-content:focus {
+  top: 8px;
+  outline: 3px solid #ffd400;
+}
+
+/* Stronger focus indicators for keyboard users (WCAG 2.4.7) */
+:focus-visible {
+  outline: 3px solid #ffd400 !important;
+  outline-offset: 2px !important;
+}

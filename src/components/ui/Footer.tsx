@@ -111,7 +111,7 @@ const Footer: React.FC = () => (
         <div className="flex gap-4">
           <a href="#" className="hover:text-white transition-colors">פרטיות</a>
           <a href="#" className="hover:text-white transition-colors">תנאי שימוש</a>
-          <a href="#" className="hover:text-white transition-colors">נגישות</a>
+          <Link to="/accessibility" className="hover:text-white transition-colors">הצהרת נגישות</Link>
         </div>
       </div>
     </div>

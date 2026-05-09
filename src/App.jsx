@@ -16,6 +16,8 @@ import PlayerPage from './pages/PlayerPage'
 import TeamPage from './pages/TeamPage'
 import VodPage from './pages/VodPage'
 import PostDetailPage from './pages/PostDetailPage'
+import AccessibilityStatementPage from './pages/AccessibilityStatementPage'
+import AccessibilityWidget from '@/components/a11y/AccessibilityWidget'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,6 +47,7 @@ const AnimatedRoutes = () => {
           <Route path="/player/:id" element={<PlayerPage />} />
           <Route path="/team/:id" element={<TeamPage />} />
           <Route path="/vod" element={<VodPage />} />
+          <Route path="/accessibility" element={<AccessibilityStatementPage />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
@@ -56,11 +59,13 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <div style={{ background: '#07080C', minHeight: '100svh' }}>
+          <a href="#main-content" className="skip-to-content">דלג לתוכן הראשי</a>
           <Header />
-          <main>
+          <main id="main-content">
             <AnimatedRoutes />
           </main>
           <Footer />
+          <AccessibilityWidget />
         </div>
       </BrowserRouter>
     </QueryClientProvider>
