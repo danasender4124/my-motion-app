@@ -15,7 +15,7 @@ const FOOTER_COLUMNS: { title: string; links: FooterLink[] }[] = [
     { label: 'VOD',        to: '/vod' },
   ]},
   { title: 'צרו קשר', links: [
-    { label: 'יצירת קשר' }, { label: 'עיתונאים' }, { label: 'שיתופי פעולה' }, { label: 'נגישות' },
+    { label: 'יצירת קשר' }, { label: 'עיתונאים' }, { label: 'שיתופי פעולה' }, { label: 'נגישות', to: '/accessibility' },
   ]},
 ];
 
