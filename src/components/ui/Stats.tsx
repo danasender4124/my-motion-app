@@ -41,14 +41,14 @@ const Stats: React.FC = () => {
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#f15a24] text-white font-semibold min-w-[180px] justify-between transition-colors hover:bg-[#d44d1d]"
+              className="relative flex items-center px-5 py-2.5 bg-[#f15a24] text-white font-semibold min-w-[200px] justify-center transition-colors hover:bg-[#d44d1d]"
             >
               <span>{triggerLabel}</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-4 h-4 absolute right-4 transition-transform ${open ? 'rotate-180' : ''}`} />
             </button>
             {open && (
               <ul
-                className="absolute right-0 left-0 top-full mt-2 rounded-lg overflow-hidden shadow-lg z-10 border"
+                className="absolute right-0 left-0 top-full mt-1 overflow-hidden shadow-lg z-10 border"
                 style={{ background: '#1a1a1a', borderColor: 'rgba(255,255,255,0.1)' }}
               >
                 {seasons.map((s) => (
@@ -56,7 +56,7 @@ const Stats: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => { setSeasonId(s.id); setOpen(false); }}
-                      className={`block w-full text-right px-5 py-2.5 transition-colors ${
+                      className={`block w-full text-center px-5 py-2.5 transition-colors ${
                         s.id === seasonId
                           ? 'bg-[#f15a24] text-white'
                           : 'text-white/80 hover:bg-white/10'
