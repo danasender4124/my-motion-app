@@ -540,31 +540,50 @@ export const useTeamLeaders = (teamId: string | undefined) =>
     },
   });
 
-export type SeasonStage = 'regular' | 'all';
+export interface PublicSeasonOption {
+  id: string;
+  name: string;
+  status: 'future' | 'active' | 'ended';
+  start_date: string | null;
+}
 
-export const useLeagueLeaders = (stage: SeasonStage) =>
+export const useSeasonsWithGames = () =>
   useQuery({
-    queryKey: ['league_leaders', stage],
+    queryKey: ['seasons_with_games'],
+    queryFn: async (): Promise<PublicSeasonOption[]> => {
+      const { data: games } = await supabase
+        .from('games')
+        .select('season_id')
+        .eq('status', 'played');
+      const ids = Array.from(new Set(((games ?? []) as Array<{ season_id: string }>).map((g) => g.season_id)));
+      if (ids.length === 0) return [];
+      const { data, error } = await supabase
+        .from('seasons')
+        .select('id, name, status, start_date')
+        .in('id', ids);
+      if (error) throw error;
+      const rows = (data ?? []) as unknown as PublicSeasonOption[];
+      return rows.sort((a, b) => (b.start_date ?? '').localeCompare(a.start_date ?? ''));
+    },
+    staleTime: 1000 * 60 * 30,
+  });
+
+export const useLeagueLeaders = (seasonId: string | null | undefined) =>
+  useQuery({
+    queryKey: ['league_leaders', seasonId ?? null],
+    enabled: !!seasonId,
     queryFn: async (): Promise<LeagueLeaders> => {
-      const { data: activeSeason } = await supabase
-        .from('seasons').select('id').eq('status', 'active').maybeSingle();
-      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
-      if (!seasonId) {
-        return computeLeagueLeaders([]);
-      }
+      if (!seasonId) return computeLeagueLeaders([]);
 
       const { data: gamesData, error: gamesErr } = await supabase
         .from('games')
-        .select('id, round, status')
+        .select('id, status')
         .eq('season_id', seasonId)
         .eq('status', 'played');
       if (gamesErr) throw gamesErr;
 
-      const games = (gamesData ?? []) as Array<{ id: string; round: string | null; status: string }>;
-      const filtered = stage === 'regular'
-        ? games.filter((g) => !(g.round ?? '').includes('פלייאוף'))
-        : games;
-      const ids = filtered.map((g) => g.id);
+      const games = (gamesData ?? []) as Array<{ id: string; status: string }>;
+      const ids = games.map((g) => g.id);
       if (ids.length === 0) {
         return computeLeagueLeaders([]);
       }

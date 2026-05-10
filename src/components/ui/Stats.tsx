@@ -1,26 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import SectionTabs, { Tab } from './SectionTabs';
 import LeadersGrid from '../stats/LeadersGrid';
-import { useLeagueLeaders, type SeasonStage } from '../../lib/queries';
-
-const STAGE_TABS: Tab[] = [
-  { id: 'regular', label: 'עונה סדירה' },
-  { id: 'all',     label: 'כל העונה' },
-];
+import { useLeagueLeaders, useSeasonsWithGames } from '../../lib/queries';
 
 const Stats: React.FC = () => {
-  const [stage, setStage] = useState<SeasonStage>('regular');
-  const { data, isLoading, error } = useLeagueLeaders(stage);
+  const { data: seasons = [] } = useSeasonsWithGames();
+
+  const tabs: Tab[] = useMemo(
+    () => seasons.map((s) => ({ id: s.id, label: s.name })),
+    [seasons]
+  );
+
+  const defaultSeasonId = useMemo(() => {
+    const active = seasons.find((s) => s.status === 'active');
+    return active?.id ?? seasons[0]?.id ?? null;
+  }, [seasons]);
+
+  const [seasonId, setSeasonId] = useState<string | null>(null);
+  useEffect(() => {
+    if (!seasonId && defaultSeasonId) setSeasonId(defaultSeasonId);
+  }, [defaultSeasonId, seasonId]);
+
+  const { data, isLoading, error } = useLeagueLeaders(seasonId);
 
   return (
     <section id="stats" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
-      <div className="flex justify-center mb-10">
-        <SectionTabs
-          tabs={STAGE_TABS}
-          active={stage}
-          onChange={(id) => setStage(id as SeasonStage)}
-        />
-      </div>
+      {tabs.length > 1 && (
+        <div className="flex justify-center mb-10">
+          <SectionTabs
+            tabs={tabs}
+            active={seasonId ?? ''}
+            onChange={(id) => setSeasonId(id)}
+          />
+        </div>
+      )}
 
       {isLoading && (
         <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>טוען...</div>
