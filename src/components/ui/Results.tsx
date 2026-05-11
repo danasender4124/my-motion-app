@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useRecentResults, useUpcomingGames, type GameWithTeams } from '../../lib/queries';
 import SectionTabs from './SectionTabs';
 
@@ -93,6 +94,8 @@ const adapt = (g: GameWithTeams): GameRow => ({
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 const Results: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const [tab, setTab] = useState<'results' | 'schedule'>('results');
 
   const recentQ = useRecentResults();
@@ -102,14 +105,14 @@ const Results: React.FC = () => {
   const upcoming = (upcomingQ.data ?? []).map(adapt);
 
   return (
-    <section id="results" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
+    <section id="results" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
 
       {/* Section header */}
       <div className="flex justify-center mb-10">
         <SectionTabs
           tabs={[
-            { id: 'schedule', label: 'המשחקים הבאים' },
-            { id: 'results',  label: 'תוצאות' },
+            { id: 'schedule', label: t('results.tab_upcoming') },
+            { id: 'results',  label: t('results.tab_results') },
           ]}
           active={tab}
           onChange={(id) => setTab(id as 'results' | 'schedule')}
@@ -121,17 +124,17 @@ const Results: React.FC = () => {
         <>
           {recentQ.isLoading && (
             <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>
-              טוען משחקים...
+              {t('results.loading')}
             </div>
           )}
           {recentQ.error && (
             <div className="text-center py-12" style={{ color: '#f87171' }}>
-              לא ניתן לטעון משחקים כעת.
+              {t('results.error')}
             </div>
           )}
           {recentQ.data && recent.length === 0 && (
             <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>
-              אין משחקים בעונה זו.
+              {t('results.no_games_season')}
             </div>
           )}
           {recentQ.data && recent.length > 0 && (() => {
@@ -153,13 +156,13 @@ const Results: React.FC = () => {
                   borderBottom: '1px solid rgba(255,255,255,0.07)',
                 }}
               >
-                <span>תאריך</span>
-                <span>שעה</span>
-                <span>אולם</span>
-                <span>מארחת</span>
-                <span>אורחת</span>
-                <span className="text-center">סטטיסטיקה</span>
-                <span className="text-center">תוצאה</span>
+                <span>{t('results.col_date')}</span>
+                <span>{t('results.col_time')}</span>
+                <span>{t('results.col_hall')}</span>
+                <span>{t('results.col_home')}</span>
+                <span>{t('results.col_away')}</span>
+                <span className="text-center">{t('results.col_stats')}</span>
+                <span className="text-center">{t('results.col_score')}</span>
               </div>
             );
 
@@ -244,7 +247,7 @@ const Results: React.FC = () => {
                                 to={g.statsUrl}
                                 className="flex items-center justify-center w-8 h-8 rounded-lg"
                                 style={{ color: '#FF4D00', background: 'rgba(255,77,0,0.14)' }}
-                                title="סטטיסטיקת משחק"
+                                title={t('results.title_stats')}
                               >
                                 <StatsIcon />
                               </Link>
@@ -252,7 +255,7 @@ const Results: React.FC = () => {
                               <span
                                 className="flex items-center justify-center w-8 h-8 rounded-lg"
                                 style={{ color: 'rgba(242,237,230,0.25)' }}
-                                title="סטטיסטיקה טרם זמינה"
+                                title={t('results.title_no_stats')}
                               >
                                 <StatsIcon />
                               </span>
@@ -283,17 +286,17 @@ const Results: React.FC = () => {
         <>
           {upcomingQ.isLoading && (
             <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>
-              טוען משחקים...
+              {t('results.loading')}
             </div>
           )}
           {upcomingQ.error && (
             <div className="text-center py-12" style={{ color: '#f87171' }}>
-              לא ניתן לטעון משחקים כעת.
+              {t('results.error')}
             </div>
           )}
           {upcomingQ.data && upcoming.length === 0 && (
             <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>
-              אין משחקים בעונה זו.
+              {t('results.no_games_season')}
             </div>
           )}
           {upcomingQ.data && upcoming.length > 0 && (
@@ -305,13 +308,13 @@ const Results: React.FC = () => {
                 className="grid items-center px-4 py-3 text-sm font-black text-white"
                 style={{ gridTemplateColumns: SCHED_COLS, background: '#FF4D00' }}
               >
-                <span>תאריך</span>
-                <span>שעה</span>
-                <span>אולם</span>
-                <span className="text-center">צפיה</span>
-                <span className="text-center">מחזור</span>
-                <span>מארחת</span>
-                <span>אורחת</span>
+                <span>{t('results.col_date')}</span>
+                <span>{t('results.col_time')}</span>
+                <span>{t('results.col_hall')}</span>
+                <span className="text-center">{t('results.col_watch')}</span>
+                <span className="text-center">{t('results.col_round')}</span>
+                <span>{t('results.col_home')}</span>
+                <span>{t('results.col_away')}</span>
                 <span />
               </div>
 
@@ -362,7 +365,7 @@ const Results: React.FC = () => {
                           rel="noopener noreferrer"
                           className="flex items-center justify-center w-8 h-8 rounded-lg"
                           style={{ color: '#FF4D00', background: 'rgba(255,77,0,0.14)' }}
-                          title="צפה במשחק"
+                          title={t('results.title_watch')}
                         >
                           <TvIcon />
                         </a>
@@ -370,7 +373,7 @@ const Results: React.FC = () => {
                         <span
                           className="flex items-center justify-center w-8 h-8 rounded-lg"
                           style={{ color: 'rgba(242,237,230,0.22)' }}
-                          title="קישור צפיה טרם זמין"
+                          title={t('results.title_no_watch')}
                         >
                           <TvIcon />
                         </span>
@@ -419,7 +422,7 @@ const Results: React.FC = () => {
                         to={`/match/${g.id}`}
                         className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors"
                         style={{ color: '#FF4D00', background: 'rgba(255,77,0,0.14)' }}
-                        title="פרטי משחק וסגלים"
+                        title={t('results.title_details')}
                       >
                         <ListIcon />
                       </Link>

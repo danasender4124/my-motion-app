@@ -1,9 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import LeadersGrid from '../stats/LeadersGrid';
 import { useLeagueLeaders, useSeasonsWithGames } from '../../lib/queries';
 
 const Stats: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const { data: seasons = [] } = useSeasonsWithGames();
 
   const defaultSeasonId = useMemo(() => {
@@ -29,12 +32,12 @@ const Stats: React.FC = () => {
   }, [open]);
 
   const selected = seasons.find((s) => s.id === seasonId);
-  const triggerLabel = selected ? selected.name : 'בחרי עונה';
+  const triggerLabel = selected ? selected.name : t('stats.pick_season');
 
   const { data, isLoading, error } = useLeagueLeaders(seasonId);
 
   return (
-    <section id="stats" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
+    <section id="stats" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
       {seasons.length > 0 && (
         <div className="flex justify-center mb-10" data-season-dropdown>
           <div className="relative">
@@ -73,10 +76,10 @@ const Stats: React.FC = () => {
       )}
 
       {isLoading && (
-        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>טוען...</div>
+        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>{t('stats.loading')}</div>
       )}
       {error && (
-        <div className="text-center py-12" style={{ color: '#f87171' }}>לא ניתן לטעון סטטיסטיקות כעת.</div>
+        <div className="text-center py-12" style={{ color: '#f87171' }}>{t('stats.error')}</div>
       )}
       {data && <LeadersGrid leaders={data} />}
     </section>

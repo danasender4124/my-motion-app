@@ -1,12 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useTeams } from '../../lib/queries';
 import { STANDINGS_OVERRIDE } from '../../lib/standings-override';
 
 const COLS = '2.5rem 1fr 3.5rem 3.5rem 3.5rem 4rem 4rem 4.5rem 3.5rem';
 
 const Standings: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const teamsQ = useTeams();
   const teams = teamsQ.data ?? [];
 
@@ -21,18 +24,18 @@ const Standings: React.FC = () => {
     .filter((r): r is { team: typeof teams[number]; wins: number; losses: number; points_for: number; points_against: number } => r !== null);
 
   return (
-    <section id="standings" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir="rtl">
+    <section id="standings" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
       <div className="flex justify-end mb-6">
         <span
           className="text-xs font-medium px-3 py-1"
           style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00', border: '1px solid rgba(255,77,0,0.3)' }}
         >
-          טבלת הליגה
+          {t('standings.title')}
         </span>
       </div>
 
       {teamsQ.isLoading ? (
-        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>טוען...</div>
+        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>{t('common.loading')}</div>
       ) : (
         <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
           <div className="min-w-[680px] overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.10)' }}>
@@ -40,15 +43,15 @@ const Standings: React.FC = () => {
               className="grid items-center px-4 py-3 text-sm font-black text-white"
               style={{ gridTemplateColumns: COLS, background: '#FF4D00', gap: '0.5rem' }}
             >
-              <span className="text-center">#</span>
-              <span>קבוצה</span>
-              <span className="text-center">מש׳</span>
-              <span className="text-center">ניצ׳</span>
-              <span className="text-center">הפ׳</span>
-              <span className="text-center">קלעה</span>
-              <span className="text-center">ספגה</span>
-              <span className="text-center">הפרש</span>
-              <span className="text-center">נק׳</span>
+              <span className="text-center">{t('standings.col_rank')}</span>
+              <span>{t('standings.col_team')}</span>
+              <span className="text-center">{t('standings.col_played')}</span>
+              <span className="text-center">{t('standings.col_won')}</span>
+              <span className="text-center">{t('standings.col_lost')}</span>
+              <span className="text-center">{t('standings.col_pf')}</span>
+              <span className="text-center">{t('standings.col_pa')}</span>
+              <span className="text-center">{t('standings.col_diff')}</span>
+              <span className="text-center">{t('standings.col_pts')}</span>
             </div>
 
             {rows.map((r, i) => {
@@ -70,8 +73,8 @@ const Standings: React.FC = () => {
                         borderBottom: '2px solid #FF4D00',
                       }}
                     >
-                      <span>בית תחתון</span>
-                      <span style={{ color: 'rgba(242,237,230,0.4)', fontWeight: 500 }}>· מקומות 7-10</span>
+                      <span>{t('standings.lower_bracket')}</span>
+                      <span style={{ color: 'rgba(242,237,230,0.4)', fontWeight: 500 }}>{t('standings.lower_bracket_note')}</span>
                     </div>
                   )}
                   <Link to={`/team/${r.team.id}`}>
