@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { PlayerStatRow } from '../../lib/queries';
 
 const formatDate = (iso: string | null): string => {
@@ -16,14 +17,16 @@ interface Props {
 }
 
 const PlayerGameLog: React.FC<Props> = ({ rows, playerTeamId }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   if (rows.length === 0) {
     return (
       <div
         className="rounded-2xl py-12 text-center"
         style={{ background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.10)', color: 'rgba(242,237,230,0.5)' }}
-        dir="rtl"
+        dir={dir}
       >
-        אין סטטיסטיקה לעונה זו.
+        {t('player.no_stats')}
       </div>
     );
   }
@@ -33,15 +36,15 @@ const PlayerGameLog: React.FC<Props> = ({ rows, playerTeamId }) => {
       className="grid items-center px-4 py-3 text-xs font-black uppercase tracking-wider"
       style={{ gridTemplateColumns: COLS, background: 'rgba(255,255,255,0.05)', color: 'rgba(242,237,230,0.45)' }}
     >
-      <span>תאריך</span>
-      <span>יריבה</span>
-      <span>תוצאה</span>
-      <span className="text-center">דק׳</span>
-      <span className="text-center">נק׳</span>
-      <span className="text-center">רבד</span>
-      <span className="text-center">אסי</span>
-      <span className="text-center">מדד</span>
-      <span className="text-center">משחק</span>
+      <span>{t('player.date')}</span>
+      <span>{t('player.opponent')}</span>
+      <span>{t('player.score')}</span>
+      <span className="text-center">{t('player.min')}</span>
+      <span className="text-center">{t('player.pts')}</span>
+      <span className="text-center">{t('player.reb')}</span>
+      <span className="text-center">{t('player.ast')}</span>
+      <span className="text-center">{t('player.eff')}</span>
+      <span className="text-center">{t('player.game')}</span>
     </div>
   );
 
@@ -49,7 +52,7 @@ const PlayerGameLog: React.FC<Props> = ({ rows, playerTeamId }) => {
     <div
       className="rounded-2xl overflow-hidden"
       style={{ border: '1px solid rgba(255,255,255,0.08)' }}
-      dir="rtl"
+      dir={dir}
     >
       <Header />
       {rows.map((r, i) => {
@@ -64,7 +67,7 @@ const PlayerGameLog: React.FC<Props> = ({ rows, playerTeamId }) => {
           ? (game.home_team_id === playerTeamId ? game.away_score : game.home_score)
           : null;
         const result = teamScore != null && oppScore != null
-          ? `${teamScore > oppScore ? 'נצ׳' : 'הפ׳'} ${teamScore}-${oppScore}`
+          ? `${teamScore > oppScore ? t('player.result_won') : t('player.result_lost')} ${teamScore}-${oppScore}`
           : '—';
         const resultColor = teamScore != null && oppScore != null
           ? (teamScore > oppScore ? '#4ade80' : '#f87171')
@@ -92,7 +95,7 @@ const PlayerGameLog: React.FC<Props> = ({ rows, playerTeamId }) => {
                 to={`/match/${r.game_id}`}
                 className="inline-flex items-center justify-center w-7 h-7 rounded"
                 style={{ color: '#FF4D00', background: 'rgba(255,77,0,0.12)' }}
-                aria-label="צפה במשחק"
+                aria-label={t('player.watch_game')}
               >
                 ↗
               </Link>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { SeasonAverages } from '../../lib/queries';
 
 const Stat: React.FC<{ value: number | string; label: string }> = ({ value, label }) => (
@@ -10,26 +11,30 @@ const Stat: React.FC<{ value: number | string; label: string }> = ({ value, labe
 
 interface Props { averages: SeasonAverages }
 
-const SeasonAveragesCard: React.FC<Props> = ({ averages }) => (
+const SeasonAveragesCard: React.FC<Props> = ({ averages }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
+  return (
   <div
     className="rounded-2xl p-6"
     style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-    dir="rtl"
+    dir={dir}
   >
     <div className="flex items-center justify-around flex-wrap gap-4">
-      <Stat value={averages.ppg} label="נק׳" />
-      <Stat value={averages.rpg} label="רבד" />
-      <Stat value={averages.apg} label="אסי" />
-      <Stat value={averages.spg} label="חט" />
-      <Stat value={averages.eff_avg} label="מדד" />
+      <Stat value={averages.ppg} label={t('player.pts')} />
+      <Stat value={averages.rpg} label={t('player.reb')} />
+      <Stat value={averages.apg} label={t('player.ast')} />
+      <Stat value={averages.spg} label={t('player.stl')} />
+      <Stat value={averages.eff_avg} label={t('player.eff')} />
     </div>
     <div
       className="mt-3 pt-3 text-center text-sm"
       style={{ borderTop: '1px solid rgba(255,255,255,0.06)', color: 'rgba(242,237,230,0.5)' }}
     >
-      משחקים: {averages.games} · דקות ממוצע: {averages.mpg}
+      {t('player.games_played')}: {averages.games} · {t('player.avg_minutes')}: {averages.mpg}
     </div>
   </div>
-);
+  );
+};
 
 export default SeasonAveragesCard;

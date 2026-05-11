@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { PlayerProfile } from '../../lib/queries';
 
 const POSITION_LABELS: Record<NonNullable<PlayerProfile['position']>, string> = {
@@ -10,11 +11,11 @@ const POSITION_LABELS: Record<NonNullable<PlayerProfile['position']>, string> = 
   center: 'C',
 };
 
-const CLASSIFICATION_LABELS: Record<PlayerProfile['classification'], string> = {
-  israeli: 'ישראלית',
-  naturalized: 'מתאזרחת',
-  foreign: 'זרה',
-  bosman: 'בוסמנית',
+const CLASSIFICATION_KEY: Record<PlayerProfile['classification'], string> = {
+  israeli: 'player.cls_israeli',
+  naturalized: 'player.cls_naturalized',
+  foreign: 'player.cls_foreign',
+  bosman: 'player.cls_bosman',
 };
 
 const calcAge = (birth: string | null): number | null => {
@@ -32,6 +33,8 @@ const initials = (first: string, last: string) => (first[0] ?? '') + (last[0] ??
 interface Props { player: PlayerProfile }
 
 const PlayerHeader: React.FC<Props> = ({ player }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const age = calcAge(player.birth_date);
   const teamPart = player.current_team
     ? `${player.current_jersey != null ? '#' + player.current_jersey + ' · ' : ''}${player.current_team.name}`
@@ -39,15 +42,15 @@ const PlayerHeader: React.FC<Props> = ({ player }) => {
   const positionLabel = player.position ? POSITION_LABELS[player.position] : null;
   const metaTop = [teamPart, positionLabel].filter(Boolean).join(' · ');
   const metaBottom = [
-    age != null ? `גיל ${age}` : null,
+    age != null ? t('player.meta_age', { age }) : null,
     player.nationality,
-    CLASSIFICATION_LABELS[player.classification],
+    t(CLASSIFICATION_KEY[player.classification]),
   ].filter(Boolean).join(' · ');
 
   return (
-    <div dir="rtl" className="space-y-4">
+    <div dir={dir} className="space-y-4">
       <Link to="/results" className="text-sm flex items-center gap-1" style={{ color: 'rgba(242,237,230,0.5)' }}>
-        ← חזרה
+        {t('player.back')}
       </Link>
       <div
         className="rounded-2xl p-8 flex items-center gap-6"
