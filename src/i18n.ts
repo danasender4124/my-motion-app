@@ -96,11 +96,15 @@ void i18n
   .use(initReactI18next)
   .init({
     resources,
+    // Hebrew is the default — English is opt-in via the language toggle.
+    // Browser language is intentionally ignored so we don't auto-switch
+    // English-speaking visitors away from the canonical Hebrew site.
+    lng: 'he',
     fallbackLng: 'he',
     supportedLngs: ['he', 'en'],
     interpolation: { escapeValue: false },
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['localStorage'],
       caches: ['localStorage'],
       lookupLocalStorage: 'wbpl_lang',
     },
