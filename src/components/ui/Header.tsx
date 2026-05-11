@@ -2,16 +2,36 @@
 import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useTeams } from '../../lib/queries';
 
-const NAV_LINKS = [
-  { label: 'בית',        to: '/' },
-  { label: 'משחקים',     to: '/results' },
-  { label: 'טבלת הליגה', to: '/standings' },
-  { label: 'סטטיסטיקה',  to: '/stats' },
-  { label: 'חדשות',      to: '/news' },
-  { label: 'VOD',        to: '/vod' },
-];
+const useNavLinks = () => {
+  const { t } = useTranslation();
+  return [
+    { label: t('nav.home'),      to: '/' },
+    { label: t('nav.games'),     to: '/results' },
+    { label: t('nav.standings'), to: '/standings' },
+    { label: t('nav.stats'),     to: '/stats' },
+    { label: t('nav.news'),      to: '/news' },
+    { label: t('nav.vod'),       to: '/vod' },
+  ];
+};
+
+const LanguageToggle: React.FC = () => {
+  const { i18n } = useTranslation();
+  const current = i18n.language === 'en' ? 'en' : 'he';
+  const next = current === 'he' ? 'en' : 'he';
+  return (
+    <button
+      type="button"
+      onClick={() => i18n.changeLanguage(next)}
+      className="flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold text-white hover:bg-white/10 transition-colors"
+      aria-label={`Switch to ${next === 'en' ? 'English' : 'Hebrew'}`}
+    >
+      {current === 'he' ? 'EN' : 'עב'}
+    </button>
+  );
+};
 
 const TeamLogos: React.FC = () => {
   const { data: teams = [] } = useTeams();
@@ -48,9 +68,12 @@ const TeamLogos: React.FC = () => {
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navLinks = useNavLinks();
+  const { i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
 
   return (
-    <header className="sticky top-0 z-50 w-full" dir="rtl">
+    <header className="sticky top-0 z-50 w-full" dir={dir}>
 
       {/* Row 1: Logo */}
       <div
@@ -98,13 +121,19 @@ const Header: React.FC = () => {
           <TeamLogos />
         </div>
 
-        {/* Left: Athena Winner logo */}
-        <img
-          src="/athena-winner-logo.png"
-          alt="ליגת אתנה וינר"
-          className="flex-shrink-0 mr-auto lg:mr-0"
-          style={{ height: '95px', width: 'auto', objectFit: 'contain' }}
-        />
+        {/* Left: Athena Winner logo + language toggle */}
+        <div className="flex items-center gap-2 flex-shrink-0 mr-auto lg:mr-0">
+          <img
+            src="/athena-winner-logo.png"
+            alt="ליגת אתנה וינר"
+            style={{ height: '95px', width: 'auto', objectFit: 'contain' }}
+          />
+        </div>
+      </div>
+
+      {/* Language toggle bar */}
+      <div className="flex justify-end px-4 py-1" style={{ background: '#0a0a0f' }}>
+        <LanguageToggle />
       </div>
 
       {/* Row 2: Orange nav bar — visible on all screens */}
@@ -113,7 +142,7 @@ const Header: React.FC = () => {
         style={{ background: '#FF4D00' }}
         aria-label="ניווט ראשי"
       >
-        {NAV_LINKS.map(link => (
+        {navLinks.map(link => (
           <NavLink
             key={link.label}
             to={link.to}
@@ -151,7 +180,7 @@ const Header: React.FC = () => {
             style={{ background: '#0A0E1A', borderTop: '1px solid rgba(255,255,255,0.07)' }}
           >
             <nav className="flex flex-col gap-1 p-4" dir="rtl">
-              {NAV_LINKS.map(link => (
+              {navLinks.map(link => (
                 <NavLink
                   key={link.label}
                   to={link.to}
