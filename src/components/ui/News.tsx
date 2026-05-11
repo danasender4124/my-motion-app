@@ -1,8 +1,11 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useApprovedPosts } from '../../lib/queries';
 import PostCard from '../news/PostCard';
 
 const News: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const postsQ = useApprovedPosts();
   const posts = useMemo(() => postsQ.data ?? [], [postsQ.data]);
 
@@ -18,16 +21,16 @@ const News: React.FC = () => {
         paddingRight: 'clamp(48px, 6vw, 96px)',
         boxSizing: 'border-box',
       }}
-      dir="rtl"
+      dir={dir}
     >
       {postsQ.isLoading && (
-        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>טוען...</div>
+        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>{t('news.loading')}</div>
       )}
       {postsQ.error && (
-        <div className="text-center py-12" style={{ color: '#f87171' }}>לא ניתן לטעון חדשות כעת.</div>
+        <div className="text-center py-12" style={{ color: '#f87171' }}>{t('news.error')}</div>
       )}
       {posts.length === 0 && !postsQ.isLoading && (
-        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>אין פרסומים עדיין</div>
+        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>{t('news.no_posts')}</div>
       )}
 
       {posts.length > 0 && (

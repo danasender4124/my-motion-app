@@ -1,17 +1,20 @@
 // src/components/ui/HomeNewsFeed.tsx
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { NEWS } from '../../data/league';
 
 const EASE = [0.25, 1, 0.5, 1] as const;
 
 const HomeNewsFeed: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const [activeId, setActiveId] = useState(NEWS[0].id);
   const featured = NEWS.find(n => n.id === activeId) ?? NEWS[0];
 
   return (
     <section
-      dir="rtl"
+      dir={dir}
       className="w-full"
       style={{ background: '#07080C', borderTop: '1px solid rgba(255,255,255,0.06)' }}
     >
@@ -83,7 +86,7 @@ const HomeNewsFeed: React.FC = () => {
         >
           {/* Header */}
           <div className="px-5 py-4 flex items-center justify-between">
-            <span className="text-sm font-black" style={{ color: '#F2EDE6' }}>חדשות וכתבות</span>
+            <span className="text-sm font-black" style={{ color: '#F2EDE6' }}>{t('news.sidebar_title')}</span>
             <a
               href="/news"
               className="text-xs font-medium transition-colors"
@@ -91,7 +94,7 @@ const HomeNewsFeed: React.FC = () => {
               onMouseEnter={e => (e.currentTarget.style.color = '#FF4D00')}
               onMouseLeave={e => (e.currentTarget.style.color = 'rgba(242,237,230,0.4)')}
             >
-              + כתבות נוספות
+              {t('news.more_posts')}
             </a>
           </div>
 

@@ -40,13 +40,17 @@ const resources = {
       },
       news: {
         title: 'חדשות', read_more: 'קראי עוד', back: 'חזרה לחדשות',
-        loading: 'טוען חדשות...', no_posts: 'אין כתבות עדיין.',
+        loading: 'טוען...', error: 'לא ניתן לטעון חדשות כעת.',
+        no_posts: 'אין כתבות עדיין', more_posts: '+ כתבות נוספות',
+        sidebar_title: 'חדשות וכתבות',
+        gallery_close: 'סגור', gallery_next: 'הבא', gallery_prev: 'הקודם',
       },
       vod: {
         title: 'VOD',
         all: 'הכל', highlights: 'היי-לייטס', interview: 'ראיון',
         recap: 'סיקור', other: 'אחר',
         no_videos: 'אין סרטונים עדיין.',
+        close: 'סגור', cannot_play: 'לא ניתן להציג את הסרטון',
       },
       team: {
         roster: 'סגל', schedule: 'לוח משחקים', stats: 'סטטיסטיקה',
@@ -123,13 +127,17 @@ const resources = {
       },
       news: {
         title: 'News', read_more: 'Read more', back: 'Back to news',
-        loading: 'Loading news...', no_posts: 'No articles yet.',
+        loading: 'Loading...', error: 'Could not load news right now.',
+        no_posts: 'No articles yet', more_posts: '+ More articles',
+        sidebar_title: 'News & Articles',
+        gallery_close: 'Close', gallery_next: 'Next', gallery_prev: 'Previous',
       },
       vod: {
         title: 'VOD',
         all: 'All', highlights: 'Highlights', interview: 'Interview',
         recap: 'Recap', other: 'Other',
         no_videos: 'No videos yet.',
+        close: 'Close', cannot_play: 'Unable to play this video',
       },
       team: {
         roster: 'Roster', schedule: 'Schedule', stats: 'Stats',

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Props { photos: string[] }
 
 const PostGallery: React.FC<Props> = ({ photos }) => {
+  const { t } = useTranslation();
   const [active, setActive] = useState<number | null>(null);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const PostGallery: React.FC<Props> = ({ photos }) => {
           <button
             onClick={() => setActive(null)}
             className="absolute top-4 left-4 text-white text-2xl font-black"
-            aria-label="סגור"
+            aria-label={t('news.gallery_close')}
           >×</button>
           <img
             src={photos[active]}
@@ -55,12 +57,12 @@ const PostGallery: React.FC<Props> = ({ photos }) => {
               <button
                 onClick={(e) => { e.stopPropagation(); setActive((active + 1) % photos.length); }}
                 className="absolute right-4 text-white text-3xl font-black"
-                aria-label="הבא"
+                aria-label={t('news.gallery_next')}
               >→</button>
               <button
                 onClick={(e) => { e.stopPropagation(); setActive((active - 1 + photos.length) % photos.length); }}
                 className="absolute left-4 text-white text-3xl font-black"
-                aria-label="הקודם"
+                aria-label={t('news.gallery_prev')}
               >←</button>
             </>
           )}

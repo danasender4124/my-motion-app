@@ -1,5 +1,6 @@
 import React from 'react';
-import { VIDEO_CATEGORY_LABEL, type VideoCategory } from '../../lib/queries';
+import { useTranslation } from 'react-i18next';
+import { type VideoCategory } from '../../lib/queries';
 
 export type CategoryValue = VideoCategory | 'all';
 
@@ -9,13 +10,15 @@ interface Props {
 }
 
 const ORDER: CategoryValue[] = ['all', 'highlights', 'interview', 'recap', 'other'];
-const ALL_LABEL = 'הכל';
 
-const CategoryFilter: React.FC<Props> = ({ active, onChange }) => (
-  <div className="flex flex-wrap gap-2" dir="rtl">
+const CategoryFilter: React.FC<Props> = ({ active, onChange }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
+  return (
+  <div className="flex flex-wrap gap-2" dir={dir}>
     {ORDER.map((c) => {
       const isActive = c === active;
-      const label = c === 'all' ? ALL_LABEL : VIDEO_CATEGORY_LABEL[c];
+      const label = t(`vod.${c}`);
       return (
         <button
           key={c}
@@ -33,6 +36,7 @@ const CategoryFilter: React.FC<Props> = ({ active, onChange }) => (
       );
     })}
   </div>
-);
+  );
+};
 
 export default CategoryFilter;

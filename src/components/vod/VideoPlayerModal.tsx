@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
 import type { PublicVideo } from '../../lib/queries';
 
@@ -11,6 +12,8 @@ const uploadUrlFor = (path: string): string =>
   supabase.storage.from('videos').getPublicUrl(path).data.publicUrl;
 
 const VideoPlayerModal: React.FC<Props> = ({ video, onClose }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   useEffect(() => {
     const onEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onEsc);
@@ -26,7 +29,7 @@ const VideoPlayerModal: React.FC<Props> = ({ video, onClose }) => {
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: 'rgba(7,8,12,0.85)' }}
       onClick={onClose}
-      dir="rtl"
+      dir={dir}
     >
       <div
         className="w-full max-w-4xl rounded-2xl overflow-hidden flex flex-col"
@@ -37,7 +40,7 @@ const VideoPlayerModal: React.FC<Props> = ({ video, onClose }) => {
           <span className="font-black text-white truncate">{video.title}</span>
           <button
             onClick={onClose}
-            aria-label="סגור"
+            aria-label={t('vod.close')}
             className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xl font-black shrink-0"
             style={{ background: 'rgba(255,255,255,0.2)' }}
           >
@@ -63,7 +66,7 @@ const VideoPlayerModal: React.FC<Props> = ({ video, onClose }) => {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center" style={{ color: 'rgba(242,237,230,0.5)' }}>
-              לא ניתן להציג את הסרטון
+              {t('vod.cannot_play')}
             </div>
           )}
         </div>
