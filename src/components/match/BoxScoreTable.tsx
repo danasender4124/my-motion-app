@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { PlayerGameStat } from '../../lib/queries';
 
 const fg = (m: number | null, a: number | null) => (m == null || a == null ? '—' : `${m}-${a}`);
@@ -31,7 +32,16 @@ const contrastText = (hex: string): string => {
 };
 
 const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows, jerseyByPlayerId }) => {
-  const header = '# שחקנית דק׳ נק׳ 2נק 3נק עונשין רבד רבת אס חט חס איב עב מדד'.split(' ');
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
+  const header = [
+    '#', t('stats.player'),
+    t('match.box_minutes'), t('match.box_pts'),
+    t('match.box_fg2'), t('match.box_fg3'), t('match.box_ft'),
+    t('match.box_oreb'), t('match.box_dreb'),
+    t('match.box_ast'), t('match.box_stl'), t('match.box_blk'),
+    t('match.box_to'), t('match.box_pf'), t('match.box_eff'),
+  ];
   const accent = teamColor || '#FF4D00';
   const titleTextColor = contrastText(accent);
 
@@ -42,7 +52,7 @@ const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows, j
   );
 
   return (
-    <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.08)' }} dir="rtl">
+    <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.08)' }} dir={dir}>
       {/* Team title bar */}
       <div className="flex items-center gap-3 px-4 py-3" style={{ background: accent }}>
         {teamLogo && (
@@ -116,7 +126,7 @@ const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows, j
           }}
         >
           <span></span>
-          <span className="text-right" style={{ color: '#F2EDE6' }}>סה״כ</span>
+          <span className="text-right" style={{ color: '#F2EDE6' }}>{t('match.total')}</span>
           <Cell bold>{sumKey(rows, 'minutes')}</Cell>
           <Cell bold>{sumKey(rows, 'points')}</Cell>
           <span className="text-center tabular-nums">{sumKey(rows, 'fg2_made')}-{sumKey(rows, 'fg2_attempted')}</span>

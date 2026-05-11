@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useGameLineupPublic } from '../../lib/queries';
 
 const initials = (first: string, last: string) =>
@@ -11,6 +12,7 @@ const TeamLineupColumn: React.FC<{
   teamLogo: string | null;
   seasonId: string | null;
 }> = ({ gameId, teamId, teamName, teamLogo, seasonId }) => {
+  const { t } = useTranslation();
   const lineupQ = useGameLineupPublic(gameId, teamId, seasonId);
 
   return (
@@ -28,18 +30,18 @@ const TeamLineupColumn: React.FC<{
       </div>
 
       {lineupQ.isLoading ? (
-        <div className="text-sm" style={{ color: 'rgba(242,237,230,0.4)' }}>טוען סגל...</div>
+        <div className="text-sm" style={{ color: 'rgba(242,237,230,0.4)' }}>{t('match.loading_lineup')}</div>
       ) : !lineupQ.data?.submitted_at ? (
         <div
           className="text-sm py-3 text-center rounded"
           style={{ background: 'rgba(255,77,0,0.08)', color: '#FF4D00', border: '1px solid rgba(255,77,0,0.2)' }}
         >
-          טרם פורסם סגל למשחק
+          {t('match.no_lineup')}
         </div>
       ) : (
         <>
           <div className="text-xs font-bold mb-3" style={{ color: '#4ade80' }}>
-            ✓ סגל פורסם · {lineupQ.data.players.length} שחקניות
+            {t('match.lineup_published', { count: lineupQ.data.players.length })}
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {lineupQ.data.players.map((p) => (
@@ -92,9 +94,11 @@ const MatchLineups: React.FC<Props> = ({
   awayTeamLogo,
   seasonId,
 }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   return (
-    <section dir="rtl">
-      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>סגלי המשחק</h2>
+    <section dir={dir}>
+      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>{t('match.lineups_title')}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TeamLineupColumn
           gameId={gameId}

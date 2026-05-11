@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
 import { useGameMediaPublic, type PublicGameMediaItem } from '../../lib/queries';
 
@@ -51,6 +52,8 @@ const PhotoLightbox: React.FC<{ photos: PublicGameMediaItem[]; index: number; on
 interface Props { gameId: string }
 
 const MatchMedia: React.FC<Props> = ({ gameId }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const { data } = useGameMediaPublic(gameId);
   const items = data ?? [];
   const photos = items.filter((m) => m.type === 'photo' && m.storage_path);
@@ -60,10 +63,10 @@ const MatchMedia: React.FC<Props> = ({ gameId }) => {
   if (photos.length === 0 && videos.length === 0) return null;
 
   return (
-    <div dir="rtl" className="space-y-6">
+    <div dir={dir} className="space-y-6">
       {photos.length > 0 && (
         <section className="space-y-3">
-          <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>תמונות מהמשחק</h2>
+          <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>{t('match.photos_title')}</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
             {photos.map((p, i) => (
               <button
@@ -85,14 +88,14 @@ const MatchMedia: React.FC<Props> = ({ gameId }) => {
 
       {videos.length > 0 && (
         <section className="space-y-3">
-          <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>סרטונים מהמשחק</h2>
+          <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>{t('match.videos_title')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {videos.map((v) => (
               <div key={v.id} style={{ aspectRatio: '16 / 9' }} className="rounded-xl overflow-hidden">
                 {v.youtube_id ? (
                   <iframe
                     src={`https://www.youtube.com/embed/${v.youtube_id}`}
-                    title="סרטון מהמשחק"
+                    title={t('match.video_title')}
                     className="w-full h-full"
                     allow="autoplay; encrypted-media; picture-in-picture"
                     allowFullScreen

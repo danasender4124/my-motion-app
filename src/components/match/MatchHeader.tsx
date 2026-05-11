@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { GameWithTeams } from '../../lib/queries';
 
 const formatDate = (iso: string | null): string => {
@@ -40,6 +41,8 @@ const TeamBlock: React.FC<{ team: GameWithTeams['home_team']; align: 'right' | '
 interface Props { game: GameWithTeams }
 
 const MatchHeader: React.FC<Props> = ({ game }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const homeWon = game.home_score != null && game.away_score != null && game.home_score > game.away_score;
   const awayWon = game.home_score != null && game.away_score != null && game.away_score > game.home_score;
   const meta = [
@@ -47,13 +50,13 @@ const MatchHeader: React.FC<Props> = ({ game }) => {
   ].filter(Boolean).join(' · ');
 
   return (
-    <div dir="rtl" className="space-y-4">
+    <div dir={dir} className="space-y-4">
       <Link
         to="/results"
         className="text-sm flex items-center gap-1"
         style={{ color: 'rgba(242,237,230,0.5)' }}
       >
-        ← חזרה למשחקים
+        {t('match.back')}
       </Link>
       <div
         className="rounded-2xl p-8 flex items-center gap-6"
@@ -76,7 +79,7 @@ const MatchHeader: React.FC<Props> = ({ game }) => {
               className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest"
               style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00' }}
             >
-              {game.status === 'scheduled' ? 'מתוכנן' : 'לא שוחק'}
+              {game.status === 'scheduled' ? t('match.scheduled') : t('match.cancelled')}
             </span>
           )}
           {meta && (

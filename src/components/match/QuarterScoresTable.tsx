@@ -1,9 +1,12 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { GameWithTeams } from '../../lib/queries';
 
 interface Props { game: GameWithTeams }
 
 const QuarterScoresTable: React.FC<Props> = ({ game }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   if (!game.quarter_scores || game.quarter_scores.length === 0) return null;
   const qs = game.quarter_scores;
 
@@ -14,9 +17,9 @@ const QuarterScoresTable: React.FC<Props> = ({ game }) => {
       className="grid items-center px-4 py-3 text-xs font-black tracking-wider uppercase"
       style={{ gridTemplateColumns: cols, background: 'rgba(255,255,255,0.05)', color: 'rgba(242,237,230,0.4)' }}
     >
-      <span>קבוצה</span>
-      {qs.map((q) => <span key={q.q} className="text-center">רבע {q.q}</span>)}
-      <span className="text-center">סה״כ</span>
+      <span>{t('match.team')}</span>
+      {qs.map((q) => <span key={q.q} className="text-center">{t('match.quarter')} {q.q}</span>)}
+      <span className="text-center">{t('match.total')}</span>
     </div>
   );
 
@@ -44,7 +47,7 @@ const QuarterScoresTable: React.FC<Props> = ({ game }) => {
     <div
       className="rounded-2xl overflow-hidden"
       style={{ border: '1px solid rgba(255,255,255,0.08)' }}
-      dir="rtl"
+      dir={dir}
     >
       <Header />
       <Row name={game.home_team?.name ?? '—'} quarters={qs.map((q) => q.home)} total={game.home_score} isWinner={homeWon} />
