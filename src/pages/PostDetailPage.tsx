@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
 import { usePostById } from '../lib/queries';
 import PostGallery from '../components/news/PostGallery';
@@ -13,17 +14,19 @@ const videoUrl = (path: string) =>
   supabase.storage.from('team-posts').getPublicUrl(path).data.publicUrl;
 
 const PostDetailPage: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = usePostById(id);
 
   if (isLoading) {
-    return <main className="text-center py-24" style={{ color: 'rgba(242,237,230,0.4)' }} dir="rtl">טוען...</main>;
+    return <main className="text-center py-24" style={{ color: 'rgba(242,237,230,0.4)' }} dir={dir}>{t('news.loading')}</main>;
   }
   if (!data) {
     return (
-      <main className="text-center py-24 space-y-4" dir="rtl">
-        <div style={{ color: 'rgba(242,237,230,0.4)' }}>הפרסום לא נמצא</div>
-        <Link to="/news" style={{ color: '#FF4D00' }}>← חזרה לחדשות</Link>
+      <main className="text-center py-24 space-y-4" dir={dir}>
+        <div style={{ color: 'rgba(242,237,230,0.4)' }}>{t('news.not_found')}</div>
+        <Link to="/news" style={{ color: '#FF4D00' }}>{t('news.back')}</Link>
       </main>
     );
   }
@@ -42,11 +45,11 @@ const PostDetailPage: React.FC = () => {
         paddingRight: 'clamp(48px, 6vw, 96px)',
         boxSizing: 'border-box',
       }}
-      dir="rtl"
+      dir={dir}
       className="space-y-6"
     >
       <Link to="/news" className="text-sm flex items-center gap-1" style={{ color: 'rgba(242,237,230,0.5)' }}>
-        ← חזרה לחדשות
+        {t('news.back')}
       </Link>
 
       {heroPhoto && (

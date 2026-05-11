@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useApprovedPosts, POST_CATEGORY_LABEL, type PublicPost } from '../../lib/queries';
 
 // ─── Easing curves (natural deceleration, not bounce) ────────────────────────
@@ -273,7 +274,7 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
                         </p>
                       )}
                       <span className="text-sm font-bold flex items-center gap-1 justify-end" style={{ color: '#FF4D00' }}>
-                        קרא עוד →
+                        {t('news.hero_read_more')}
                       </span>
                     </div>
                   </Link>
@@ -302,6 +303,7 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
 
 // ─── Main Hero ────────────────────────────────────────────────────────────────
 export const HeroSection: React.FC = () => {
+  const { t } = useTranslation();
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const videoOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
@@ -363,7 +365,7 @@ export const HeroSection: React.FC = () => {
           className="text-[clamp(2.16rem,7.2vw,5.4rem)] font-black leading-none tracking-tight"
           style={{ color: '#F2EDE6' }}
         >
-          <HeadlineWord delay={0}>ליגת</HeadlineWord>
+          <HeadlineWord delay={0}>{t('hero.headline_top')}</HeadlineWord>
           {' '}
           <HeadlineWord delay={0.12}>
             <img
@@ -395,7 +397,7 @@ export const HeroSection: React.FC = () => {
             />
           </HeadlineWord>
           <br />
-          <HeadlineWord delay={0.36}>בכדורסל לנשים</HeadlineWord>
+          <HeadlineWord delay={0.36}>{t('hero.headline_bottom')}</HeadlineWord>
         </motion.h1>
         </motion.div>
 
@@ -410,7 +412,7 @@ export const HeroSection: React.FC = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.8 }}
       >
-        <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: 'rgba(242,237,230,0.3)' }}>גלול</span>
+        <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: 'rgba(242,237,230,0.3)' }}>{t('hero.scroll')}</span>
         <motion.div
           className="w-px h-10"
           style={{ background: 'linear-gradient(to bottom, rgba(255,77,0,0.7), transparent)' }}

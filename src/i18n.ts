@@ -46,11 +46,13 @@ const resources = {
         close: 'סגור',
       },
       news: {
-        title: 'חדשות', read_more: 'קראי עוד', back: 'חזרה לחדשות',
+        title: 'חדשות', read_more: 'קראי עוד', back: '← חזרה לחדשות',
         loading: 'טוען...', error: 'לא ניתן לטעון חדשות כעת.',
         no_posts: 'אין כתבות עדיין', more_posts: '+ כתבות נוספות',
+        not_found: 'הפרסום לא נמצא',
         sidebar_title: 'חדשות וכתבות',
         gallery_close: 'סגור', gallery_next: 'הבא', gallery_prev: 'הקודם',
+        hero_read_more: 'קראי עוד →',
       },
       vod: {
         title: 'VOD',
@@ -121,6 +123,11 @@ const resources = {
         games_played: 'משחקים', avg_minutes: 'דקות ממוצע',
         cls_israeli: 'ישראלית', cls_naturalized: 'מתאזרחת',
         cls_foreign: 'זרה', cls_bosman: 'בוסמנית',
+      },
+      hero: {
+        headline_top: 'ליגת',
+        headline_bottom: 'בכדורסל לנשים',
+        scroll: 'גלול',
       },
       footer: {
         copyright: 'כל הזכויות שמורות',
@@ -197,11 +204,13 @@ const resources = {
         close: 'Close',
       },
       news: {
-        title: 'News', read_more: 'Read more', back: 'Back to news',
+        title: 'News', read_more: 'Read more', back: '← Back to news',
         loading: 'Loading...', error: 'Could not load news right now.',
         no_posts: 'No articles yet', more_posts: '+ More articles',
+        not_found: 'Article not found',
         sidebar_title: 'News & Articles',
         gallery_close: 'Close', gallery_next: 'Next', gallery_prev: 'Previous',
+        hero_read_more: 'Read more →',
       },
       vod: {
         title: 'VOD',
@@ -272,6 +281,11 @@ const resources = {
         games_played: 'Games', avg_minutes: 'Avg minutes',
         cls_israeli: 'Israeli', cls_naturalized: 'Naturalized',
         cls_foreign: 'Foreign', cls_bosman: 'Bosman',
+      },
+      hero: {
+        headline_top: 'Women\'s Premier',
+        headline_bottom: 'Basketball League',
+        scroll: 'Scroll',
       },
       footer: {
         copyright: 'All rights reserved',
