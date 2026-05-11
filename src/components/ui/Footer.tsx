@@ -1,29 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface FooterLink { label: string; to?: string }
 
-const FOOTER_COLUMNS: { title: string; links: FooterLink[] }[] = [
-  { title: 'הליגה', links: [
-    { label: 'אודות' }, { label: 'היסטוריה' }, { label: 'אלופות לשעבר' }, { label: 'כללים' }, { label: 'תקנון' },
-  ]},
-  { title: 'ספורט', links: [
-    { label: 'לוח משחקים', to: '/results' },
-    { label: 'תוצאות',     to: '/results' },
-    { label: 'טבלת הליגה', to: '/standings' },
-    { label: 'סטטיסטיקה',  to: '/stats' },
-    { label: 'VOD',        to: '/vod' },
-  ]},
-  { title: 'צרו קשר', links: [
-    { label: 'יצירת קשר' }, { label: 'עיתונאים' }, { label: 'שיתופי פעולה' }, { label: 'נגישות', to: '/accessibility' },
-  ]},
-];
+const useFooterColumns = (): { title: string; links: FooterLink[] }[] => {
+  const { t } = useTranslation();
+  return [
+    { title: t('footer.col_league'), links: [
+      { label: t('footer.about') }, { label: t('footer.history') },
+      { label: t('footer.past_champs') }, { label: t('footer.rules') },
+      { label: t('footer.regulations') },
+    ]},
+    { title: t('footer.col_sport'), links: [
+      { label: t('footer.schedule'), to: '/results' },
+      { label: t('footer.results'),  to: '/results' },
+      { label: t('footer.table'),    to: '/standings' },
+      { label: t('footer.stats'),    to: '/stats' },
+      { label: t('footer.vod'),      to: '/vod' },
+    ]},
+    { title: t('footer.col_contact'), links: [
+      { label: t('footer.contact_us') }, { label: t('footer.press') },
+      { label: t('footer.partnerships') },
+      { label: t('footer.accessibility'), to: '/accessibility' },
+    ]},
+  ];
+};
 
-const Footer: React.FC = () => (
+const Footer: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const FOOTER_COLUMNS = useFooterColumns();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
+  return (
   <footer
     className="mt-16 py-10 px-4 md:px-8"
     style={{ borderTop: '1px solid rgba(255,255,255,0.07)', background: 'rgba(0,0,0,0.3)' }}
-    dir="rtl"
+    dir={dir}
   >
     <div className="max-w-7xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
@@ -35,10 +47,10 @@ const Footer: React.FC = () => (
               alt="מנהלת ליגת העל"
               className="h-10 w-auto object-contain shrink-0"
             />
-            <span className="font-black text-sm" style={{ color: '#F2EDE6' }}>ליגת העל נשים</span>
+            <span className="font-black text-sm" style={{ color: '#F2EDE6' }}>{t('footer.brand')}</span>
           </div>
           <p className="text-xs leading-relaxed" style={{ color: 'rgba(242,237,230,0.35)' }}>
-            מנהלת ליגת העל בכדורסל לנשים בישראל.
+            {t('footer.slogan')}
           </p>
           <div className="flex gap-3 mt-4">
             <a
@@ -107,15 +119,16 @@ const Footer: React.FC = () => (
         className="flex flex-wrap items-center justify-between gap-4 pt-6 text-xs"
         style={{ borderTop: '1px solid rgba(255,255,255,0.06)', color: 'rgba(242,237,230,0.3)' }}
       >
-        <span>© 2025 מנהלת ליגת העל בכדורסל נשים · כל הזכויות שמורות</span>
+        <span>© 2025 {t('footer.brand')} · {t('footer.copyright')}</span>
         <div className="flex gap-4">
-          <a href="#" className="hover:text-white transition-colors">פרטיות</a>
-          <a href="#" className="hover:text-white transition-colors">תנאי שימוש</a>
-          <Link to="/accessibility" className="hover:text-white transition-colors">הצהרת נגישות</Link>
+          <a href="#" className="hover:text-white transition-colors">{t('footer.privacy')}</a>
+          <a href="#" className="hover:text-white transition-colors">{t('footer.terms')}</a>
+          <Link to="/accessibility" className="hover:text-white transition-colors">{t('footer.accessibility_statement')}</Link>
         </div>
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 export default Footer;
