@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { LeagueLeaderRow } from '../../lib/queries';
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const LeaderModal: React.FC<Props> = ({ label, rows, formatValue, onClose }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   useEffect(() => {
     const onEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onEsc);
@@ -25,7 +28,7 @@ const LeaderModal: React.FC<Props> = ({ label, rows, formatValue, onClose }) => 
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: 'rgba(7,8,12,0.85)' }}
       onClick={onClose}
-      dir="rtl"
+      dir={dir}
     >
       <div
         className="w-full max-w-md max-h-[85vh] flex flex-col rounded-2xl overflow-hidden"
@@ -36,7 +39,7 @@ const LeaderModal: React.FC<Props> = ({ label, rows, formatValue, onClose }) => 
           <span className="font-black text-white">{label}</span>
           <button
             onClick={onClose}
-            aria-label="סגור"
+            aria-label={t('stats.close')}
             className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xl font-black"
             style={{ background: 'rgba(255,255,255,0.2)' }}
           >
@@ -46,7 +49,7 @@ const LeaderModal: React.FC<Props> = ({ label, rows, formatValue, onClose }) => 
         <div className="flex-1 overflow-y-auto">
           {rows.length === 0 ? (
             <div className="px-4 py-12 text-center text-sm" style={{ color: 'rgba(242,237,230,0.4)' }}>
-              אין נתונים מספיקים
+              {t('stats.not_enough_data')}
             </div>
           ) : (
             <ul>

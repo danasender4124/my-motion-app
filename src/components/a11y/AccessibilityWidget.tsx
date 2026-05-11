@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 // Israeli accessibility widget per תקן ישראלי 5568 / WCAG 2.0 AA
 // Persists user preferences in localStorage and applies them via classes on
@@ -56,6 +57,8 @@ const PersonIcon: React.FC<{ size?: number }> = ({ size = 28 }) => (
 );
 
 const AccessibilityWidget: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<Preferences>(() => loadPrefs());
 
@@ -79,7 +82,7 @@ const AccessibilityWidget: React.FC = () => {
     <>
       <button
         type="button"
-        aria-label={open ? 'סגור תפריט נגישות' : 'פתח תפריט נגישות'}
+        aria-label={open ? t('a11y.close') : t('a11y.open')}
         aria-expanded={open}
         aria-controls="a11y-panel"
         onClick={() => setOpen((v) => !v)}
@@ -116,8 +119,8 @@ const AccessibilityWidget: React.FC = () => {
           <div
             id="a11y-panel"
             role="dialog"
-            aria-label="תפריט נגישות"
-            dir="rtl"
+            aria-label={t('a11y.title')}
+            dir={dir}
             style={{
               position: 'fixed',
               bottom: '88px',
@@ -137,23 +140,23 @@ const AccessibilityWidget: React.FC = () => {
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>תפריט נגישות</h2>
+              <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>{t('a11y.title')}</h2>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                aria-label="סגור"
+                aria-label={t('a11y.close_btn')}
                 style={{ background: 'transparent', border: 0, fontSize: 24, lineHeight: 1, cursor: 'pointer', color: '#374151' }}
               >×</button>
             </div>
 
-            <Section title="גודל טקסט">
+            <Section title={t('a11y.section_text')}>
               <Row>
                 <BtnGroup
                   options={[
-                    { v: 100, label: 'רגיל' },
-                    { v: 110, label: '+ גדול' },
-                    { v: 120, label: '++ יותר' },
-                    { v: 130, label: '+++ ענק' },
+                    { v: 100, label: t('a11y.text_normal') },
+                    { v: 110, label: t('a11y.text_large') },
+                    { v: 120, label: t('a11y.text_larger') },
+                    { v: 130, label: t('a11y.text_huge') },
                   ]}
                   value={prefs.fontScale}
                   onChange={(v) => update('fontScale', v as number)}
@@ -161,13 +164,13 @@ const AccessibilityWidget: React.FC = () => {
               </Row>
             </Section>
 
-            <Section title="ניגודיות">
+            <Section title={t('a11y.section_contrast')}>
               <Row>
                 <BtnGroup
                   options={[
-                    { v: 'normal', label: 'רגילה' },
-                    { v: 'high', label: 'גבוהה' },
-                    { v: 'inverted', label: 'הפוכה' },
+                    { v: 'normal', label: t('a11y.contrast_normal') },
+                    { v: 'high', label: t('a11y.contrast_high') },
+                    { v: 'inverted', label: t('a11y.contrast_inverted') },
                   ]}
                   value={prefs.contrast}
                   onChange={(v) => update('contrast', v as Preferences['contrast'])}
@@ -175,12 +178,12 @@ const AccessibilityWidget: React.FC = () => {
               </Row>
             </Section>
 
-            <Section title="תצוגת קישורים">
+            <Section title={t('a11y.section_links')}>
               <Row>
                 <BtnGroup
                   options={[
-                    { v: 'normal', label: 'רגיל' },
-                    { v: 'underline', label: 'הדגשת קישורים' },
+                    { v: 'normal', label: t('a11y.links_normal') },
+                    { v: 'underline', label: t('a11y.links_underline') },
                   ]}
                   value={prefs.links}
                   onChange={(v) => update('links', v as Preferences['links'])}
@@ -188,17 +191,17 @@ const AccessibilityWidget: React.FC = () => {
               </Row>
             </Section>
 
-            <Section title="עזרים נוספים">
+            <Section title={t('a11y.section_extras')}>
               <Row>
                 <Toggle
-                  label="גופן ברור (קריאות מוגברת)"
+                  label={t('a11y.readable_font')}
                   checked={prefs.readableFont}
                   onChange={(v) => update('readableFont', v)}
                 />
               </Row>
               <Row>
                 <Toggle
-                  label="סמן עכבר מוגדל"
+                  label={t('a11y.big_cursor')}
                   checked={prefs.bigCursor}
                   onChange={(v) => update('bigCursor', v)}
                 />
@@ -221,7 +224,7 @@ const AccessibilityWidget: React.FC = () => {
                 fontWeight: 600,
               }}
             >
-              איפוס הגדרות
+              {t('a11y.reset')}
             </button>
 
             <Link
@@ -240,7 +243,7 @@ const AccessibilityWidget: React.FC = () => {
                 fontWeight: 600,
               }}
             >
-              📄 הצהרת נגישות
+              {t('a11y.statement')}
             </Link>
           </div>
         </>

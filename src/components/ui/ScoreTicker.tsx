@@ -1,8 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RECENT_RESULTS } from '../../data/league';
 
 const ScoreTicker: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const trackRef = useRef<HTMLDivElement>(null);
+  const direction: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
 
   // Duplicate items for seamless loop
   const items = [...RECENT_RESULTS, ...RECENT_RESULTS];
@@ -10,7 +13,7 @@ const ScoreTicker: React.FC = () => {
   return (
     <div
       className="w-full overflow-hidden"
-      style={{ background: '#FF4D00', height: '36px', direction: 'rtl' }}
+      style={{ background: '#FF4D00', height: '36px', direction }}
     >
       <div
         ref={trackRef}
@@ -44,7 +47,7 @@ const ScoreTicker: React.FC = () => {
               </span>
               <span style={{ fontWeight: !homeWon ? 800 : 400 }}>{game.away}</span>
               <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: '11px' }}>
-                מחזור {game.round}
+                {t('results.col_round')} {game.round}
               </span>
             </div>
           );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { LeagueLeaderRow } from '../../lib/queries';
 import LeaderModal from './LeaderModal';
 
@@ -13,6 +14,8 @@ interface Props {
 const defaultFormat = (n: number) => n.toFixed(1);
 
 const LeaderCard: React.FC<Props> = ({ label, rows, formatValue = defaultFormat }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const [open, setOpen] = useState(false);
   const top = rows.slice(0, 5);
 
@@ -21,7 +24,7 @@ const LeaderCard: React.FC<Props> = ({ label, rows, formatValue = defaultFormat 
       <div
         className="rounded-xl overflow-hidden flex flex-col"
         style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-        dir="rtl"
+        dir={dir}
       >
         <div
           className="px-3 py-2 text-sm font-black text-center"
@@ -31,7 +34,7 @@ const LeaderCard: React.FC<Props> = ({ label, rows, formatValue = defaultFormat 
         </div>
         {top.length === 0 ? (
           <div className="px-3 py-6 text-center text-xs" style={{ color: 'rgba(242,237,230,0.4)' }}>
-            אין נתונים מספיקים
+            {t('stats.not_enough_data')}
           </div>
         ) : (
           <ul className="divide-y" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
@@ -65,7 +68,7 @@ const LeaderCard: React.FC<Props> = ({ label, rows, formatValue = defaultFormat 
             className="px-3 py-2 text-xs font-bold transition-colors hover:bg-white/5"
             style={{ color: 'rgba(242,237,230,0.6)', borderTop: '1px solid rgba(255,255,255,0.05)' }}
           >
-            לדירוג המלא ←
+            {t('stats.view_all')}
           </button>
         )}
       </div>
