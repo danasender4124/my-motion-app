@@ -1,22 +1,24 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTeamHeadCoachPublic, useTeamSupportStaffPublic, type PublicHeadCoach, type PublicStaffMember, type PublicStaffRole } from '../../lib/queries';
 
-const STAFF_LABEL: Record<PublicStaffRole, string> = {
-  assistant_coach:        'עוזר/ת מאמן/ת',
-  strength_conditioning:  'מאמן/ת כושר',
-  physiotherapist:        'פיזיותרפיסט/ית',
-  team_manager:           'מנהל/ת קבוצה',
+const STAFF_LABEL_KEY: Record<PublicStaffRole, string> = {
+  assistant_coach:        'team.role_assistant_coach',
+  strength_conditioning:  'team.role_strength_coach',
+  physiotherapist:        'team.role_physio',
+  team_manager:           'team.role_team_manager',
 };
 
 const initials = (first: string, last: string) =>
   (first?.[0] ?? '') + (last?.[0] ?? '');
 
 const TrophyBadges: React.FC<{ a: PublicHeadCoach['achievements'] }> = ({ a }) => {
+  const { t } = useTranslation();
   const items: Array<{ icon: string; label: string; n: number }> = [
-    { icon: '🏆', label: 'אליפות מדינה', n: a.state_championships },
-    { icon: '🥇', label: 'גביע מדינה',   n: a.state_cups },
-    { icon: '🏅', label: 'גביע ווינר',    n: a.winner_cups },
-    { icon: '🌍', label: 'גביע אירופי',   n: a.european_cups },
+    { icon: '🏆', label: t('team.title_state_championships'), n: a.state_championships },
+    { icon: '🥇', label: t('team.title_state_cups'),          n: a.state_cups },
+    { icon: '🏅', label: t('team.title_winner_cups'),         n: a.winner_cups },
+    { icon: '🌍', label: t('team.title_european_cups'),       n: a.european_cups },
   ].filter((x) => x.n > 0);
   if (items.length === 0) return null;
   return (
@@ -57,7 +59,9 @@ const HeadCoachCard: React.FC<{ coach: PublicHeadCoach }> = ({ coach }) => (
   </div>
 );
 
-const StaffCard: React.FC<{ m: PublicStaffMember }> = ({ m }) => (
+const StaffCard: React.FC<{ m: PublicStaffMember }> = ({ m }) => {
+  const { t } = useTranslation();
+  return (
   <div
     className="rounded-xl p-3 flex items-center gap-3"
     style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
@@ -71,11 +75,12 @@ const StaffCard: React.FC<{ m: PublicStaffMember }> = ({ m }) => (
         : <span className="text-xs font-black" style={{ color: 'rgba(242,237,230,0.55)' }}>{initials(m.first_name, m.last_name)}</span>}
     </div>
     <div className="flex-1 min-w-0">
-      <div className="text-xs" style={{ color: 'rgba(242,237,230,0.55)' }}>{STAFF_LABEL[m.role]}</div>
+      <div className="text-xs" style={{ color: 'rgba(242,237,230,0.55)' }}>{t(STAFF_LABEL_KEY[m.role])}</div>
       <div className="text-sm font-semibold truncate" style={{ color: '#F2EDE6' }}>{m.first_name} {m.last_name}</div>
     </div>
   </div>
-);
+  );
+};
 
 interface Props { teamId: string }
 
@@ -88,9 +93,12 @@ const TeamCoachStaff: React.FC<Props> = ({ teamId }) => {
 
   if (!coach && staff.length === 0) return null;
 
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
+
   return (
-    <div dir="rtl" className="space-y-4">
-      <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>צוות מקצועי</h2>
+    <div dir={dir} className="space-y-4">
+      <h2 className="text-xl font-black" style={{ color: '#F2EDE6' }}>{t('team.coaching_staff')}</h2>
       {coach && <HeadCoachCard coach={coach} />}
       {staff.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

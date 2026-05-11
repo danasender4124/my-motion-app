@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { TeamSeasonStats } from '../../lib/aggregations';
 
 interface Props { stats: TeamSeasonStats }
@@ -10,17 +11,21 @@ const Cell: React.FC<{ label: string; value: React.ReactNode }> = ({ label, valu
   </div>
 );
 
-const TeamQuickStats: React.FC<Props> = ({ stats }) => (
+const TeamQuickStats: React.FC<Props> = ({ stats }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
+  return (
   <div
     className="rounded-2xl p-6 flex items-stretch gap-4"
     style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-    dir="rtl"
+    dir={dir}
   >
-    <Cell label="מאזן" value={`${stats.wins}-${stats.losses}`} />
-    <Cell label="מיקום" value={stats.position == null ? '—' : `#${stats.position}`} />
-    <Cell label="קלעה" value={stats.points_for} />
-    <Cell label="ספגה" value={stats.points_against} />
+    <Cell label={t('team.record')} value={`${stats.wins}-${stats.losses}`} />
+    <Cell label={t('team.rank')} value={stats.position == null ? '—' : `#${stats.position}`} />
+    <Cell label={t('team.pf')} value={stats.points_for} />
+    <Cell label={t('team.pa')} value={stats.points_against} />
   </div>
-);
+  );
+};
 
 export default TeamQuickStats;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { TeamProfile } from '../../lib/queries';
 
 const initials = (name: string): string => {
@@ -10,14 +11,16 @@ const initials = (name: string): string => {
 interface Props { team: TeamProfile }
 
 const TeamHeader: React.FC<Props> = ({ team }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   return (
-    <div dir="rtl" className="space-y-4">
+    <div dir={dir} className="space-y-4">
       <Link
         to="/standings"
         className="text-sm flex items-center gap-1"
         style={{ color: 'rgba(242,237,230,0.5)' }}
       >
-        ← חזרה לטבלת הליגה
+        {t('team.back_to_standings')}
       </Link>
       <div
         className="rounded-2xl p-8 flex items-center gap-6"

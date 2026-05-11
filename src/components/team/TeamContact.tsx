@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { TeamProfile } from '../../lib/queries';
 
 interface Props { team: TeamProfile }
@@ -17,6 +18,8 @@ const SocialIcon: React.FC<{ href: string; label: string; children: React.ReactN
 );
 
 const TeamContact: React.FC<Props> = ({ team }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const c = team.contact ?? {};
   const s = team.social_links ?? {};
   const hasContact = c.phone || c.email;
@@ -25,27 +28,27 @@ const TeamContact: React.FC<Props> = ({ team }) => {
   if (!hasContact && !hasSocial && !hasVenue) return null;
 
   return (
-    <div dir="rtl">
-      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>פרטי קשר</h2>
+    <div dir={dir}>
+      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>{t('team.contact')}</h2>
       <div
         className="rounded-2xl p-6 space-y-4"
         style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
       >
         {hasVenue && (
           <div className="flex items-start gap-3">
-            <span className="text-sm shrink-0" style={{ color: 'rgba(242,237,230,0.5)' }}>אולם:</span>
+            <span className="text-sm shrink-0" style={{ color: 'rgba(242,237,230,0.5)' }}>{t('team.hall')}:</span>
             <span className="text-sm" style={{ color: '#F2EDE6' }}>{team.hall_address}</span>
           </div>
         )}
         {c.phone && (
           <div className="flex items-start gap-3">
-            <span className="text-sm shrink-0" style={{ color: 'rgba(242,237,230,0.5)' }}>טלפון:</span>
+            <span className="text-sm shrink-0" style={{ color: 'rgba(242,237,230,0.5)' }}>{t('team.phone')}:</span>
             <a href={`tel:${c.phone}`} className="text-sm" style={{ color: '#F2EDE6' }} dir="ltr">{c.phone}</a>
           </div>
         )}
         {c.email && (
           <div className="flex items-start gap-3">
-            <span className="text-sm shrink-0" style={{ color: 'rgba(242,237,230,0.5)' }}>אימייל:</span>
+            <span className="text-sm shrink-0" style={{ color: 'rgba(242,237,230,0.5)' }}>{t('team.email')}:</span>
             <a href={`mailto:${c.email}`} className="text-sm" style={{ color: '#FF4D00' }} dir="ltr">{c.email}</a>
           </div>
         )}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { TeamLeaders, LeaderRow } from '../../lib/queries';
 
 const initials = (first: string, last: string) =>
@@ -33,14 +34,16 @@ const Card: React.FC<{ label: string; row: LeaderRow | null }> = ({ label, row }
 interface Props { leaders: TeamLeaders }
 
 const TeamLeaders: React.FC<Props> = ({ leaders }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   if (!leaders.ppg && !leaders.rpg && !leaders.apg) return null;
   return (
-    <div dir="rtl">
-      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>מובילות הקבוצה</h2>
+    <div dir={dir}>
+      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>{t('team.leaders')}</h2>
       <div className="flex gap-3">
-        <Card label="נקודות" row={leaders.ppg} />
-        <Card label="ריבאונדים" row={leaders.rpg} />
-        <Card label="אסיסטים" row={leaders.apg} />
+        <Card label={t('team.leader_points')} row={leaders.ppg} />
+        <Card label={t('team.leader_rebounds')} row={leaders.rpg} />
+        <Card label={t('team.leader_assists')} row={leaders.apg} />
       </div>
     </div>
   );

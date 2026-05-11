@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { RosterPlayer } from '../../lib/queries';
 
 const POSITION_LABEL: Record<NonNullable<RosterPlayer['position']>, string> = {
@@ -16,16 +17,18 @@ const initials = (first: string, last: string) =>
 interface Props { players: RosterPlayer[] }
 
 const TeamRoster: React.FC<Props> = ({ players }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   if (players.length === 0) {
     return (
-      <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }} dir="rtl">
-        טרם שובץ סגל לעונה זו
+      <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }} dir={dir}>
+        {t('team.no_roster')}
       </div>
     );
   }
   return (
-    <div dir="rtl">
-      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>סגל</h2>
+    <div dir={dir}>
+      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>{t('team.roster')}</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
         {players.map((p) => (
           <Link
