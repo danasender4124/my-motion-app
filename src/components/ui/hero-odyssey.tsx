@@ -174,6 +174,7 @@ const cardFor = (post: PublicPost, fallbackIdx: number) => ({
 
 // ─── Card slider ──────────────────────────────────────────────────────────────
 const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
+  const { t } = useTranslation();
   const [current, setCurrent] = useState(0);
   const { data } = useApprovedPosts();
   const CARDS = useMemo(() => (data ?? []).map((p, i) => cardFor(p, i)), [data]);
@@ -182,8 +183,8 @@ const HeroNewsFeed: React.FC<{ show: boolean }> = ({ show }) => {
   // Auto-advance every 4 seconds
   useEffect(() => {
     if (!show || total < 2) return;
-    const t = setInterval(() => setCurrent(c => (c + 1) % total), 4000);
-    return () => clearInterval(t);
+    const iv = setInterval(() => setCurrent(c => (c + 1) % total), 4000);
+    return () => clearInterval(iv);
   }, [show, total]);
 
   // Reset index if posts shrink below current
