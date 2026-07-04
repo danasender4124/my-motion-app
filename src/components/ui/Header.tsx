@@ -36,7 +36,7 @@ const LanguageToggle: React.FC = () => {
 const TeamLogos: React.FC = () => {
   const { data: teams = [] } = useTeams();
   return (
-    <div className="flex-1 flex items-center justify-center gap-3" style={{ minWidth: 0 }}>
+    <div className="flex-1 flex items-center justify-center gap-3 overflow-hidden" style={{ minWidth: 0 }}>
       {teams.map((team) => (
         <Link
           key={team.id}

@@ -112,3 +112,8 @@ html.a11y-big-cursor * {
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* Prevent horizontal page overflow (RTL overflow escapes to the left) */
+html, body {
+  overflow-x: clip;
+}
