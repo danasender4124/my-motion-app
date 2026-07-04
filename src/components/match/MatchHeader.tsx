@@ -71,7 +71,7 @@ const MatchHeader: React.FC<Props> = ({ game }) => {
           {game.status === 'played' && game.home_score != null && game.away_score != null ? (
             <div className="text-5xl font-black tabular-nums flex items-center gap-3">
               <span style={{ color: homeWon ? '#FF4D00' : '#F2EDE6' }}>{game.home_score}</span>
-              <span style={{ color: 'rgba(242,237,230,0.3)' }}>-</span>
+              <span style={{ color: 'rgba(242,237,230,0.4)' }}>-</span>
               <span style={{ color: awayWon ? '#FF4D00' : '#F2EDE6' }}>{game.away_score}</span>
             </div>
           ) : (

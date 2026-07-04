@@ -253,7 +253,7 @@ const Results: React.FC = () => {
                             ) : (
                               <span
                                 className="flex items-center justify-center w-8 h-8 rounded-lg"
-                                style={{ color: 'rgba(242,237,230,0.25)' }}
+                                style={{ color: 'rgba(242,237,230,0.4)' }}
                                 title={t('results.title_no_stats')}
                               >
                                 <StatsIcon />
@@ -369,7 +369,7 @@ const Results: React.FC = () => {
                       ) : (
                         <span
                           className="flex items-center justify-center w-8 h-8 rounded-lg"
-                          style={{ color: 'rgba(242,237,230,0.22)' }}
+                          style={{ color: 'rgba(242,237,230,0.4)' }}
                           title={t('results.title_no_watch')}
                         >
                           <TvIcon />

@@ -117,7 +117,7 @@ const Footer: React.FC = () => {
 
       <div
         className="flex flex-wrap items-center justify-between gap-4 pt-6 text-xs"
-        style={{ borderTop: '1px solid rgba(255,255,255,0.06)', color: 'rgba(242,237,230,0.3)' }}
+        style={{ borderTop: '1px solid rgba(255,255,255,0.06)', color: 'rgba(242,237,230,0.4)' }}
       >
         <span>© 2025 {t('footer.brand')} · {t('footer.copyright')}</span>
         <div className="flex gap-4">

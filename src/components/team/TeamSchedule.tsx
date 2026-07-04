@@ -127,7 +127,7 @@ const TeamSchedule: React.FC<Props> = ({ games, teamId }) => {
                   {tab === 'past' && g.status === 'played' ? (
                     <Link to={`/match/${g.id}`} style={{ color: '#FF4D00' }} title={t('team.game_details')}>↗</Link>
                   ) : (
-                    <span style={{ color: 'rgba(242,237,230,0.25)' }}>↗</span>
+                    <span style={{ color: 'rgba(242,237,230,0.4)' }}>↗</span>
                   )}
                 </div>
               </div>

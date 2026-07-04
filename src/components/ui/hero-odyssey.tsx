@@ -413,7 +413,7 @@ export const HeroSection: React.FC = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.8 }}
       >
-        <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: 'rgba(242,237,230,0.3)' }}>{t('hero.scroll')}</span>
+        <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: 'rgba(242,237,230,0.4)' }}>{t('hero.scroll')}</span>
         <motion.div
           className="w-px h-10"
           style={{ background: 'linear-gradient(to bottom, rgba(255,77,0,0.7), transparent)' }}
