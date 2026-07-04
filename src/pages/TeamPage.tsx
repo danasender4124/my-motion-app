@@ -36,7 +36,7 @@ const TeamPage: React.FC = () => {
   const team = teamQ.data;
 
   return (
-    <main className="max-w-5xl mx-auto px-4 md:px-8 py-8 space-y-10" style={{ background: '#07080C' }}>
+    <main className="max-w-5xl mx-auto px-6 md:px-12 pt-12 pb-16 space-y-10" style={{ background: '#07080C' }}>
       <TeamHeader team={team} stats={statsQ.data ?? null} />
       {leadersQ.data && <TeamLeaders leaders={leadersQ.data} />}
       <TeamCoachStaff teamId={team.id} />

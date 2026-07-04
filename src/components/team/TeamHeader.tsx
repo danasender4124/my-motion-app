@@ -22,7 +22,7 @@ const accentFor = (hex: string | null): string => {
 
 const StatTile: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
   <div
-    className="flex flex-col items-center gap-1 px-4 py-3 flex-1 min-w-[80px]"
+    className="flex flex-col items-center gap-1.5 px-5 py-4 flex-1 min-w-[90px]"
     style={{ background: 'rgba(7,8,12,0.55)' }}
   >
     <span className="text-[11px] uppercase tracking-wider" style={{ color: 'rgba(242,237,230,0.5)' }}>
@@ -62,12 +62,9 @@ const TeamHeader: React.FC<Props> = ({ team, stats }) => {
           backdropFilter: 'blur(20px)',
         }}
       >
-        {/* Team-color accent bar */}
-        <div className="h-1.5 w-full" style={{ background: `linear-gradient(to left, ${accent}, transparent)` }} />
-
         {/* Identity row */}
         <div
-          className="p-6 md:p-8 flex items-center gap-5 md:gap-7"
+          className="p-8 md:p-10 flex items-center gap-6 md:gap-8"
           style={{
             background: `radial-gradient(ellipse 60% 120% at ${dir === 'rtl' ? '85%' : '15%'} 0%, ${accent}22 0%, transparent 65%)`,
           }}
