@@ -1,7 +1,9 @@
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { usePublishedVideos, usePublishedGameVideos, type PublicVideo, type VideoCategory } from '../lib/queries';
 import CategoryFilter, { type CategoryValue } from '../components/vod/CategoryFilter';
 import VideoGrid from '../components/vod/VideoGrid';
+import { teamName } from '../lib/displayName';
 
 const fmtDate = (iso: string | null): string => {
   if (!iso) return '';
@@ -10,6 +12,8 @@ const fmtDate = (iso: string | null): string => {
 };
 
 const VodPage: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const [category, setCategory] = useState<CategoryValue>('all');
   const baseQ = usePublishedVideos(category);
   const gameVidsQ = usePublishedGameVideos();
@@ -18,8 +22,8 @@ const VodPage: React.FC = () => {
     const base = baseQ.data ?? [];
     if (category !== 'all') return base; // game videos have no category — only show on 'all'
     const fromGames: PublicVideo[] = (gameVidsQ.data ?? []).map((g) => {
-      const home = g.game?.home_team?.name ?? '—';
-      const away = g.game?.away_team?.name ?? '—';
+      const home = teamName(g.game?.home_team);
+      const away = teamName(g.game?.away_team);
       const date = fmtDate(g.game?.date ?? null);
       const title = date ? `${home} vs ${away} · ${date}` : `${home} vs ${away}`;
       const v: PublicVideo = {
@@ -46,19 +50,19 @@ const VodPage: React.FC = () => {
   const error = baseQ.error || gameVidsQ.error;
 
   return (
-    <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 space-y-6" dir="rtl">
+    <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 space-y-6" dir={dir}>
       <h1 className="text-3xl font-black" style={{ color: '#F2EDE6' }}>VOD</h1>
       <CategoryFilter active={category} onChange={setCategory} />
 
       {isLoading && (
-        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>טוען...</div>
+        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>{t('common.loading')}</div>
       )}
       {error && (
-        <div className="text-center py-12" style={{ color: '#f87171' }}>לא ניתן לטעון סרטונים כעת.</div>
+        <div className="text-center py-12" style={{ color: '#f87171' }}>{t('vod.error')}</div>
       )}
       {merged.length === 0 && !isLoading && (
         <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>
-          אין סרטונים עדיין
+          {t('vod.no_videos')}
         </div>
       )}
       {merged.length > 0 && <VideoGrid videos={merged} />}

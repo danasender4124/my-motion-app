@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useMatch, useMatchStats, useTeamJerseys } from '../lib/queries';
 import { teamName } from '../lib/displayName';
 import MatchHeader from '../components/match/MatchHeader';
@@ -10,6 +11,8 @@ import MatchMedia from '../components/match/MatchMedia';
 import MatchLineups from '../components/match/MatchLineups';
 
 const MatchPage: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const { id } = useParams<{ id: string }>();
   const matchQ = useMatch(id);
   const statsQ = useMatchStats(id);
@@ -18,16 +21,16 @@ const MatchPage: React.FC = () => {
 
   if (matchQ.isLoading) {
     return (
-      <div dir="rtl" className="min-h-screen flex items-center justify-center" style={{ background: '#07080C' }}>
-        <span style={{ color: 'rgba(242,237,230,0.5)' }}>טוען...</span>
+      <div dir={dir} className="min-h-screen flex items-center justify-center" style={{ background: '#07080C' }}>
+        <span style={{ color: 'rgba(242,237,230,0.5)' }}>{t('common.loading')}</span>
       </div>
     );
   }
   if (matchQ.error || !matchQ.data) {
     return (
-      <div dir="rtl" className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: '#07080C' }}>
-        <span style={{ color: '#F2EDE6' }}>המשחק לא נמצא</span>
-        <Link to="/results" style={{ color: '#FF4D00' }}>חזרה למשחקים</Link>
+      <div dir={dir} className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: '#07080C' }}>
+        <span style={{ color: '#F2EDE6' }}>{t('match.not_found')}</span>
+        <Link to="/results" style={{ color: '#FF4D00' }}>{t('match.back')}</Link>
       </div>
     );
   }
@@ -38,7 +41,7 @@ const MatchPage: React.FC = () => {
   const awayStats = stats.filter((s) => s.team_id === game.away_team_id);
 
   return (
-    <div dir="rtl" className="min-h-screen py-12 px-4 md:px-8" style={{ background: '#07080C' }}>
+    <div dir={dir} className="min-h-screen py-12 px-4 md:px-8" style={{ background: '#07080C' }}>
       <div className="max-w-6xl mx-auto space-y-6">
         <MatchHeader game={game} />
 
@@ -70,7 +73,7 @@ const MatchPage: React.FC = () => {
               className="rounded-2xl p-6 text-center"
               style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(242,237,230,0.6)' }}
             >
-              המשחק טרם שוחק.
+              {t('match.not_played_yet')}
             </div>
             {game.home_team && game.away_team && (
               <MatchLineups

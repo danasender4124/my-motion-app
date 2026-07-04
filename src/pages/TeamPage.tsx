@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useTeam, useTeamRoster, useTeamGames, useTeamSeasonStats, useTeamLeaders } from '../lib/queries';
 import TeamHeader from '../components/team/TeamHeader';
 import TeamRoster from '../components/team/TeamRoster';
@@ -11,6 +12,8 @@ import TeamSchedule from '../components/team/TeamSchedule';
 import TeamContact from '../components/team/TeamContact';
 
 const TeamPage: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const { id } = useParams<{ id: string }>();
   const teamQ = useTeam(id);
   const rosterQ = useTeamRoster(id);
@@ -20,16 +23,16 @@ const TeamPage: React.FC = () => {
 
   if (teamQ.isLoading) {
     return (
-      <div className="text-center py-24" style={{ color: 'rgba(242,237,230,0.4)' }} dir="rtl">
-        טוען...
+      <div className="text-center py-24" style={{ color: 'rgba(242,237,230,0.4)' }} dir={dir}>
+        {t('common.loading')}
       </div>
     );
   }
   if (!teamQ.data) {
     return (
-      <div className="text-center py-24 space-y-4" dir="rtl">
-        <div style={{ color: 'rgba(242,237,230,0.4)' }}>הקבוצה לא נמצאה</div>
-        <Link to="/standings" style={{ color: '#FF4D00' }}>← חזרה לטבלת הליגה</Link>
+      <div className="text-center py-24 space-y-4" dir={dir}>
+        <div style={{ color: 'rgba(242,237,230,0.4)' }}>{t('team.not_found')}</div>
+        <Link to="/standings" style={{ color: '#FF4D00' }}>{t('team.back_to_standings')}</Link>
       </div>
     );
   }
