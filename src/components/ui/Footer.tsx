@@ -121,8 +121,6 @@ const Footer: React.FC = () => {
       >
         <span>© 2025 {t('footer.brand')} · {t('footer.copyright')}</span>
         <div className="flex gap-4">
-          <a href="#" className="hover:text-white transition-colors">{t('footer.privacy')}</a>
-          <a href="#" className="hover:text-white transition-colors">{t('footer.terms')}</a>
           <Link to="/accessibility" className="hover:text-white transition-colors">{t('footer.accessibility_statement')}</Link>
         </div>
       </div>

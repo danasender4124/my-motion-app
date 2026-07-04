@@ -217,12 +217,12 @@ const Results: React.FC = () => {
                           {/* מארחת */}
                           {g.homeId ? (
                             <Link to={`/team/${g.homeId}`} className="flex items-center gap-2 min-w-0">
-                              <img src={g.homeLogo} alt={g.home} style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
+                              <img src={g.homeLogo} alt={g.home} loading="lazy" style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
                               <span className="text-sm font-bold truncate" style={{ color: homeWon ? '#F2EDE6' : 'rgba(242,237,230,0.55)' }}>{g.home}</span>
                             </Link>
                           ) : (
                             <div className="flex items-center gap-2 min-w-0">
-                              <img src={g.homeLogo} alt={g.home} style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
+                              <img src={g.homeLogo} alt={g.home} loading="lazy" style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
                               <span className="text-sm font-bold truncate" style={{ color: homeWon ? '#F2EDE6' : 'rgba(242,237,230,0.55)' }}>{g.home}</span>
                             </div>
                           )}
@@ -230,12 +230,12 @@ const Results: React.FC = () => {
                           {/* אורחת */}
                           {g.awayId ? (
                             <Link to={`/team/${g.awayId}`} className="flex items-center gap-2 min-w-0">
-                              <img src={g.awayLogo} alt={g.away} style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
+                              <img src={g.awayLogo} alt={g.away} loading="lazy" style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
                               <span className="text-sm font-medium truncate" style={{ color: !homeWon ? '#F2EDE6' : 'rgba(242,237,230,0.55)' }}>{g.away}</span>
                             </Link>
                           ) : (
                             <div className="flex items-center gap-2 min-w-0">
-                              <img src={g.awayLogo} alt={g.away} style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
+                              <img src={g.awayLogo} alt={g.away} loading="lazy" style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
                               <span className="text-sm font-medium truncate" style={{ color: !homeWon ? '#F2EDE6' : 'rgba(242,237,230,0.55)' }}>{g.away}</span>
                             </div>
                           )}
@@ -393,12 +393,12 @@ const Results: React.FC = () => {
                     {/* מארחת — logo + name */}
                     {g.homeId ? (
                       <Link to={`/team/${g.homeId}`} className="flex items-center gap-2 min-w-0">
-                        <img src={g.homeLogo} alt={g.home} style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }} />
+                        <img src={g.homeLogo} alt={g.home} loading="lazy" style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }} />
                         <span className="text-sm font-bold leading-tight truncate" style={{ color: '#F2EDE6' }}>{g.home}</span>
                       </Link>
                     ) : (
                       <div className="flex items-center gap-2 min-w-0">
-                        <img src={g.homeLogo} alt={g.home} style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }} />
+                        <img src={g.homeLogo} alt={g.home} loading="lazy" style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }} />
                         <span className="text-sm font-bold leading-tight truncate" style={{ color: '#F2EDE6' }}>{g.home}</span>
                       </div>
                     )}
@@ -406,12 +406,12 @@ const Results: React.FC = () => {
                     {/* אורחת — logo + name */}
                     {g.awayId ? (
                       <Link to={`/team/${g.awayId}`} className="flex items-center gap-2 min-w-0">
-                        <img src={g.awayLogo} alt={g.away} style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }} />
+                        <img src={g.awayLogo} alt={g.away} loading="lazy" style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }} />
                         <span className="text-sm font-medium leading-tight truncate" style={{ color: 'rgba(242,237,230,0.75)' }}>{g.away}</span>
                       </Link>
                     ) : (
                       <div className="flex items-center gap-2 min-w-0">
-                        <img src={g.awayLogo} alt={g.away} style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }} />
+                        <img src={g.awayLogo} alt={g.away} loading="lazy" style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }} />
                         <span className="text-sm font-medium leading-tight truncate" style={{ color: 'rgba(242,237,230,0.75)' }}>{g.away}</span>
                       </div>
                     )}

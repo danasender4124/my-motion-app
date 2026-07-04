@@ -47,7 +47,7 @@ const VideoCard: React.FC<Props> = ({ video, onPlay }) => {
     >
       <div className="relative w-full" style={{ aspectRatio: '16 / 9', background: 'rgba(255,255,255,0.06)' }}>
         {thumb ? (
-          <img src={thumb} alt={video.title} className="w-full h-full object-cover" />
+          <img src={thumb} alt={video.title} loading="lazy" className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full" />
         )}

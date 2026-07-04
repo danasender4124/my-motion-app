@@ -31,7 +31,7 @@ const PostGallery: React.FC<Props> = ({ photos }) => {
             onClick={() => setActive(i)}
             className="rounded-lg overflow-hidden"
           >
-            <img src={url} alt="" className="w-full h-40 object-cover hover:opacity-90 transition-opacity" />
+            <img src={url} alt="" loading="lazy" className="w-full h-40 object-cover hover:opacity-90 transition-opacity" />
           </button>
         ))}
       </div>

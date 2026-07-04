@@ -78,6 +78,7 @@ const MatchMedia: React.FC<Props> = ({ gameId }) => {
                 <img
                   src={p.storage_path ? mediaUrl(p.storage_path) : ''}
                   alt=""
+                  loading="lazy"
                   className="w-full h-32 object-cover hover:opacity-90 transition-opacity"
                 />
               </button>

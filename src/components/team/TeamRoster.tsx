@@ -42,7 +42,7 @@ const TeamRoster: React.FC<Props> = ({ players }) => {
               style={{ background: 'rgba(255,255,255,0.06)' }}
             >
               {p.photo
-                ? <img src={p.photo} alt={`${p.first_name} ${p.last_name}`} className="w-full h-full object-cover" />
+                ? <img src={p.photo} alt={`${p.first_name} ${p.last_name}`} loading="lazy" className="w-full h-full object-cover" style={{ objectPosition: 'center top' }} />
                 : <span className="text-base font-black" style={{ color: 'rgba(242,237,230,0.55)' }}>{initials(p.first_name, p.last_name)}</span>}
             </div>
             <div className="text-xs font-black" style={{ color: '#FF4D00' }}>

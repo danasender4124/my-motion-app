@@ -110,7 +110,9 @@ const TeamSchedule: React.FC<Props> = ({ games, teamId }) => {
                 <div className="flex items-center gap-2 min-w-0">
                   {isHome && <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00' }}>{t('team.venue_home')}</span>}
                   {!isHome && <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(242,237,230,0.5)' }}>{t('team.venue_away')}</span>}
-                  {opp?.logo && <img src={opp.logo} alt={opp.name} style={{ width: 22, height: 22, objectFit: 'contain', flexShrink: 0 }} />}
+                  {opp?.logo
+                    ? <img src={opp.logo} alt={opp.name} loading="lazy" style={{ width: 22, height: 22, objectFit: 'contain', flexShrink: 0 }} />
+                    : <span style={{ width: 22, height: 22, flexShrink: 0, borderRadius: 4, background: 'rgba(255,255,255,0.06)', display: 'inline-block' }} />}
                   <span className="truncate" style={{ color: '#F2EDE6' }}>{opp?.name ?? '—'}</span>
                 </div>
                 {tab === 'past' && (

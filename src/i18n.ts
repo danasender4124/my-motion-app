@@ -26,7 +26,7 @@ const resources = {
         title: 'טבלת הליגה',
         col_rank: '#', col_team: 'קבוצה', col_played: 'מש׳',
         col_won: 'ניצ׳', col_lost: 'הפ׳', col_pf: 'קלעה',
-        col_pa: 'ספגה', col_diff: 'הפרש', col_pts: 'נק׳',
+        col_pa: 'ספגה', col_diff: 'הפרש', col_pts: 'נק׳', col_pct: 'אחוז',
         lower_bracket: 'בית תחתון', lower_bracket_note: '· מקומות 7-10',
       },
       stats: {
@@ -184,7 +184,7 @@ const resources = {
         title: 'League Standings',
         col_rank: '#', col_team: 'Team', col_played: 'GP',
         col_won: 'W', col_lost: 'L', col_pf: 'PF',
-        col_pa: 'PA', col_diff: '+/-', col_pts: 'Pts',
+        col_pa: 'PA', col_diff: '+/-', col_pts: 'Pts', col_pct: 'Win %',
         lower_bracket: 'Lower Bracket', lower_bracket_note: '· Positions 7-10',
       },
       stats: {

@@ -55,7 +55,7 @@ const TeamLineupColumn: React.FC<{
                   style={{ background: 'rgba(255,255,255,0.06)' }}
                 >
                   {p.photo
-                    ? <img src={p.photo} alt={`${p.first_name} ${p.last_name}`} className="w-full h-full object-cover" />
+                    ? <img src={p.photo} alt={`${p.first_name} ${p.last_name}`} loading="lazy" className="w-full h-full object-cover" style={{ objectPosition: 'center top' }} />
                     : <span className="text-sm font-black" style={{ color: 'rgba(242,237,230,0.5)' }}>{initials(p.first_name, p.last_name)}</span>}
                 </div>
                 {p.jersey_number != null && (

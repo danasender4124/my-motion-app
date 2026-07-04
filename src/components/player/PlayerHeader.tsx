@@ -65,7 +65,7 @@ const PlayerHeader: React.FC<Props> = ({ player }) => {
           style={{ background: 'rgba(255,255,255,0.06)' }}
         >
           {player.photo
-            ? <img src={player.photo} alt={`${player.first_name} ${player.last_name}`} className="w-full h-full object-cover" />
+            ? <img src={player.photo} alt={`${player.first_name} ${player.last_name}`} className="w-full h-full object-cover" style={{ objectPosition: 'center top' }} />
             : <span className="text-3xl font-black" style={{ color: 'rgba(242,237,230,0.5)' }}>{initials(player.first_name, player.last_name)}</span>}
         </div>
         <div className="flex-1 min-w-0">

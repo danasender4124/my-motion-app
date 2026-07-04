@@ -104,4 +104,5 @@ html.a11y-big-cursor * {
 :focus-visible {
   outline: 3px solid #ffd400 !important;
   outline-offset: 2px !important;
+  border-radius: 4px;
 }

@@ -23,6 +23,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
           <img
             src={thumb}
             alt={post.title}
+            loading="lazy"
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useTeams } from '../../lib/queries';
 import { STANDINGS_OVERRIDE } from '../../lib/standings-override';
 
-const COLS = '2.5rem 1fr 3.5rem 3.5rem 3.5rem 4rem 4rem 4.5rem 3.5rem';
+const COLS = '2.5rem 1fr 3.5rem 3.5rem 3.5rem 4rem 4rem 4.5rem 3.5rem 4rem';
 
 const Standings: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -52,6 +52,7 @@ const Standings: React.FC = () => {
               <span className="text-center">{t('standings.col_pa')}</span>
               <span className="text-center">{t('standings.col_diff')}</span>
               <span className="text-center">{t('standings.col_pts')}</span>
+              <span className="text-center">{t('standings.col_pct')}</span>
             </div>
 
             {rows.map((r, i) => {
@@ -59,6 +60,7 @@ const Standings: React.FC = () => {
               const isUpperHalf = i < 6;
               const diff = r.points_for - r.points_against;
               const pts = r.wins * 2 + r.losses;
+              const pct = r.wins + r.losses > 0 ? Math.round((r.wins / (r.wins + r.losses)) * 100) : 0;
               const evenBg = 'rgba(255,255,255,0.04)';
               const oddBg = 'rgba(255,255,255,0.01)';
               return (
@@ -104,6 +106,7 @@ const Standings: React.FC = () => {
                           <img
                             src={r.team.logo}
                             alt={r.team.name}
+                            loading="lazy"
                             style={{ width: 28, height: 28, objectFit: 'contain', flexShrink: 0 }}
                           />
                         )}
@@ -140,6 +143,12 @@ const Standings: React.FC = () => {
                         style={{ color: isTop ? '#FF4D00' : '#F2EDE6' }}
                       >
                         {pts}
+                      </span>
+                      <span
+                        className="text-center text-sm tabular-nums"
+                        style={{ color: 'rgba(242,237,230,0.65)' }}
+                      >
+                        {`${pct}%`}
                       </span>
                     </motion.div>
                   </Link>

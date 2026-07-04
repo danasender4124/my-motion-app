@@ -46,7 +46,7 @@ const HeadCoachCard: React.FC<{ coach: PublicHeadCoach }> = ({ coach }) => (
       style={{ background: 'rgba(255,255,255,0.06)', width: 72, height: 72 }}
     >
       {coach.photo
-        ? <img src={coach.photo} alt={`${coach.first_name} ${coach.last_name}`} className="w-full h-full object-cover" />
+        ? <img src={coach.photo} alt={`${coach.first_name} ${coach.last_name}`} loading="lazy" className="w-full h-full object-cover" style={{ objectPosition: 'center top' }} />
         : <span className="text-base font-black" style={{ color: 'rgba(242,237,230,0.55)' }}>{initials(coach.first_name, coach.last_name)}</span>}
     </div>
     <div className="flex-1 min-w-0">
@@ -71,7 +71,7 @@ const StaffCard: React.FC<{ m: PublicStaffMember }> = ({ m }) => {
       style={{ background: 'rgba(255,255,255,0.06)' }}
     >
       {m.photo
-        ? <img src={m.photo} alt={`${m.first_name} ${m.last_name}`} className="w-full h-full object-cover" />
+        ? <img src={m.photo} alt={`${m.first_name} ${m.last_name}`} loading="lazy" className="w-full h-full object-cover" style={{ objectPosition: 'center top' }} />
         : <span className="text-xs font-black" style={{ color: 'rgba(242,237,230,0.55)' }}>{initials(m.first_name, m.last_name)}</span>}
     </div>
     <div className="flex-1 min-w-0">
@@ -85,6 +85,8 @@ const StaffCard: React.FC<{ m: PublicStaffMember }> = ({ m }) => {
 interface Props { teamId: string }
 
 const TeamCoachStaff: React.FC<Props> = ({ teamId }) => {
+  const { t, i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const coachQ = useTeamHeadCoachPublic(teamId);
   const staffQ = useTeamSupportStaffPublic(teamId);
 
@@ -92,9 +94,6 @@ const TeamCoachStaff: React.FC<Props> = ({ teamId }) => {
   const staff = staffQ.data ?? [];
 
   if (!coach && staff.length === 0) return null;
-
-  const { t, i18n } = useTranslation();
-  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
 
   return (
     <div dir={dir} className="space-y-4">

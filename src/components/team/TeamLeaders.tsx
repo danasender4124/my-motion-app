@@ -19,7 +19,7 @@ const Card: React.FC<{ label: string; row: LeaderRow | null }> = ({ label, row }
           style={{ background: 'rgba(255,255,255,0.06)' }}
         >
           {row.photo
-            ? <img src={row.photo} alt={`${row.first_name} ${row.last_name}`} className="w-full h-full object-cover" />
+            ? <img src={row.photo} alt={`${row.first_name} ${row.last_name}`} loading="lazy" className="w-full h-full object-cover" style={{ objectPosition: 'center top' }} />
             : <span className="text-sm font-black" style={{ color: 'rgba(242,237,230,0.55)' }}>{initials(row.first_name, row.last_name)}</span>}
         </div>
         <span className="text-sm font-semibold" style={{ color: '#F2EDE6' }}>{row.first_name} {row.last_name}</span>
