@@ -329,9 +329,9 @@ void i18n
   .init({
     resources,
     // Hebrew is the default — English is opt-in via the language toggle.
-    // Browser language is intentionally ignored so we don't auto-switch
-    // English-speaking visitors away from the canonical Hebrew site.
-    lng: 'he',
+    // No hardcoded `lng`: the detector reads the user's saved choice from
+    // localStorage so EN persists across reloads; with nothing saved it
+    // falls back to Hebrew. Browser language is intentionally not consulted.
     fallbackLng: 'he',
     supportedLngs: ['he', 'en'],
     interpolation: { escapeValue: false },

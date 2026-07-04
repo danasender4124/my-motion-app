@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGameLineupPublic } from '../../lib/queries';
+import { playerFullName } from '../../lib/displayName';
 
 const initials = (first: string, last: string) =>
   (first?.[0] ?? '') + (last?.[0] ?? '');
@@ -62,7 +63,7 @@ const TeamLineupColumn: React.FC<{
                   <div className="text-xs font-black" style={{ color: '#FF4D00' }}>#{p.jersey_number}</div>
                 )}
                 <div className="text-[11px] text-center truncate w-full" style={{ color: '#F2EDE6' }}>
-                  {p.first_name} {p.last_name}
+                  {playerFullName(p)}
                 </div>
               </div>
             ))}

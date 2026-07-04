@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecentResults, useUpcomingGames, type GameWithTeams } from '../../lib/queries';
+import { teamName } from '../../lib/displayName';
 import SectionTabs from './SectionTabs';
 import { SkeletonTable } from './Skeleton';
 
@@ -83,11 +84,11 @@ const adapt = (g: GameWithTeams): GameRow => ({
   venue: g.hall || '',
   statsUrl: '/match/' + g.id,
   watchUrl: g.watch_url || '',
-  home: g.home_team?.name || '',
+  home: g.home_team ? teamName(g.home_team) : '',
   homeLogo: g.home_team?.logo || '',
   homeId: g.home_team?.id,
   homeScore: g.home_score,
-  away: g.away_team?.name || '',
+  away: g.away_team ? teamName(g.away_team) : '',
   awayLogo: g.away_team?.logo || '',
   awayId: g.away_team?.id,
   awayScore: g.away_score,

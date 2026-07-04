@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { RosterPlayer } from '../../lib/queries';
+import { playerFullName } from '../../lib/displayName';
 
 const POSITION_LABEL: Record<NonNullable<RosterPlayer['position']>, string> = {
   point_guard: 'PG',
@@ -50,7 +51,7 @@ const TeamRoster: React.FC<Props> = ({ players }) => {
               {p.position && <span className="mr-2" style={{ color: 'rgba(242,237,230,0.5)' }}>{POSITION_LABEL[p.position]}</span>}
             </div>
             <div className="text-sm font-semibold text-center truncate w-full" style={{ color: '#F2EDE6' }}>
-              {p.first_name} {p.last_name}
+              {playerFullName(p)}
             </div>
           </Link>
         ))}

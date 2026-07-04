@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { LeagueLeaderRow } from '../../lib/queries';
+import { playerFullName } from '../../lib/displayName';
 
 interface Props {
   label: string;
@@ -75,7 +76,7 @@ const LeaderModal: React.FC<Props> = ({ label, rows, formatValue, onClose }) => 
                     style={{ color: '#F2EDE6', fontWeight: i === 0 ? 700 : 500 }}
                     onClick={onClose}
                   >
-                    {r.first_name} {r.last_name}
+                    {playerFullName(r)}
                   </Link>
                   <span
                     className="tabular-nums"

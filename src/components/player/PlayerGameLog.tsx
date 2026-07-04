@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { PlayerStatRow } from '../../lib/queries';
+import { teamName } from '../../lib/displayName';
 
 const formatDate = (iso: string | null): string => {
   if (!iso) return '—';
@@ -83,7 +84,7 @@ const PlayerGameLog: React.FC<Props> = ({ rows, playerTeamId }) => {
             }}
           >
             <span className="tabular-nums" style={{ color: 'rgba(242,237,230,0.7)' }}>{formatDate(game?.date ?? null)}</span>
-            <span style={{ color: '#F2EDE6' }}>{opp?.name ?? '—'}</span>
+            <span style={{ color: '#F2EDE6' }}>{teamName(opp)}</span>
             <span className="tabular-nums" style={{ color: resultColor }}>{result}</span>
             <span className="text-center tabular-nums" style={{ color: 'rgba(242,237,230,0.7)' }}>{r.minutes ?? '—'}</span>
             <span className="text-center tabular-nums font-bold" style={{ color: '#F2EDE6' }}>{r.points ?? '—'}</span>

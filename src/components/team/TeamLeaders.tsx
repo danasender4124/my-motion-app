@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { TeamLeaders, LeaderRow } from '../../lib/queries';
+import { playerFullName } from '../../lib/displayName';
 
 const initials = (first: string, last: string) =>
   (first?.[0] ?? '') + (last?.[0] ?? '');
@@ -28,7 +29,7 @@ const Card: React.FC<{ label: string; suffix: string; row: LeaderRow | null }> =
             : <span className="text-lg font-black" style={{ color: 'rgba(242,237,230,0.55)' }}>{initials(row.first_name, row.last_name)}</span>}
         </div>
         <span className="text-sm font-bold text-center leading-tight" style={{ color: '#F2EDE6' }}>
-          {row.first_name} {row.last_name}
+          {playerFullName(row)}
         </span>
         <span className="flex items-baseline gap-1.5">
           <span className="text-3xl font-black tabular-nums" style={{ color: '#FF4D00' }}>{row.avg.toFixed(1)}</span>

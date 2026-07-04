@@ -10,6 +10,7 @@ export type { LeaderCategoryKey, LeagueLeaderRow } from './aggregations';
 interface TeamRef {
   id: string;
   name: string;
+  name_en?: string | null;
   logo: string | null;
   home_color: string | null;
   away_color: string | null;
@@ -56,13 +57,15 @@ export interface PlayerGameStat {
   ft_made: number | null;
   ft_attempted: number | null;
   efficiency: number | null;
-  player: { id: string; first_name: string; last_name: string } | null;
+  player: { id: string; first_name: string; last_name: string; first_name_en?: string | null; last_name_en?: string | null } | null;
 }
 
 export interface PlayerProfile {
   id: string;
   first_name: string;
   last_name: string;
+  first_name_en?: string | null;
+  last_name_en?: string | null;
   birth_date: string | null;
   nationality: string | null;
   country_of_origin: string | null;
@@ -71,13 +74,14 @@ export interface PlayerProfile {
   status: string;
   classification: 'israeli' | 'naturalized' | 'foreign' | 'bosman';
   photo: string | null;
-  current_team: { id: string; name: string; logo: string | null } | null;
+  current_team: { id: string; name: string; name_en?: string | null; logo: string | null } | null;
   current_jersey: number | null;
 }
 
 export interface TeamProfile {
   id: string;
   name: string;
+  name_en?: string | null;
   logo: string | null;
   home_color: string | null;
   away_color: string | null;
@@ -91,6 +95,8 @@ export interface RosterPlayer {
   id: string;
   first_name: string;
   last_name: string;
+  first_name_en?: string | null;
+  last_name_en?: string | null;
   photo: string | null;
   position: PlayerProfile['position'];
   jersey_number: number | null;
@@ -104,8 +110,8 @@ export interface PlayerStatRow extends PlayerGameStat {
     away_team_id: string;
     home_score: number | null;
     away_score: number | null;
-    home_team: { id: string; name: string } | null;
-    away_team: { id: string; name: string } | null;
+    home_team: { id: string; name: string; name_en?: string | null } | null;
+    away_team: { id: string; name: string; name_en?: string | null } | null;
   } | null;
 }
 
@@ -124,6 +130,8 @@ export interface LeaderRow {
   player_id: string;
   first_name: string;
   last_name: string;
+  first_name_en?: string | null;
+  last_name_en?: string | null;
   photo: string | null;
   avg: number;
   games: number;
@@ -155,8 +163,8 @@ export const calcAverages = (rows: PlayerGameStat[]): SeasonAverages => {
 };
 
 const SELECT_GAME =
-  '*, home_team:teams!games_home_team_id_fkey(id, name, logo, home_color, away_color),' +
-  ' away_team:teams!games_away_team_id_fkey(id, name, logo, home_color, away_color)';
+  '*, home_team:teams!games_home_team_id_fkey(id, name, name_en, logo, home_color, away_color),' +
+  ' away_team:teams!games_away_team_id_fkey(id, name, name_en, logo, home_color, away_color)';
 
 const fetchActiveSeasonId = async (): Promise<string | null> => {
   const { data } = await supabase
@@ -223,7 +231,7 @@ export const useMatchStats = (id: string | undefined) =>
     queryFn: async (): Promise<PlayerGameStat[]> => {
       const { data, error } = await supabase
         .from('player_game_stats')
-        .select('*, player:players(id, first_name, last_name)')
+        .select('*, player:players(id, first_name, last_name, first_name_en, last_name_en)')
         .eq('game_id', id!);
       if (error) throw error;
       return (data ?? []) as unknown as PlayerGameStat[];
@@ -272,12 +280,12 @@ export const usePlayer = (id: string | undefined) =>
       if (seasonId) {
         const { data: pts } = await supabase
           .from('player_team_seasons')
-          .select('jersey_number, team:teams(id, name, logo)')
+          .select('jersey_number, team:teams(id, name, name_en, logo)')
           .eq('player_id', id!)
           .eq('season_id', seasonId)
           .maybeSingle();
         if (pts) {
-          const row = pts as { jersey_number: number | null; team: { id: string; name: string; logo: string | null } | null };
+          const row = pts as { jersey_number: number | null; team: { id: string; name: string; name_en?: string | null; logo: string | null } | null };
           current_team = row.team;
           current_jersey = row.jersey_number;
         }
@@ -306,8 +314,8 @@ export const usePlayerStats = (id: string | undefined) =>
         .from('player_game_stats')
         .select(
           '*, game:games(id, date, home_team_id, away_team_id, home_score, away_score,' +
-            ' home_team:teams!games_home_team_id_fkey(id, name),' +
-            ' away_team:teams!games_away_team_id_fkey(id, name))'
+            ' home_team:teams!games_home_team_id_fkey(id, name, name_en),' +
+            ' away_team:teams!games_away_team_id_fkey(id, name, name_en))'
         )
         .eq('player_id', id!)
         .in('game_id', ids);
@@ -343,7 +351,7 @@ export const useTeams = () =>
 
       let q = supabase
         .from('teams')
-        .select('id, name, logo, home_color, away_color, city, hall_address, contact, social_links')
+        .select('id, name, name_en, logo, home_color, away_color, city, hall_address, contact, social_links')
         .order('name', { ascending: true });
       if (allowedIds && allowedIds.length > 0) q = q.in('id', allowedIds);
 
@@ -361,7 +369,7 @@ export const useTeam = (id: string | undefined) =>
     queryFn: async (): Promise<TeamProfile | null> => {
       const { data, error } = await supabase
         .from('teams')
-        .select('id, name, logo, home_color, away_color, city, hall_address, contact, social_links')
+        .select('id, name, name_en, logo, home_color, away_color, city, hall_address, contact, social_links')
         .eq('id', id!)
         .maybeSingle();
       if (error) throw error;
@@ -381,14 +389,14 @@ export const useTeamRoster = (teamId: string | undefined) =>
 
       const { data, error } = await supabase
         .from('player_team_seasons')
-        .select('jersey_number, player:players(id, first_name, last_name, photo, position)')
+        .select('jersey_number, player:players(id, first_name, last_name, first_name_en, last_name_en, photo, position)')
         .eq('team_id', teamId!)
         .eq('season_id', seasonId);
       if (error) throw error;
 
       const rows = (data ?? []) as Array<{
         jersey_number: number | null;
-        player: { id: string; first_name: string; last_name: string; photo: string | null; position: PlayerProfile['position'] } | null;
+        player: { id: string; first_name: string; last_name: string; first_name_en?: string | null; last_name_en?: string | null; photo: string | null; position: PlayerProfile['position'] } | null;
       }>;
 
       return rows
@@ -397,6 +405,8 @@ export const useTeamRoster = (teamId: string | undefined) =>
           id: r.player!.id,
           first_name: r.player!.first_name,
           last_name: r.player!.last_name,
+          first_name_en: r.player!.first_name_en ?? null,
+          last_name_en: r.player!.last_name_en ?? null,
           photo: r.player!.photo,
           position: r.player!.position,
           jersey_number: r.jersey_number,
@@ -487,7 +497,7 @@ export const useTeamLeaders = (teamId: string | undefined) =>
 
       const { data, error } = await supabase
         .from('player_game_stats')
-        .select('player_id, points, rebounds, assists, player:players(id, first_name, last_name, photo)')
+        .select('player_id, points, rebounds, assists, player:players(id, first_name, last_name, first_name_en, last_name_en, photo)')
         .eq('team_id', teamId!)
         .in('game_id', gids);
       if (error) throw error;
@@ -497,7 +507,7 @@ export const useTeamLeaders = (teamId: string | undefined) =>
         points: number | null;
         rebounds: number | null;
         assists: number | null;
-        player: { id: string; first_name: string; last_name: string; photo: string | null } | null;
+        player: { id: string; first_name: string; last_name: string; first_name_en?: string | null; last_name_en?: string | null; photo: string | null } | null;
       };
       const rows = (data ?? []) as Row[];
 
@@ -526,6 +536,8 @@ export const useTeamLeaders = (teamId: string | undefined) =>
           player_id: best.player.id,
           first_name: best.player.first_name,
           last_name: best.player.last_name,
+          first_name_en: best.player.first_name_en ?? null,
+          last_name_en: best.player.last_name_en ?? null,
           photo: best.player.photo,
           avg: round1(best.v),
           games: best.games,
@@ -592,8 +604,8 @@ export const useLeagueLeaders = (seasonId: string | null | undefined) =>
         .from('player_game_stats')
         .select(
           'player_id, team_id, game_id, minutes, points, rebounds, assists, steals, blocks, turnovers, efficiency, fg2_made, fg2_attempted, fg3_made, fg3_attempted, ft_made, ft_attempted,' +
-          ' player:players(id, first_name, last_name, photo),' +
-          ' team:teams(id, name, logo)'
+          ' player:players(id, first_name, last_name, first_name_en, last_name_en, photo),' +
+          ' team:teams(id, name, name_en, logo)'
         )
         .in('game_id', ids);
       if (error) throw error;
@@ -777,7 +789,7 @@ export interface PublicPost {
   youtube_id: string | null;
   video_storage_path: string | null;
   published_at: string;
-  team: { id: string; name: string; logo: string | null } | null;
+  team: { id: string; name: string; name_en?: string | null; logo: string | null } | null;
 }
 
 export const useApprovedPosts = (category?: PostCategory | 'all', teamId?: string) =>
@@ -786,7 +798,7 @@ export const useApprovedPosts = (category?: PostCategory | 'all', teamId?: strin
     queryFn: async (): Promise<PublicPost[]> => {
       let q = supabase
         .from('team_posts')
-        .select('id, team_id, category, tags, title, body, photos, youtube_id, video_storage_path, published_at, team:teams(id, name, logo)')
+        .select('id, team_id, category, tags, title, body, photos, youtube_id, video_storage_path, published_at, team:teams(id, name, name_en, logo)')
         .eq('status', 'published')
         .order('published_at', { ascending: false });
       if (category && category !== 'all') q = q.eq('category', category);
@@ -805,7 +817,7 @@ export const usePostById = (id: string | undefined) =>
     queryFn: async (): Promise<PublicPost | null> => {
       const { data, error } = await supabase
         .from('team_posts')
-        .select('id, team_id, category, tags, title, body, photos, youtube_id, video_storage_path, published_at, team:teams(id, name, logo)')
+        .select('id, team_id, category, tags, title, body, photos, youtube_id, video_storage_path, published_at, team:teams(id, name, name_en, logo)')
         .eq('id', id!)
         .eq('status', 'published')
         .maybeSingle();
@@ -821,7 +833,7 @@ export const useTeamLatestPosts = (teamId: string | undefined, limit = 5) =>
     queryFn: async (): Promise<PublicPost[]> => {
       const { data, error } = await supabase
         .from('team_posts')
-        .select('id, team_id, category, tags, title, body, photos, youtube_id, video_storage_path, published_at, team:teams(id, name, logo)')
+        .select('id, team_id, category, tags, title, body, photos, youtube_id, video_storage_path, published_at, team:teams(id, name, name_en, logo)')
         .eq('status', 'published')
         .eq('team_id', teamId!)
         .order('published_at', { ascending: false })
@@ -847,8 +859,8 @@ export interface PublicGameMediaWithGame extends PublicGameMediaItem {
   game: {
     id: string;
     date: string | null;
-    home_team: { id: string; name: string; logo: string | null } | null;
-    away_team: { id: string; name: string; logo: string | null } | null;
+    home_team: { id: string; name: string; name_en?: string | null; logo: string | null } | null;
+    away_team: { id: string; name: string; name_en?: string | null; logo: string | null } | null;
   } | null;
 }
 
@@ -877,8 +889,8 @@ export const usePublishedGameVideos = () =>
         .from('game_media')
         .select('id, game_id, type, storage_path, youtube_id, caption, publish_to_vod, created_at,' +
           ' game:games(id, date,' +
-          '   home_team:teams!games_home_team_id_fkey(id, name, logo),' +
-          '   away_team:teams!games_away_team_id_fkey(id, name, logo))')
+          '   home_team:teams!games_home_team_id_fkey(id, name, name_en, logo),' +
+          '   away_team:teams!games_away_team_id_fkey(id, name, name_en, logo))')
         .eq('type', 'video')
         .eq('publish_to_vod', true)
         .order('created_at', { ascending: false });
@@ -893,6 +905,8 @@ export interface GameLineupPlayer {
   id: string;
   first_name: string;
   last_name: string;
+  first_name_en?: string | null;
+  last_name_en?: string | null;
   photo: string | null;
   jersey_number: number | null;
 }
@@ -909,7 +923,7 @@ export const useGameLineupPublic = (
       const [lineupRes, subRes, jerseysRes] = await Promise.all([
         supabase
           .from('game_lineups')
-          .select('player_id, player:players(id, first_name, last_name, photo)')
+          .select('player_id, player:players(id, first_name, last_name, first_name_en, last_name_en, photo)')
           .eq('game_id', gameId!)
           .eq('team_id', teamId!),
         supabase
@@ -934,13 +948,15 @@ export const useGameLineupPublic = (
       }
       const players: GameLineupPlayer[] = ((lineupRes.data ?? []) as Array<{
         player_id: string;
-        player: { id: string; first_name: string; last_name: string; photo: string | null } | null;
+        player: { id: string; first_name: string; last_name: string; first_name_en?: string | null; last_name_en?: string | null; photo: string | null } | null;
       }>)
         .filter((r) => r.player)
         .map((r) => ({
           id: r.player!.id,
           first_name: r.player!.first_name,
           last_name: r.player!.last_name,
+          first_name_en: r.player!.first_name_en ?? null,
+          last_name_en: r.player!.last_name_en ?? null,
           photo: r.player!.photo,
           jersey_number: jerseyMap.get(r.player_id) ?? null,
         }))

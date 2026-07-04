@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { GameWithTeams } from '../../lib/queries';
+import { teamName } from '../../lib/displayName';
 
 const formatDate = (iso: string | null): string => {
   if (!iso) return '—';
@@ -113,7 +114,7 @@ const TeamSchedule: React.FC<Props> = ({ games, teamId }) => {
                   {opp?.logo
                     ? <img src={opp.logo} alt={opp.name} loading="lazy" style={{ width: 22, height: 22, objectFit: 'contain', flexShrink: 0 }} />
                     : <span style={{ width: 22, height: 22, flexShrink: 0, borderRadius: 4, background: 'rgba(255,255,255,0.06)', display: 'inline-block' }} />}
-                  <span className="truncate" style={{ color: '#F2EDE6' }}>{opp?.name ?? '—'}</span>
+                  <span className="truncate" style={{ color: '#F2EDE6' }}>{teamName(opp)}</span>
                 </div>
                 {tab === 'past' && (
                   <span

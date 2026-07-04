@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useMatch, useMatchStats, useTeamJerseys } from '../lib/queries';
+import { teamName } from '../lib/displayName';
 import MatchHeader from '../components/match/MatchHeader';
 import QuarterScoresTable from '../components/match/QuarterScoresTable';
 import BoxScoreTable from '../components/match/BoxScoreTable';
@@ -46,7 +47,7 @@ const MatchPage: React.FC = () => {
             <QuarterScoresTable game={game} />
             {homeStats.length > 0 && (
               <BoxScoreTable
-                teamName={game.home_team?.name ?? ''}
+                teamName={game.home_team ? teamName(game.home_team) : ''}
                 teamLogo={game.home_team?.logo ?? null}
                 teamColor={game.home_team?.home_color ?? null}
                 rows={homeStats}
@@ -55,7 +56,7 @@ const MatchPage: React.FC = () => {
             )}
             {awayStats.length > 0 && (
               <BoxScoreTable
-                teamName={game.away_team?.name ?? ''}
+                teamName={game.away_team ? teamName(game.away_team) : ''}
                 teamLogo={game.away_team?.logo ?? null}
                 teamColor={game.away_team?.away_color ?? null}
                 rows={awayStats}
@@ -76,10 +77,10 @@ const MatchPage: React.FC = () => {
                 gameId={game.id}
                 seasonId={game.season_id ?? null}
                 homeTeamId={game.home_team_id}
-                homeTeamName={game.home_team.name}
+                homeTeamName={teamName(game.home_team)}
                 homeTeamLogo={game.home_team.logo}
                 awayTeamId={game.away_team_id}
-                awayTeamName={game.away_team.name}
+                awayTeamName={teamName(game.away_team)}
                 awayTeamLogo={game.away_team.logo}
               />
             )}

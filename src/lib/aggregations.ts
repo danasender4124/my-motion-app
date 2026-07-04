@@ -62,9 +62,12 @@ export interface LeagueLeaderRow {
   player_id: string;
   first_name: string;
   last_name: string;
+  first_name_en?: string | null;
+  last_name_en?: string | null;
   photo: string | null;
   team_id: string | null;
   team_name: string | null;
+  team_name_en?: string | null;
   team_logo: string | null;
   value: number;
   games: number;
@@ -91,8 +94,8 @@ export interface LeaderInputRow {
   fg3_attempted: number | null;
   ft_made: number | null;
   ft_attempted: number | null;
-  player: { id: string; first_name: string; last_name: string; photo: string | null } | null;
-  team: { id: string; name: string; logo: string | null } | null;
+  player: { id: string; first_name: string; last_name: string; first_name_en?: string | null; last_name_en?: string | null; photo: string | null } | null;
+  team: { id: string; name: string; name_en?: string | null; logo: string | null } | null;
 }
 
 const round1 = (n: number) => Math.round(n * 10) / 10;
@@ -102,9 +105,12 @@ interface PlayerAgg {
   player_id: string;
   first_name: string;
   last_name: string;
+  first_name_en: string | null;
+  last_name_en: string | null;
   photo: string | null;
   team_id: string | null;
   team_name: string | null;
+  team_name_en: string | null;
   team_logo: string | null;
   games: number;
   sums: {
@@ -142,9 +148,12 @@ export const computeLeagueLeaders = (rows: LeaderInputRow[]): LeagueLeaders => {
       player_id: r.player_id,
       first_name: r.player.first_name,
       last_name: r.player.last_name,
+      first_name_en: r.player.first_name_en ?? null,
+      last_name_en: r.player.last_name_en ?? null,
       photo: r.player.photo,
       team_id: r.team?.id ?? r.team_id,
       team_name: r.team?.name ?? null,
+      team_name_en: r.team?.name_en ?? null,
       team_logo: r.team?.logo ?? null,
       games: 0,
       sums: { minutes: 0, points: 0, rebounds: 0, assists: 0, steals: 0, blocks: 0, turnovers: 0, efficiency: 0, fg2m: 0, fg2a: 0, fg3m: 0, fg3a: 0, ftm: 0, fta: 0 },
@@ -167,6 +176,7 @@ export const computeLeagueLeaders = (rows: LeaderInputRow[]): LeagueLeaders => {
     if (r.team) {
       cur.team_id = r.team.id;
       cur.team_name = r.team.name;
+      cur.team_name_en = r.team.name_en ?? null;
       cur.team_logo = r.team.logo;
     }
     byPlayer.set(r.player_id, cur);
@@ -216,9 +226,12 @@ export const computeLeagueLeaders = (rows: LeaderInputRow[]): LeagueLeaders => {
       player_id: a.player_id,
       first_name: a.first_name,
       last_name: a.last_name,
+      first_name_en: a.first_name_en,
+      last_name_en: a.last_name_en,
       photo: a.photo,
       team_id: a.team_id,
       team_name: a.team_name,
+      team_name_en: a.team_name_en,
       team_logo: a.team_logo,
       value: PCT_KEYS.includes(key) ? round1(v) : round1(v),
       games: a.games,

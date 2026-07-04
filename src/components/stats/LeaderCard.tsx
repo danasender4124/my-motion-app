@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { LeagueLeaderRow } from '../../lib/queries';
+import { playerFullName } from '../../lib/displayName';
 import LeaderModal from './LeaderModal';
 
 interface Props {
@@ -49,7 +50,7 @@ const LeaderCard: React.FC<Props> = ({ label, rows, formatValue = defaultFormat 
                   className="flex-1 truncate"
                   style={{ color: i === 0 ? '#FF4D00' : 'rgba(242,237,230,0.85)', fontWeight: i === 0 ? 700 : 500 }}
                 >
-                  {r.first_name} {r.last_name}
+                  {playerFullName(r)}
                 </Link>
                 <span
                   className="tabular-nums shrink-0"

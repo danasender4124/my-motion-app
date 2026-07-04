@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { PlayerGameStat } from '../../lib/queries';
+import { playerFullName } from '../../lib/displayName';
 
 const fg = (m: number | null, a: number | null) => (m == null || a == null ? '—' : `${m}-${a}`);
 const safe = (n: number | null) => (n == null ? '—' : n);
@@ -94,7 +95,7 @@ const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows, j
                 className="hover:underline"
                 style={{ color: '#F2EDE6' }}
               >
-                {s.player.first_name} {s.player.last_name}
+                {playerFullName(s.player)}
               </Link>
             ) : '—'}
           </span>

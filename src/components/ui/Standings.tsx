@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useTeams } from '../../lib/queries';
+import { teamName } from '../../lib/displayName';
 import { STANDINGS_OVERRIDE } from '../../lib/standings-override';
 import { SkeletonTable } from './Skeleton';
 
@@ -115,7 +116,7 @@ const Standings: React.FC = () => {
                           className="text-sm font-semibold truncate"
                           style={{ color: isTop ? '#F2EDE6' : 'rgba(242,237,230,0.85)' }}
                         >
-                          {r.team.name}
+                          {teamName(r.team)}
                         </span>
                       </div>
                       <span className="text-center text-sm tabular-nums" style={{ color: 'rgba(242,237,230,0.55)' }}>

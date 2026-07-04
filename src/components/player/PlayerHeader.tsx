@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { PlayerProfile } from '../../lib/queries';
+import { teamName, playerFullName } from '../../lib/displayName';
 
 const POSITION_LABELS: Record<NonNullable<PlayerProfile['position']>, string> = {
   point_guard: 'PG',
@@ -37,7 +38,7 @@ const PlayerHeader: React.FC<Props> = ({ player }) => {
   const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const age = calcAge(player.birth_date);
   const teamPart = player.current_team
-    ? `${player.current_jersey != null ? '#' + player.current_jersey + ' · ' : ''}${player.current_team.name}`
+    ? `${player.current_jersey != null ? '#' + player.current_jersey + ' · ' : ''}${teamName(player.current_team)}`
     : null;
   const positionLabel = player.position ? POSITION_LABELS[player.position] : null;
   const metaTop = [teamPart, positionLabel].filter(Boolean).join(' · ');
@@ -70,7 +71,7 @@ const PlayerHeader: React.FC<Props> = ({ player }) => {
         </div>
         <div className="flex-1 min-w-0">
           <h1 className="text-3xl font-black leading-tight" style={{ color: '#F2EDE6' }}>
-            {player.first_name} {player.last_name}
+            {playerFullName(player)}
           </h1>
           {metaTop && <div className="mt-2 text-sm" style={{ color: 'rgba(242,237,230,0.7)' }}>{metaTop}</div>}
           {metaBottom && <div className="text-sm" style={{ color: 'rgba(242,237,230,0.5)' }}>{metaBottom}</div>}

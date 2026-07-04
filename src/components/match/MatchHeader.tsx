@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { GameWithTeams } from '../../lib/queries';
+import { teamName } from '../../lib/displayName';
 
 const formatDate = (iso: string | null): string => {
   if (!iso) return '';
@@ -24,7 +25,7 @@ const TeamBlock: React.FC<{ team: GameWithTeams['home_team']; align: 'right' | '
         className="text-base font-bold text-center truncate w-full"
         style={{ color: '#F2EDE6', textAlign: align }}
       >
-        {team?.name ?? '—'}
+        {teamName(team)}
       </div>
     </>
   );

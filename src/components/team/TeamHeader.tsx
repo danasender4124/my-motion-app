@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { TeamProfile } from '../../lib/queries';
+import { teamName } from '../../lib/displayName';
 import type { TeamSeasonStats } from '../../lib/aggregations';
 
 const initials = (name: string): string => {
@@ -83,7 +84,7 @@ const TeamHeader: React.FC<Props> = ({ team, stats }) => {
           </div>
           <div className="flex flex-col gap-1.5 min-w-0">
             <h1 className="text-2xl md:text-4xl font-black leading-tight" style={{ color: '#F2EDE6' }}>
-              {team.name}
+              {teamName(team)}
             </h1>
             {(team.city || team.hall_address) && (
               <div className="text-sm flex items-center gap-1.5" style={{ color: 'rgba(242,237,230,0.55)' }}>
