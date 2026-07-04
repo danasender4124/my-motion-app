@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTeam, useTeamRoster, useTeamGames, useTeamSeasonStats, useTeamLeaders } from '../lib/queries';
 import TeamHeader from '../components/team/TeamHeader';
-import TeamQuickStats from '../components/team/TeamQuickStats';
 import TeamRoster from '../components/team/TeamRoster';
 import TeamLeaders from '../components/team/TeamLeaders';
 import TeamCoachStaff from '../components/team/TeamCoachStaff';
@@ -37,9 +36,8 @@ const TeamPage: React.FC = () => {
   const team = teamQ.data;
 
   return (
-    <main className="max-w-5xl mx-auto px-4 md:px-8 py-8 space-y-8" style={{ background: '#07080C' }}>
-      <TeamHeader team={team} />
-      {statsQ.data && <TeamQuickStats stats={statsQ.data} />}
+    <main className="max-w-5xl mx-auto px-4 md:px-8 py-8 space-y-10" style={{ background: '#07080C' }}>
+      <TeamHeader team={team} stats={statsQ.data ?? null} />
       {leadersQ.data && <TeamLeaders leaders={leadersQ.data} />}
       <TeamCoachStaff teamId={team.id} />
       <TeamManagement teamId={team.id} />
