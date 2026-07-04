@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import './index.css'
 import Header          from '@/components/ui/Header'
 import { HeroSection } from '@/components/ui/hero-odyssey'
@@ -27,6 +28,7 @@ const queryClient = new QueryClient({
 
 const AnimatedRoutes = () => {
   const location = useLocation()
+  const { t } = useTranslation()
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -38,10 +40,10 @@ const AnimatedRoutes = () => {
       >
         <Routes location={location}>
           <Route path="/" element={<HeroSection />} />
-          <Route path="/results"   element={<><PageBanner title="משחקים ותוצאות" /><Results /></>} />
-          <Route path="/standings" element={<><PageBanner title="טבלת הליגה" /><Standings /></>} />
-          <Route path="/stats"     element={<><PageBanner title="סטטיסטיקה" /><Stats /></>} />
-          <Route path="/news"      element={<><PageBanner title="כל החדשות" /><News /></>} />
+          <Route path="/results"   element={<><PageBanner title={t('results.title')} /><Results /></>} />
+          <Route path="/standings" element={<><PageBanner title={t('standings.title')} /><Standings /></>} />
+          <Route path="/stats"     element={<><PageBanner title={t('stats.title')} /><Stats /></>} />
+          <Route path="/news"      element={<><PageBanner title={t('news.title')} /><News /></>} />
           <Route path="/news/:id" element={<PostDetailPage />} />
           <Route path="/match/:id" element={<MatchPage />} />
           <Route path="/player/:id" element={<PlayerPage />} />

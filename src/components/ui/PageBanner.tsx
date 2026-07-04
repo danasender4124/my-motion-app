@@ -1,6 +1,7 @@
 // src/components/ui/PageBanner.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 
@@ -8,7 +9,10 @@ interface PageBannerProps {
   title: string;
 }
 
-const PageBanner: React.FC<PageBannerProps> = ({ title }) => (
+const PageBanner: React.FC<PageBannerProps> = ({ title }) => {
+  const { i18n } = useTranslation();
+  const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
+  return (
   <div
     className="relative w-full flex items-center justify-center overflow-hidden border-b-4"
     style={{
@@ -36,7 +40,7 @@ const PageBanner: React.FC<PageBannerProps> = ({ title }) => (
         fontSize: 'clamp(1.1rem, 2.2vw, 1.6rem)',
         letterSpacing: '-0.02em',
         lineHeight: 1,
-        direction: 'rtl',
+        direction: dir,
       }}
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
@@ -45,6 +49,7 @@ const PageBanner: React.FC<PageBannerProps> = ({ title }) => (
       {title}
     </motion.h1>
   </div>
-);
+  );
+};
 
 export default PageBanner;
