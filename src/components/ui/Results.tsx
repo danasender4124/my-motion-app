@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecentResults, useUpcomingGames, type GameWithTeams } from '../../lib/queries';
 import SectionTabs from './SectionTabs';
+import { SkeletonTable } from './Skeleton';
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 20 },
@@ -123,9 +124,7 @@ const Results: React.FC = () => {
         /* ── Results: grouped table ───────────────────────────────────────── */
         <>
           {recentQ.isLoading && (
-            <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>
-              {t('results.loading')}
-            </div>
+            <SkeletonTable rows={8} />
           )}
           {recentQ.error && (
             <div className="text-center py-12" style={{ color: '#f87171' }}>
@@ -285,9 +284,7 @@ const Results: React.FC = () => {
         /* ── Schedule: full table ─────────────────────────────────────────── */
         <>
           {upcomingQ.isLoading && (
-            <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>
-              {t('results.loading')}
-            </div>
+            <SkeletonTable rows={8} />
           )}
           {upcomingQ.error && (
             <div className="text-center py-12" style={{ color: '#f87171' }}>

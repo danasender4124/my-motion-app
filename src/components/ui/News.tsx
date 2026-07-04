@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApprovedPosts } from '../../lib/queries';
 import PostCard from '../news/PostCard';
+import { SkeletonCardGrid } from './Skeleton';
 
 const News: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -23,9 +24,7 @@ const News: React.FC = () => {
       }}
       dir={dir}
     >
-      {postsQ.isLoading && (
-        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>{t('news.loading')}</div>
-      )}
+      {postsQ.isLoading && <SkeletonCardGrid cards={6} cardHeight={280} />}
       {postsQ.error && (
         <div className="text-center py-12" style={{ color: '#f87171' }}>{t('news.error')}</div>
       )}

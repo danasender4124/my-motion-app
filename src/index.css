@@ -106,3 +106,9 @@ html.a11y-big-cursor * {
   outline-offset: 2px !important;
   border-radius: 4px;
 }
+
+/* Skeleton loading shimmer */
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

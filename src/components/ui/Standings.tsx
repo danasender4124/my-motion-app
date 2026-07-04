@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useTeams } from '../../lib/queries';
 import { STANDINGS_OVERRIDE } from '../../lib/standings-override';
+import { SkeletonTable } from './Skeleton';
 
 const COLS = '2.5rem 1fr 3.5rem 3.5rem 3.5rem 4rem 4rem 4.5rem 3.5rem 4rem';
 
@@ -35,7 +36,7 @@ const Standings: React.FC = () => {
       </div>
 
       {teamsQ.isLoading ? (
-        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>{t('common.loading')}</div>
+        <SkeletonTable rows={10} />
       ) : (
         <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
           <div className="min-w-[680px] overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.10)' }}>

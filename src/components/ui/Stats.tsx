@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import LeadersGrid from '../stats/LeadersGrid';
+import { SkeletonCardGrid } from './Skeleton';
 import { useLeagueLeaders, useSeasonsWithGames } from '../../lib/queries';
 
 const Stats: React.FC = () => {
@@ -75,9 +76,7 @@ const Stats: React.FC = () => {
         </div>
       )}
 
-      {isLoading && (
-        <div className="text-center py-12" style={{ color: 'rgba(242,237,230,0.4)' }}>{t('stats.loading')}</div>
-      )}
+      {isLoading && <SkeletonCardGrid cards={10} cardHeight={220} />}
       {error && (
         <div className="text-center py-12" style={{ color: '#f87171' }}>{t('stats.error')}</div>
       )}
