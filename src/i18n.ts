@@ -98,7 +98,7 @@ const resources = {
         role_community: 'רכז קהילה',
       },
       match: {
-        box_score: 'בוקס סקור', lineups: 'הרכבים',
+        box_score: 'בוקס סקור', lineups: 'הרכבים', referees: 'שופטים',
         media: 'מדיה', videos: 'סרטונים',
         quarter: 'רבע', total: 'סה״כ',
         starting_five: 'חמישייה פותחת', bench: 'ספסל', coach: 'מאמן/ת',
@@ -258,7 +258,7 @@ const resources = {
         role_community: 'Community Coordinator',
       },
       match: {
-        box_score: 'Box Score', lineups: 'Lineups',
+        box_score: 'Box Score', lineups: 'Lineups', referees: 'Referees',
         media: 'Media', videos: 'Videos',
         quarter: 'Q', total: 'Total',
         starting_five: 'Starting Five', bench: 'Bench', coach: 'Coach',

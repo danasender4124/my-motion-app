@@ -31,6 +31,7 @@ export interface GameWithTeams {
   quarter_scores: { q: number; home: number | null; away: number | null }[] | null;
   watch_url: string | null;
   stats_url: string | null;
+  referees: string[] | null;
   home_team: TeamRef | null;
   away_team: TeamRef | null;
 }

@@ -39,11 +39,22 @@ const MatchPage: React.FC = () => {
   const stats = statsQ.data ?? [];
   const homeStats = stats.filter((s) => s.team_id === game.home_team_id);
   const awayStats = stats.filter((s) => s.team_id === game.away_team_id);
+  const referees = (game.referees ?? []).filter((r) => r && r.trim().length > 0);
 
   return (
     <div dir={dir} className="min-h-screen py-12 px-4 md:px-8" style={{ background: '#07080C' }}>
       <div className="max-w-6xl mx-auto space-y-6">
         <MatchHeader game={game} />
+
+        {referees.length > 0 && (
+          <div
+            className="rounded-2xl p-5 text-center"
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            <div className="text-xs mb-2" style={{ color: 'rgba(242,237,230,0.5)' }}>{t('match.referees')}</div>
+            <div className="font-medium" style={{ color: '#F2EDE6' }}>{referees.join('  ·  ')}</div>
+          </div>
+        )}
 
         {game.status === 'played' ? (
           <>
