@@ -14,6 +14,8 @@ const useNavLinks = () => {
     { label: t('nav.stats'),     to: '/stats' },
     { label: t('nav.news'),      to: '/news' },
     { label: t('nav.vod'),       to: '/vod' },
+    // External: the live/VOD viewing app (broadcasts of league games).
+    { label: 'WBPL TV',          to: 'https://tv.wbpl.co.il', external: true as const },
   ];
 };
 
@@ -143,6 +145,19 @@ const Header: React.FC = () => {
         aria-label="ניווט ראשי"
       >
         {navLinks.map(link => (
+          'external' in link && link.external ? (
+            <a
+              key={link.label}
+              href={link.to}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setMenuOpen(false)}
+              className="flex-1 lg:flex-1 flex items-center justify-center py-3 lg:py-2 text-sm font-bold transition-colors duration-150 relative whitespace-nowrap px-3"
+              style={{ color: '#fff', borderLeft: '1px solid rgba(255,255,255,0.15)', minWidth: 'fit-content' }}
+            >
+              {link.label}
+            </a>
+          ) : (
           <NavLink
             key={link.label}
             to={link.to}
@@ -165,6 +180,7 @@ const Header: React.FC = () => {
               </>
             )}
           </NavLink>
+          )
         ))}
       </nav>
 
@@ -181,6 +197,19 @@ const Header: React.FC = () => {
           >
             <nav className="flex flex-col gap-1 p-4" dir="rtl">
               {navLinks.map(link => (
+                'external' in link && link.external ? (
+                  <a
+                    key={link.label}
+                    href={link.to}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setMenuOpen(false)}
+                    className="px-4 py-3 rounded-xl text-sm font-medium"
+                    style={{ color: '#F2EDE6' }}
+                  >
+                    {link.label}
+                  </a>
+                ) : (
                 <NavLink
                   key={link.label}
                   to={link.to}
@@ -194,6 +223,7 @@ const Header: React.FC = () => {
                 >
                   {link.label}
                 </NavLink>
+                )
               ))}
             </nav>
           </motion.div>
