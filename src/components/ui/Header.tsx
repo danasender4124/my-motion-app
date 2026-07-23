@@ -146,14 +146,24 @@ const Header: React.FC = () => {
       >
         {navLinks.map(link => (
           'external' in link && link.external ? (
+            // WBPL TV — raised 3D button, larger and bolder than the other tabs
             <a
               key={link.label}
               href={link.to}
               target="_blank"
               rel="noreferrer"
               onClick={() => setMenuOpen(false)}
-              className="flex-1 lg:flex-1 flex items-center justify-center py-3 lg:py-2 text-sm font-bold transition-colors duration-150 relative whitespace-nowrap px-3"
-              style={{ color: '#fff', borderLeft: '1px solid rgba(255,255,255,0.15)', minWidth: 'fit-content' }}
+              className="flex items-center justify-center self-center text-base lg:text-lg font-black whitespace-nowrap px-5 py-1.5 mx-2 my-1 rounded-xl transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0"
+              style={{
+                color: '#fff',
+                background: 'linear-gradient(180deg, #2E3A5C 0%, #141B30 55%, #0A0E1A 100%)',
+                border: '1px solid rgba(255,255,255,0.25)',
+                boxShadow:
+                  'inset 0 1px 0 rgba(255,255,255,0.3), 0 3px 0 #050810, 0 6px 14px rgba(0,0,0,0.45)',
+                textShadow: '0 1px 2px rgba(0,0,0,0.7)',
+                letterSpacing: '0.04em',
+                minWidth: 'fit-content',
+              }}
             >
               {link.label}
             </a>
@@ -198,14 +208,23 @@ const Header: React.FC = () => {
             <nav className="flex flex-col gap-1 p-4" dir="rtl">
               {navLinks.map(link => (
                 'external' in link && link.external ? (
+                  // WBPL TV — stands out in the mobile menu too
                   <a
                     key={link.label}
                     href={link.to}
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => setMenuOpen(false)}
-                    className="px-4 py-3 rounded-xl text-sm font-medium"
-                    style={{ color: '#F2EDE6' }}
+                    className="px-4 py-3 rounded-xl text-base font-black text-center"
+                    style={{
+                      color: '#fff',
+                      background: 'linear-gradient(180deg, #FF6A26 0%, #FF4D00 55%, #D63E00 100%)',
+                      border: '1px solid rgba(255,255,255,0.25)',
+                      boxShadow:
+                        'inset 0 1px 0 rgba(255,255,255,0.35), 0 3px 0 #A33000, 0 6px 14px rgba(0,0,0,0.4)',
+                      textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                      letterSpacing: '0.04em',
+                    }}
                   >
                     {link.label}
                   </a>
