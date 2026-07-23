@@ -97,10 +97,29 @@ footer{padding:11px 26px 18px;color:var(--mut);font-size:10px;display:flex;
   @page{size:A4;margin:0}
   :root{--ground:#fff;--paper:#fff;--ink:#141A2B;--body:#454F66;--mut:#6B7489;--line:#E3E1DC}
   html,body{background:#fff}
-  body{font-size:10.5px}
-  .sheet{box-shadow:none;max-width:none}
+  body{font-size:12.2px;line-height:1.52}
+  .sheet{box-shadow:none;max-width:none;width:100%;min-height:297mm;
+         display:flex;flex-direction:column}
+  .pad{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;
+       padding:20px 26px 8px}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .cta,.tabs,.cols{break-inside:avoid}
+  /* the narrow-screen rules must not leak into print — restore the real layout */
+  .tabs{grid-template-columns:repeat(5,1fr)}
+  .cols{grid-template-columns:1.3fr 1fr}
+  .band{flex-direction:row;text-align:right}
+  .cta{flex-direction:row;text-align:right}
+  /* let the page breathe into the full sheet */
+  .band{padding:24px 26px 22px}
+  .band h1{font-size:32px}
+  .band img{height:60px}
+  .thesis{font-size:16px}
+  h2.sec{margin:0 0 10px}
+  .tab h3{font-size:14.5px}
+  .tab p{font-size:11.5px}
+  .pts{gap:11px}
+  .cta{margin-top:0;padding:17px 20px}
+  .cta img{width:84px;height:84px}
+  .sheet,.cta,.tabs,.cols,.band,footer{break-inside:avoid}
 }
 </style>
 </head>
