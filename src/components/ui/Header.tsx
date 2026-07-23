@@ -76,6 +76,85 @@ const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full" dir={dir}>
+      {/* WBPL TV broadcast button — rotating gradient ring + live pulse */}
+      <style>{`
+        .wbpltv-btn {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          gap: 9px;
+          padding: 8px 18px;
+          border-radius: 999px;
+          overflow: hidden;
+          isolation: isolate;
+          white-space: nowrap;
+          min-width: fit-content;
+          transition: transform .15s ease, filter .15s ease;
+        }
+        .wbpltv-btn::before {
+          content: '';
+          position: absolute;
+          inset: -120%;
+          z-index: -2;
+          background: conic-gradient(from 0deg,
+            #FFB347, #FF4D00, #7A1E00, #2E9AC7, #FFB347);
+          animation: wbpltv-spin 3.5s linear infinite;
+        }
+        .wbpltv-btn::after {
+          content: '';
+          position: absolute;
+          inset: 2.5px;
+          z-index: -1;
+          border-radius: 999px;
+          background:
+            radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.14), transparent 55%),
+            linear-gradient(180deg, #1B2440 0%, #0A0E1A 100%);
+        }
+        .wbpltv-btn:hover { transform: translateY(-1px) scale(1.04); filter: brightness(1.12); }
+        .wbpltv-btn:active { transform: translateY(0) scale(0.99); }
+        .wbpltv-label {
+          color: #fff;
+          font-weight: 900;
+          font-size: 1.05rem;
+          letter-spacing: .05em;
+          text-shadow: 0 1px 3px rgba(0,0,0,.7);
+        }
+        .wbpltv-play {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          color: #fff;
+          background: linear-gradient(180deg, #FF6A26, #D63E00);
+          box-shadow: 0 0 10px rgba(255,77,0,.8), inset 0 1px 0 rgba(255,255,255,.35);
+          flex-shrink: 0;
+        }
+        .wbpltv-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #FF3B30;
+          flex-shrink: 0;
+          animation: wbpltv-pulse 1.6s ease-out infinite;
+        }
+        .wbpltv-btn--mobile {
+          justify-content: center;
+          padding: 12px 18px;
+          margin-top: 4px;
+        }
+        @keyframes wbpltv-spin { to { transform: rotate(360deg); } }
+        @keyframes wbpltv-pulse {
+          0%   { box-shadow: 0 0 0 0 rgba(255,59,48,.65); }
+          70%  { box-shadow: 0 0 0 7px rgba(255,59,48,0); }
+          100% { box-shadow: 0 0 0 0 rgba(255,59,48,0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .wbpltv-btn::before { animation: none; }
+          .wbpltv-dot { animation: none; }
+        }
+      `}</style>
 
       {/* Row 1: Logo */}
       <div
@@ -146,26 +225,23 @@ const Header: React.FC = () => {
       >
         {navLinks.map(link => (
           'external' in link && link.external ? (
-            // WBPL TV — raised 3D button, larger and bolder than the other tabs
+            // WBPL TV — broadcast-style button: rotating gradient ring,
+            // pulsing live dot and a play badge on dark glass
             <a
               key={link.label}
               href={link.to}
               target="_blank"
               rel="noreferrer"
               onClick={() => setMenuOpen(false)}
-              className="flex items-center justify-center self-center text-base lg:text-lg font-black whitespace-nowrap px-5 py-1.5 mx-2 my-1 rounded-xl transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0"
-              style={{
-                color: '#fff',
-                background: 'linear-gradient(180deg, #2E3A5C 0%, #141B30 55%, #0A0E1A 100%)',
-                border: '1px solid rgba(255,255,255,0.25)',
-                boxShadow:
-                  'inset 0 1px 0 rgba(255,255,255,0.3), 0 3px 0 #050810, 0 6px 14px rgba(0,0,0,0.45)',
-                textShadow: '0 1px 2px rgba(0,0,0,0.7)',
-                letterSpacing: '0.04em',
-                minWidth: 'fit-content',
-              }}
+              className="wbpltv-btn self-center mx-2 my-1"
             >
-              {link.label}
+              <span className="wbpltv-play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="100%" height="100%">
+                  <path d="M9 6.5v11l9-5.5z" fill="currentColor" />
+                </svg>
+              </span>
+              <span className="wbpltv-label">{link.label}</span>
+              <span className="wbpltv-dot" aria-hidden="true" />
             </a>
           ) : (
           <NavLink
@@ -208,25 +284,22 @@ const Header: React.FC = () => {
             <nav className="flex flex-col gap-1 p-4" dir="rtl">
               {navLinks.map(link => (
                 'external' in link && link.external ? (
-                  // WBPL TV — stands out in the mobile menu too
+                  // WBPL TV — same broadcast button, full-width in the mobile menu
                   <a
                     key={link.label}
                     href={link.to}
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => setMenuOpen(false)}
-                    className="px-4 py-3 rounded-xl text-base font-black text-center"
-                    style={{
-                      color: '#fff',
-                      background: 'linear-gradient(180deg, #FF6A26 0%, #FF4D00 55%, #D63E00 100%)',
-                      border: '1px solid rgba(255,255,255,0.25)',
-                      boxShadow:
-                        'inset 0 1px 0 rgba(255,255,255,0.35), 0 3px 0 #A33000, 0 6px 14px rgba(0,0,0,0.4)',
-                      textShadow: '0 1px 2px rgba(0,0,0,0.5)',
-                      letterSpacing: '0.04em',
-                    }}
+                    className="wbpltv-btn wbpltv-btn--mobile"
                   >
-                    {link.label}
+                    <span className="wbpltv-play" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="100%" height="100%">
+                        <path d="M9 6.5v11l9-5.5z" fill="currentColor" />
+                      </svg>
+                    </span>
+                    <span className="wbpltv-label">{link.label}</span>
+                    <span className="wbpltv-dot" aria-hidden="true" />
                   </a>
                 ) : (
                 <NavLink
