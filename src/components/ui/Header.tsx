@@ -47,16 +47,28 @@ const TeamLogos: React.FC = () => {
           className="flex-shrink-0"
         >
           {team.logo ? (
-            <img
-              src={team.logo}
-              alt={team.name}
-              style={{ height: 70, width: 70, objectFit: 'contain' }}
-            />
+            // White circle behind every crest so dark-on-dark logos (e.g.
+            // Hapoel Jerusalem) stay legible on the dark header, and the strip
+            // reads as one uniform set.
+            <div
+              style={{
+                height: 70, width: 70, borderRadius: '50%', background: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: 6, boxSizing: 'border-box', overflow: 'hidden',
+              }}
+            >
+              <img
+                src={team.logo}
+                alt={team.name}
+                style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
+              />
+            </div>
           ) : (
             <div
               style={{
-                height: 70, width: 70, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: 'rgba(255,255,255,0.06)', color: '#F2EDE6', fontWeight: 900, fontSize: 12, borderRadius: 8,
+                height: 70, width: 70, borderRadius: '50%', display: 'flex',
+                alignItems: 'center', justifyContent: 'center',
+                background: 'rgba(255,255,255,0.06)', color: '#F2EDE6', fontWeight: 900, fontSize: 12,
               }}
             >
               {team.name.split(' ')[0]?.slice(0, 3) ?? '—'}
