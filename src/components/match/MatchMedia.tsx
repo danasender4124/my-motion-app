@@ -76,7 +76,7 @@ const MatchMedia: React.FC<Props> = ({ gameId }) => {
                 className="rounded-lg overflow-hidden"
               >
                 <img
-                  src={p.storage_path ? mediaUrl(p.storage_path) : ''}
+                  src={p.storage_path ? mediaUrl(p.storage_path) : undefined}
                   alt=""
                   loading="lazy"
                   className="w-full h-32 object-cover hover:opacity-90 transition-opacity"

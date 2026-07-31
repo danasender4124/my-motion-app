@@ -62,11 +62,11 @@ type GameRow = {
   statsUrl: string;
   watchUrl: string;
   home: string;
-  homeLogo: string;
+  homeLogo?: string;
   homeId?: string;
   homeScore: number | null;
   away: string;
-  awayLogo: string;
+  awayLogo?: string;
   awayId?: string;
   awayScore: number | null;
 };
@@ -86,11 +86,11 @@ const adapt = (g: GameWithTeams): GameRow => ({
   statsUrl: '/match/' + g.id,
   watchUrl: g.watch_url || '',
   home: g.home_team ? teamName(g.home_team) : '',
-  homeLogo: g.home_team?.logo || '',
+  homeLogo: g.home_team?.logo || undefined,
   homeId: g.home_team?.id,
   homeScore: g.home_score,
   away: g.away_team ? teamName(g.away_team) : '',
-  awayLogo: g.away_team?.logo || '',
+  awayLogo: g.away_team?.logo || undefined,
   awayId: g.away_team?.id,
   awayScore: g.away_score,
 });
