@@ -329,34 +329,16 @@ export const usePlayerStats = (id: string | undefined) =>
 
 export const useTeams = () =>
   useQuery({
-    queryKey: ['teams', 'active-season'],
+    queryKey: ['teams', 'active'],
     queryFn: async (): Promise<TeamProfile[]> => {
-      // Only show teams that have a roster in the currently active season —
-      // teams that participated in past seasons but aren't playing now should
-      // not appear on the public site.
-      const { data: active } = await supabase
-        .from('seasons')
-        .select('id')
-        .eq('status', 'active')
-        .maybeSingle();
-      const activeId = (active as { id: string } | null)?.id ?? null;
-
-      let allowedIds: string[] | null = null;
-      if (activeId) {
-        const { data: pts } = await supabase
-          .from('player_team_seasons')
-          .select('team_id')
-          .eq('season_id', activeId);
-        allowedIds = Array.from(new Set((pts ?? []).map((r: { team_id: string }) => r.team_id)));
-      }
-
-      let q = supabase
+      // Show the league's current teams — those flagged active in the teams
+      // table. (Previously filtered by having a roster in the active season,
+      // which hid every team pre-season until it built its new-season squad.)
+      const { data, error } = await supabase
         .from('teams')
         .select('id, name, name_en, logo, home_color, away_color, city, hall_address, contact, social_links')
+        .eq('status', 'active')
         .order('name', { ascending: true });
-      if (allowedIds && allowedIds.length > 0) q = q.in('id', allowedIds);
-
-      const { data, error } = await q;
       if (error) throw error;
       return (data ?? []) as unknown as TeamProfile[];
     },
