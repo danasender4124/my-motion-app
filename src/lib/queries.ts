@@ -174,11 +174,13 @@ const fetchActiveSeasonId = async (): Promise<string | null> => {
 };
 
 // ── Hooks ─────────────────────────────────────────────────────────────────────
-export const useRecentResults = () =>
+// Played games for a given season (defaults handled by the caller). Pass the
+// season chosen in the on-page season picker; null/undefined → no fetch.
+export const useRecentResults = (seasonId: string | null | undefined) =>
   useQuery({
-    queryKey: ['games', 'recent'],
+    queryKey: ['games', 'results', seasonId ?? null],
+    enabled: !!seasonId,
     queryFn: async (): Promise<GameWithTeams[]> => {
-      const seasonId = await fetchActiveSeasonId();
       if (!seasonId) return [];
       const { data, error } = await supabase
         .from('games')
@@ -192,11 +194,11 @@ export const useRecentResults = () =>
     staleTime: 1000 * 60 * 5,
   });
 
-export const useUpcomingGames = () =>
+export const useUpcomingGames = (seasonId: string | null | undefined) =>
   useQuery({
-    queryKey: ['games', 'upcoming'],
+    queryKey: ['games', 'upcoming', seasonId ?? null],
+    enabled: !!seasonId,
     queryFn: async (): Promise<GameWithTeams[]> => {
-      const seasonId = await fetchActiveSeasonId();
       if (!seasonId) return [];
       const { data, error } = await supabase
         .from('games')
@@ -360,14 +362,12 @@ export const useTeam = (id: string | undefined) =>
     },
   });
 
-export const useTeamRoster = (teamId: string | undefined) =>
+export const useTeamRoster = (teamId: string | undefined, seasonOverride?: string | null) =>
   useQuery({
-    queryKey: ['team_roster', teamId],
+    queryKey: ['team_roster', teamId, seasonOverride ?? 'active'],
     enabled: !!teamId,
     queryFn: async (): Promise<RosterPlayer[]> => {
-      const { data: activeSeason } = await supabase
-        .from('seasons').select('id').eq('status', 'active').maybeSingle();
-      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      const seasonId = seasonOverride ?? (await fetchActiveSeasonId());
       if (!seasonId) return [];
 
       const { data, error } = await supabase
@@ -398,14 +398,12 @@ export const useTeamRoster = (teamId: string | undefined) =>
     },
   });
 
-export const useTeamGames = (teamId: string | undefined) =>
+export const useTeamGames = (teamId: string | undefined, seasonOverride?: string | null) =>
   useQuery({
-    queryKey: ['team_games', teamId],
+    queryKey: ['team_games', teamId, seasonOverride ?? 'active'],
     enabled: !!teamId,
     queryFn: async (): Promise<GameWithTeams[]> => {
-      const { data: activeSeason } = await supabase
-        .from('seasons').select('id').eq('status', 'active').maybeSingle();
-      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      const seasonId = seasonOverride ?? (await fetchActiveSeasonId());
       if (!seasonId) return [];
 
       const { data, error } = await supabase
@@ -463,14 +461,12 @@ export const useTeamSeasonStats = (teamId: string | undefined) =>
     },
   });
 
-export const useTeamLeaders = (teamId: string | undefined) =>
+export const useTeamLeaders = (teamId: string | undefined, seasonOverride?: string | null) =>
   useQuery({
-    queryKey: ['team_leaders', teamId],
+    queryKey: ['team_leaders', teamId, seasonOverride ?? 'active'],
     enabled: !!teamId,
     queryFn: async (): Promise<TeamLeaders> => {
-      const { data: activeSeason } = await supabase
-        .from('seasons').select('id').eq('status', 'active').maybeSingle();
-      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      const seasonId = seasonOverride ?? (await fetchActiveSeasonId());
       if (!seasonId) return { ppg: null, rpg: null, apg: null };
 
       const { data: gameIds } = await supabase
@@ -562,6 +558,96 @@ export const useSeasonsWithGames = () =>
     },
     staleTime: 1000 * 60 * 30,
   });
+
+export interface PublicSeasonOptionExt extends PublicSeasonOption {
+  /** True when the season has at least one *played* game (real data). */
+  has_played: boolean;
+}
+
+/**
+ * Every season that has *any* game (played or scheduled), newest first, each
+ * flagged with whether it has played games. Used by the games-page season
+ * picker so the upcoming-season fixtures stay reachable even before any game
+ * of that season has been played.
+ */
+export const useSeasonsWithAnyGames = () =>
+  useQuery({
+    queryKey: ['seasons_with_any_games'],
+    queryFn: async (): Promise<PublicSeasonOptionExt[]> => {
+      const { data: games } = await supabase
+        .from('games')
+        .select('season_id, status');
+      const rowsG = (games ?? []) as Array<{ season_id: string; status: string }>;
+      const played = new Set<string>();
+      const any = new Set<string>();
+      for (const g of rowsG) {
+        any.add(g.season_id);
+        if (g.status === 'played') played.add(g.season_id);
+      }
+      const ids = Array.from(any);
+      if (ids.length === 0) return [];
+      const { data, error } = await supabase
+        .from('seasons')
+        .select('id, name, status, start_date')
+        .in('id', ids);
+      if (error) throw error;
+      const rows = (data ?? []) as unknown as PublicSeasonOption[];
+      return rows
+        .map((r) => ({ ...r, has_played: played.has(r.id) }))
+        .sort((a, b) => (b.start_date ?? '').localeCompare(a.start_date ?? ''));
+    },
+    staleTime: 1000 * 60 * 30,
+  });
+
+/**
+ * Seasons a specific team participated in — has games or a roster — newest
+ * first, flagged with whether the team played games that season. Powers the
+ * season picker on a team page.
+ */
+export const useTeamSeasons = (teamId: string | undefined) =>
+  useQuery({
+    queryKey: ['team_seasons', teamId],
+    enabled: !!teamId,
+    queryFn: async (): Promise<PublicSeasonOptionExt[]> => {
+      const [gamesRes, rosterRes] = await Promise.all([
+        supabase
+          .from('games')
+          .select('season_id, status')
+          .or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`),
+        supabase
+          .from('player_team_seasons')
+          .select('season_id')
+          .eq('team_id', teamId!),
+      ]);
+      const any = new Set<string>();
+      const played = new Set<string>();
+      for (const g of (gamesRes.data ?? []) as Array<{ season_id: string; status: string }>) {
+        any.add(g.season_id);
+        if (g.status === 'played') played.add(g.season_id);
+      }
+      for (const r of (rosterRes.data ?? []) as Array<{ season_id: string }>) {
+        any.add(r.season_id);
+      }
+      const ids = Array.from(any);
+      if (ids.length === 0) return [];
+      const { data, error } = await supabase
+        .from('seasons')
+        .select('id, name, status, start_date')
+        .in('id', ids);
+      if (error) throw error;
+      const rows = (data ?? []) as unknown as PublicSeasonOption[];
+      return rows
+        .map((r) => ({ ...r, has_played: played.has(r.id) }))
+        .sort((a, b) => (b.start_date ?? '').localeCompare(a.start_date ?? ''));
+    },
+    staleTime: 1000 * 60 * 10,
+  });
+
+/** The default public season: newest season that has played games. */
+export const pickDefaultSeasonId = (seasons: PublicSeasonOptionExt[]): string | null => {
+  const withData = seasons.find((s) => s.has_played);
+  return withData?.id ?? seasons[0]?.id ?? null;
+};
 
 export const useLeagueLeaders = (seasonId: string | null | undefined) =>
   useQuery({

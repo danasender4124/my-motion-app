@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { GameWithTeams } from '../../lib/queries';
@@ -23,6 +23,13 @@ const TeamSchedule: React.FC<Props> = ({ games, teamId }) => {
     .sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''));
   const past = games.filter((g) => g.status === 'played')
     .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
+
+  // Archived seasons have no upcoming games — land on the results tab instead
+  // of an empty "upcoming" view.
+  useEffect(() => {
+    if (upcoming.length === 0 && past.length > 0) setTab('past');
+    else if (upcoming.length > 0) setTab('upcoming');
+  }, [upcoming.length, past.length]);
 
   if (games.length === 0) {
     return (

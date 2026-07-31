@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useTeam, useTeamRoster, useTeamGames, useTeamSeasonStats, useTeamLeaders } from '../lib/queries';
+import {
+  useTeam, useTeamRoster, useTeamGames, useTeamSeasonStats, useTeamLeaders,
+  useTeamSeasons, pickDefaultSeasonId,
+} from '../lib/queries';
 import TeamHeader from '../components/team/TeamHeader';
 import TeamRoster from '../components/team/TeamRoster';
 import TeamLeaders from '../components/team/TeamLeaders';
@@ -10,16 +13,29 @@ import TeamManagement from '../components/team/TeamManagement';
 import TeamLatestPosts from '../components/team/TeamLatestPosts';
 import TeamSchedule from '../components/team/TeamSchedule';
 import TeamContact from '../components/team/TeamContact';
+import SeasonPicker from '../components/ui/SeasonPicker';
 
 const TeamPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const { id } = useParams<{ id: string }>();
+
+  // Season selector — seasons this team took part in, default the latest with data.
+  const { data: teamSeasons = [] } = useTeamSeasons(id);
+  const [seasonId, setSeasonId] = useState<string | null>(null);
+  const defaultSeasonId = pickDefaultSeasonId(teamSeasons);
+  useEffect(() => {
+    if (!seasonId && defaultSeasonId) setSeasonId(defaultSeasonId);
+  }, [defaultSeasonId, seasonId]);
+  // The win/loss/rank strip mirrors the pinned league table, which only exists
+  // for the current season — hide it when viewing an archived season.
+  const isCurrentSeason = !!seasonId && seasonId === defaultSeasonId;
+
   const teamQ = useTeam(id);
-  const rosterQ = useTeamRoster(id);
-  const gamesQ = useTeamGames(id);
+  const rosterQ = useTeamRoster(id, seasonId);
+  const gamesQ = useTeamGames(id, seasonId);
   const statsQ = useTeamSeasonStats(id);
-  const leadersQ = useTeamLeaders(id);
+  const leadersQ = useTeamLeaders(id, seasonId);
 
   if (teamQ.isLoading) {
     return (
@@ -40,7 +56,19 @@ const TeamPage: React.FC = () => {
 
   return (
     <main className="max-w-5xl mx-auto px-6 md:px-12 pt-12 pb-16 space-y-10" style={{ background: '#07080C' }}>
-      <TeamHeader team={team} stats={statsQ.data ?? null} />
+      {teamSeasons.length > 1 && (
+        <div className="flex justify-end">
+          <SeasonPicker
+            seasons={teamSeasons}
+            value={seasonId}
+            onChange={setSeasonId}
+            placeholder={t('team.pick_season')}
+            label={t('team.season_label')}
+            align="end"
+          />
+        </div>
+      )}
+      <TeamHeader team={team} stats={isCurrentSeason ? (statsQ.data ?? null) : null} />
       {leadersQ.data && <TeamLeaders leaders={leadersQ.data} />}
       <TeamCoachStaff teamId={team.id} />
       <TeamManagement teamId={team.id} />

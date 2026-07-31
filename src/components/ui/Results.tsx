@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useRecentResults, useUpcomingGames, type GameWithTeams } from '../../lib/queries';
+import { useRecentResults, useUpcomingGames, useSeasonsWithAnyGames, pickDefaultSeasonId, type GameWithTeams } from '../../lib/queries';
 import { teamName } from '../../lib/displayName';
 import SectionTabs from './SectionTabs';
+import SeasonPicker from './SeasonPicker';
 import { SkeletonTable } from './Skeleton';
 
 const fadeUp = {
@@ -100,14 +101,33 @@ const Results: React.FC = () => {
   const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const [tab, setTab] = useState<'results' | 'schedule'>('results');
 
-  const recentQ = useRecentResults();
-  const upcomingQ = useUpcomingGames();
+  // Season selector — every season with games, newest first; default is the
+  // most recent season that has *played* games (empty active season is skipped).
+  const { data: seasons = [] } = useSeasonsWithAnyGames();
+  const [seasonId, setSeasonId] = useState<string | null>(null);
+  const defaultSeasonId = pickDefaultSeasonId(seasons);
+  useEffect(() => {
+    if (!seasonId && defaultSeasonId) setSeasonId(defaultSeasonId);
+  }, [defaultSeasonId, seasonId]);
+
+  const recentQ = useRecentResults(seasonId);
+  const upcomingQ = useUpcomingGames(seasonId);
 
   const recent = (recentQ.data ?? []).map(adapt);
   const upcoming = (upcomingQ.data ?? []).map(adapt);
 
   return (
     <section id="results" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
+
+      {/* Season selector */}
+      <div className="flex justify-center mb-6">
+        <SeasonPicker
+          seasons={seasons}
+          value={seasonId}
+          onChange={setSeasonId}
+          placeholder={t('results.pick_season')}
+        />
+      </div>
 
       {/* Section header */}
       <div className="flex justify-center mb-10">

@@ -10,7 +10,7 @@ const resources = {
         stats: 'סטטיסטיקה', news: 'חדשות', vod: 'VOD',
       },
       results: {
-        title: 'משחקים ותוצאות',
+        title: 'משחקים ותוצאות', pick_season: 'בחרי עונה',
         tab_results: 'תוצאות', tab_upcoming: 'המשחקים הבאים',
         col_date: 'תאריך', col_time: 'שעה', col_hall: 'אולם',
         col_home: 'מארחת', col_away: 'אורחת', col_score: 'תוצאה', col_stats: 'סטטיסטיקה',
@@ -70,6 +70,7 @@ const resources = {
         no_roster: 'טרם שובץ סגל לעונה זו', not_found: 'הקבוצה לא נמצאה', no_games: 'אין משחקים', position: 'עמדה',
         height: 'גובה', age: 'גיל', jersey: 'מס׳',
         back_to_standings: '← חזרה לטבלת הליגה',
+        pick_season: 'בחרי עונה', season_label: 'עונה',
         all_news: 'כל החדשות ←',
         hall: 'אולם', phone: 'טלפון', email: 'אימייל',
         record: 'מאזן', rank: 'מיקום', pf: 'קלעה', pa: 'ספגה',
@@ -170,7 +171,7 @@ const resources = {
         stats: 'Stats', news: 'News', vod: 'VOD',
       },
       results: {
-        title: 'Games & Results',
+        title: 'Games & Results', pick_season: 'Select season',
         tab_results: 'Results', tab_upcoming: 'Upcoming',
         col_date: 'Date', col_time: 'Time', col_hall: 'Venue',
         col_home: 'Home', col_away: 'Away', col_score: 'Score', col_stats: 'Stats',
@@ -230,6 +231,7 @@ const resources = {
         no_roster: 'Roster not yet announced', not_found: 'Team not found', no_games: 'No games', position: 'Position',
         height: 'Height', age: 'Age', jersey: '#',
         back_to_standings: '← Back to standings',
+        pick_season: 'Select season', season_label: 'Season',
         all_news: 'All news →',
         hall: 'Arena', phone: 'Phone', email: 'Email',
         record: 'Record', rank: 'Rank', pf: 'PF', pa: 'PA',
