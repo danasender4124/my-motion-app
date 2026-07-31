@@ -35,6 +35,12 @@ const LanguageToggle: React.FC = () => {
   );
 };
 
+// Crests whose artwork is dark/transparent and disappears on the dark header
+// get a white circle behind them. Everything else renders as-is.
+const WHITE_BACKED_TEAM_IDS = new Set<string>([
+  '63a7ca54-9040-4862-860c-83d13ad7a9e8', // הפועל לב ירושלים
+]);
+
 const TeamLogos: React.FC = () => {
   const { data: teams = [] } = useTeams();
   return (
@@ -47,22 +53,28 @@ const TeamLogos: React.FC = () => {
           className="flex-shrink-0"
         >
           {team.logo ? (
-            // White circle behind every crest so dark-on-dark logos (e.g.
-            // Hapoel Jerusalem) stay legible on the dark header, and the strip
-            // reads as one uniform set.
-            <div
-              style={{
-                height: 70, width: 70, borderRadius: '50%', background: '#fff',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                padding: 6, boxSizing: 'border-box', overflow: 'hidden',
-              }}
-            >
+            WHITE_BACKED_TEAM_IDS.has(team.id) ? (
+              // White circle so the dark-on-dark crest stays legible.
+              <div
+                style={{
+                  height: 70, width: 70, borderRadius: '50%', background: '#fff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  padding: 6, boxSizing: 'border-box', overflow: 'hidden',
+                }}
+              >
+                <img
+                  src={team.logo}
+                  alt={team.name}
+                  style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
+                />
+              </div>
+            ) : (
               <img
                 src={team.logo}
                 alt={team.name}
-                style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
+                style={{ height: 70, width: 70, objectFit: 'contain' }}
               />
-            </div>
+            )
           ) : (
             <div
               style={{
