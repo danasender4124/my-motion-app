@@ -35,9 +35,9 @@ const PostCard: React.FC<Props> = ({ post, compact }) => {
         )}
         <span
           className={compact
-            ? 'absolute top-2 right-2 px-2 py-0.5 rounded text-xs font-black uppercase tracking-wider'
-            : 'absolute top-4 right-4 px-4 py-2 rounded text-base md:text-lg font-black uppercase tracking-wider'}
-          style={{ background: '#FF4D00', color: '#fff' }}
+            ? 'absolute top-2 right-2 px-2 py-0.5 rounded text-xs font-bold'
+            : 'absolute top-3 right-3 px-2.5 py-1 rounded text-sm font-bold'}
+          style={{ background: 'var(--grad-orange)', color: '#fff', boxShadow: 'var(--sheen-top)' }}
         >
           {POST_CATEGORY_LABEL[post.category]}
         </span>
