@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { RosterPlayer } from '../../lib/queries';
 import { playerFullName } from '../../lib/displayName';
+import SectionTitle from '../ui/SectionTitle';
 
 const POSITION_LABEL: Record<NonNullable<RosterPlayer['position']>, string> = {
   point_guard: 'PG',
@@ -29,7 +30,7 @@ const TeamRoster: React.FC<Props> = ({ players }) => {
   }
   return (
     <div dir={dir}>
-      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>{t('team.roster')}</h2>
+      <SectionTitle>{t('team.roster')}</SectionTitle>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
         {players.map((p) => (
           <Link

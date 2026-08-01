@@ -55,7 +55,7 @@ const TeamPage: React.FC = () => {
   const team = teamQ.data;
 
   return (
-    <main className="max-w-5xl mx-auto px-6 md:px-12 pt-12 pb-16 space-y-10" style={{ background: '#07080C' }}>
+    <main className="max-w-6xl mx-auto px-6 md:px-10 pt-4 pb-16 space-y-6" style={{ background: '#07080C' }}>
       {teamSeasons.length > 1 && (
         <div className="flex justify-end">
           <SeasonPicker
@@ -69,13 +69,25 @@ const TeamPage: React.FC = () => {
         </div>
       )}
       <TeamHeader team={team} stats={isCurrentSeason ? (statsQ.data ?? null) : null} />
-      {leadersQ.data && <TeamLeaders leaders={leadersQ.data} />}
-      <TeamCoachStaff teamId={team.id} />
-      <TeamManagement teamId={team.id} />
-      <TeamLatestPosts teamId={team.id} />
-      <TeamRoster players={rosterQ.data ?? []} />
-      <TeamSchedule games={gamesQ.data ?? []} teamId={team.id} />
-      <TeamContact team={team} />
+
+      {/* Two-column body (desktop): news strip pinned to the inline-start
+          (right in RTL) column, everything else in the wide column.
+          On mobile it collapses to one column: roster → games → the rest → news. */}
+      <div className="lg:grid lg:gap-6" style={{ gridTemplateColumns: '230px minmax(0, 1fr)' }}>
+        <div className="space-y-6 lg:col-start-2 lg:row-start-1">
+          <TeamRoster players={rosterQ.data ?? []} />
+          <TeamSchedule games={gamesQ.data ?? []} teamId={team.id} />
+          {leadersQ.data && <TeamLeaders leaders={leadersQ.data} />}
+          <TeamCoachStaff teamId={team.id} />
+          <TeamManagement teamId={team.id} />
+          <TeamContact team={team} />
+        </div>
+        <aside className="mt-6 lg:mt-0 lg:col-start-1 lg:row-start-1">
+          <div className="lg:sticky" style={{ top: 210 }}>
+            <TeamLatestPosts teamId={team.id} compact />
+          </div>
+        </aside>
+      </div>
     </main>
   );
 };

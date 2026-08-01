@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TeamProfile } from '../../lib/queries';
+import SectionTitle from '../ui/SectionTitle';
 
 interface Props { team: TeamProfile }
 
@@ -29,7 +30,7 @@ const TeamContact: React.FC<Props> = ({ team }) => {
 
   return (
     <div dir={dir}>
-      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>{t('team.contact')}</h2>
+      <SectionTitle>{t('team.contact')}</SectionTitle>
       <div
         className="rounded-2xl p-6 space-y-4"
         style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}

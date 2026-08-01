@@ -4,24 +4,22 @@ import { useTranslation } from 'react-i18next';
 
 interface FooterLink { label: string; to?: string }
 
+// Only real destinations — a footer link that goes nowhere reads as broken.
 const useFooterColumns = (): { title: string; links: FooterLink[] }[] => {
   const { t } = useTranslation();
   return [
-    { title: t('footer.col_league'), links: [
-      { label: t('footer.about') }, { label: t('footer.history') },
-      { label: t('footer.past_champs') }, { label: t('footer.rules') },
-      { label: t('footer.regulations') },
-    ]},
     { title: t('footer.col_sport'), links: [
       { label: t('footer.schedule'), to: '/results' },
       { label: t('footer.results'),  to: '/results' },
       { label: t('footer.table'),    to: '/standings' },
       { label: t('footer.stats'),    to: '/stats' },
-      { label: t('footer.vod'),      to: '/vod' },
+    ]},
+    { title: t('footer.col_league'), links: [
+      { label: t('footer.news'), to: '/news' },
+      { label: t('footer.vod'),  to: '/vod' },
+      { label: 'WBPL TV', to: 'https://tv.wbpl.co.il' },
     ]},
     { title: t('footer.col_contact'), links: [
-      { label: t('footer.contact_us') }, { label: t('footer.press') },
-      { label: t('footer.partnerships') },
       { label: t('footer.accessibility'), to: '/accessibility' },
     ]},
   ];
@@ -47,7 +45,6 @@ const Footer: React.FC = () => {
               alt="מנהלת ליגת העל"
               className="h-10 w-auto object-contain shrink-0"
             />
-            <span className="font-black text-sm" style={{ color: '#F2EDE6' }}>{t('footer.brand')}</span>
           </div>
           <p className="text-xs leading-relaxed" style={{ color: 'rgba(242,237,230,0.35)' }}>
             {t('footer.slogan')}
@@ -95,7 +92,17 @@ const Footer: React.FC = () => {
             <ul className="space-y-2">
               {col.links.map(link => (
                 <li key={link.label}>
-                  {link.to ? (
+                  {link.to?.startsWith('http') ? (
+                    <a
+                      href={link.to}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm transition-colors hover:text-white"
+                      style={{ color: 'rgba(242,237,230,0.55)' }}
+                    >
+                      {link.label}
+                    </a>
+                  ) : link.to ? (
                     <Link
                       to={link.to}
                       className="text-sm transition-colors hover:text-white"
@@ -119,7 +126,7 @@ const Footer: React.FC = () => {
         className="flex flex-wrap items-center justify-between gap-4 pt-6 text-xs"
         style={{ borderTop: '1px solid rgba(255,255,255,0.06)', color: 'rgba(242,237,230,0.4)' }}
       >
-        <span>© 2025 {t('footer.brand')} · {t('footer.copyright')}</span>
+        <span>© {new Date().getFullYear()} {t('footer.brand')} · {t('footer.copyright')}</span>
         <div className="flex gap-4">
           <Link to="/accessibility" className="hover:text-white transition-colors">{t('footer.accessibility_statement')}</Link>
         </div>

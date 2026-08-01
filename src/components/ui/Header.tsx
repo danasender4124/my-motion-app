@@ -106,8 +106,8 @@ const Header: React.FC = () => {
           position: relative;
           display: inline-flex;
           align-items: center;
-          gap: 9px;
-          padding: 8px 18px;
+          gap: 8px;
+          padding: 3px 14px;
           border-radius: 999px;
           overflow: hidden;
           isolation: isolate;
@@ -139,7 +139,7 @@ const Header: React.FC = () => {
         .wbpltv-label {
           color: #fff;
           font-weight: 900;
-          font-size: 1.05rem;
+          font-size: 0.95rem;
           letter-spacing: .05em;
           text-shadow: 0 1px 3px rgba(0,0,0,.7);
         }
@@ -147,8 +147,8 @@ const Header: React.FC = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 22px;
-          height: 22px;
+          width: 18px;
+          height: 18px;
           border-radius: 50%;
           color: #fff;
           background: linear-gradient(180deg, #FF6A26, #D63E00);
@@ -186,13 +186,12 @@ const Header: React.FC = () => {
         style={{
           height: '110px',
           background: '#0A0E1A',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}
       >
         {/* Right: hamburger (mobile only) — placed on the start (right) side */}
         <button
           className="lg:hidden flex flex-col justify-center items-center w-11 h-11 rounded-lg gap-1.5 flex-shrink-0"
-          style={{ background: '#FF4D00' }}
+          style={{ background: 'var(--grad-orange)', boxShadow: 'var(--sheen-top)' }}
           onClick={() => setMenuOpen(v => !v)}
           aria-label="תפריט"
         >
@@ -226,7 +225,7 @@ const Header: React.FC = () => {
           <TeamLogos />
         </div>
 
-        {/* Left: Athena Winner logo + language toggle */}
+        {/* Left: Athena Winner logo */}
         <div className="flex items-center gap-2 flex-shrink-0 mr-auto lg:mr-0">
           <img
             src="/athena-winner-logo.png"
@@ -234,17 +233,22 @@ const Header: React.FC = () => {
             style={{ height: '95px', width: 'auto', objectFit: 'contain' }}
           />
         </div>
+
+        {/* Far left: language toggle, bottom-aligned with the logos — lives
+            inside the logo row so no extra strip pushes the nav down */}
+        <div className="self-end pb-2 flex-shrink-0">
+          <LanguageToggle />
+        </div>
       </div>
 
-      {/* Language toggle bar */}
-      <div className="flex justify-end px-4 py-1" style={{ background: '#0a0a0f' }}>
-        <LanguageToggle />
-      </div>
-
-      {/* Row 2: Orange nav bar — visible on all screens */}
+      {/* Row 2: Orange nav bar — gradient material with a soft top sheen,
+          not a flat fill */}
       <nav
         className="flex items-stretch w-full overflow-x-auto"
-        style={{ background: '#FF4D00' }}
+        style={{
+          background: 'var(--grad-orange)',
+          boxShadow: 'var(--sheen-top), 0 10px 26px rgba(214,60,0,0.22)',
+        }}
         aria-label="ניווט ראשי"
       >
         {navLinks.map(link => (
@@ -273,17 +277,29 @@ const Header: React.FC = () => {
             to={link.to}
             end={link.to === '/'}
             onClick={() => setMenuOpen(false)}
-            className="flex-1 lg:flex-1 flex items-center justify-center py-3 lg:py-2 text-sm font-bold transition-colors duration-150 relative whitespace-nowrap px-3"
-            style={{ color: '#fff', borderLeft: '1px solid rgba(255,255,255,0.15)', minWidth: 'fit-content' }}
+            className="flex-1 lg:flex-1 flex items-center justify-center py-1.5 lg:py-1 text-sm transition-all duration-150 relative whitespace-nowrap px-3"
+            style={{ borderLeft: '1px solid rgba(0,0,0,0.12)', minWidth: 'fit-content' }}
           >
             {({ isActive }) => (
               <>
-                {link.label}
+                <span
+                  className="transition-all duration-150"
+                  style={{
+                    color: isActive ? '#fff' : 'rgba(255,255,255,0.82)',
+                    fontWeight: isActive ? 800 : 500,
+                    textShadow: isActive ? '0 1px 6px rgba(120,30,0,0.5)' : 'none',
+                  }}
+                >
+                  {link.label}
+                </span>
                 {isActive && (
                   <motion.div
                     layoutId="orange-nav-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5"
-                    style={{ background: '#fff' }}
+                    className="absolute bottom-0.5 h-[2px] rounded-full"
+                    style={{
+                      left: 14, right: 14,
+                      background: 'linear-gradient(90deg, rgba(255,255,255,0.15), #fff 50%, rgba(255,255,255,0.15))',
+                    }}
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
                 )}

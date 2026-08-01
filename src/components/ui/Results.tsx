@@ -192,13 +192,15 @@ const Results: React.FC = () => {
               <div style={{ minWidth: '700px' }}>
                 {Object.entries(grouped).map(([round, games]) => (
                   <div key={round}>
-                    {/* Round header */}
-                    <div
-                      className="flex items-center justify-end px-5 py-2.5"
-                      style={{ background: '#FF4D00' }}
-                    >
-                      <span className="text-base font-black text-white">{round}</span>
-                    </div>
+                    {/* Round header — only when the round has a name */}
+                    {round && (
+                      <div
+                        className="flex items-center justify-end px-5 py-2.5"
+                        style={{ background: 'var(--grad-orange)', boxShadow: 'var(--sheen-top)' }}
+                      >
+                        <span className="text-base font-black text-white">{round}</span>
+                      </div>
+                    )}
 
                     <SubHeader />
 
@@ -324,7 +326,7 @@ const Results: React.FC = () => {
               {/* Header row */}
               <div
                 className="grid items-center px-4 py-3 text-sm font-black text-white"
-                style={{ gridTemplateColumns: SCHED_COLS, background: '#FF4D00' }}
+                style={{ gridTemplateColumns: SCHED_COLS, background: 'var(--grad-orange)', boxShadow: 'var(--sheen-top)' }}
               >
                 <span>{t('results.col_date')}</span>
                 <span>{t('results.col_time')}</span>

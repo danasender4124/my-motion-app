@@ -23,13 +23,13 @@ const accentFor = (hex: string | null): string => {
 
 const StatTile: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
   <div
-    className="flex flex-col items-center gap-1.5 px-5 py-4 flex-1 min-w-[90px]"
+    className="flex flex-col items-center gap-0.5 px-4 py-2.5 flex-1 min-w-[80px]"
     style={{ background: 'rgba(7,8,12,0.55)' }}
   >
     <span className="text-[11px] uppercase tracking-wider" style={{ color: 'rgba(242,237,230,0.5)' }}>
       {label}
     </span>
-    <span className="text-2xl md:text-3xl font-black tabular-nums" style={{ color: '#F2EDE6' }}>
+    <span className="text-lg md:text-2xl font-black tabular-nums" style={{ color: '#F2EDE6' }}>
       {value}
     </span>
   </div>
@@ -46,7 +46,7 @@ const TeamHeader: React.FC<Props> = ({ team, stats }) => {
   const accent = accentFor(team.home_color);
 
   return (
-    <div dir={dir} className="space-y-4">
+    <div dir={dir} className="space-y-2">
       <Link
         to="/standings"
         className="text-sm inline-flex items-center gap-1 transition-colors hover:text-white"
@@ -63,27 +63,27 @@ const TeamHeader: React.FC<Props> = ({ team, stats }) => {
           backdropFilter: 'blur(20px)',
         }}
       >
-        {/* Identity row */}
+        {/* Identity row — compact so stats and leaders are visible above the fold */}
         <div
-          className="p-8 md:p-10 flex items-center gap-6 md:gap-8"
+          className="px-5 py-4 md:px-7 md:py-5 flex items-center gap-4 md:gap-6"
           style={{
             background: `radial-gradient(ellipse 60% 120% at ${dir === 'rtl' ? '85%' : '15%'} 0%, ${accent}22 0%, transparent 65%)`,
           }}
         >
           <div
-            className="w-20 h-20 md:w-28 md:h-28 rounded-full shrink-0 flex items-center justify-center overflow-hidden"
+            className="w-14 h-14 md:w-20 md:h-20 rounded-full shrink-0 flex items-center justify-center overflow-hidden"
             style={{
               background: 'rgba(255,255,255,0.06)',
               border: `2px solid ${accent}55`,
-              boxShadow: `0 0 32px ${accent}33`,
+              boxShadow: `0 0 24px ${accent}33`,
             }}
           >
             {team.logo
-              ? <img src={team.logo} alt={team.name} className="w-full h-full object-contain p-1.5" />
-              : <span className="text-2xl font-black" style={{ color: 'rgba(242,237,230,0.6)' }}>{initials(team.name)}</span>}
+              ? <img src={team.logo} alt={team.name} className="w-full h-full object-contain p-1" />
+              : <span className="text-xl font-black" style={{ color: 'rgba(242,237,230,0.6)' }}>{initials(team.name)}</span>}
           </div>
-          <div className="flex flex-col gap-1.5 min-w-0">
-            <h1 className="text-2xl md:text-4xl font-black leading-tight" style={{ color: '#F2EDE6' }}>
+          <div className="flex flex-col gap-1 min-w-0">
+            <h1 className="text-xl md:text-3xl font-black leading-tight" style={{ color: '#F2EDE6' }}>
               {teamName(team)}
             </h1>
             {(team.city || team.hall_address) && (

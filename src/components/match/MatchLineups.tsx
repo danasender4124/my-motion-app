@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGameLineupPublic } from '../../lib/queries';
 import { playerFullName } from '../../lib/displayName';
+import SectionTitle from '../ui/SectionTitle';
 
 const initials = (first: string, last: string) =>
   (first?.[0] ?? '') + (last?.[0] ?? '');
@@ -99,7 +100,7 @@ const MatchLineups: React.FC<Props> = ({
   const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   return (
     <section dir={dir}>
-      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>{t('match.lineups_title')}</h2>
+      <SectionTitle>{t('match.lineups_title')}</SectionTitle>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TeamLineupColumn
           gameId={gameId}

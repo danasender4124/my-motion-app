@@ -18,6 +18,7 @@ import TeamPage from './pages/TeamPage'
 import VodPage from './pages/VodPage'
 import PostDetailPage from './pages/PostDetailPage'
 import AccessibilityStatementPage from './pages/AccessibilityStatementPage'
+import NotFoundPage from './pages/NotFoundPage'
 import AccessibilityWidget from '@/components/a11y/AccessibilityWidget'
 
 const queryClient = new QueryClient({
@@ -50,6 +51,7 @@ const AnimatedRoutes = () => {
           <Route path="/team/:id" element={<TeamPage />} />
           <Route path="/vod" element={<VodPage />} />
           <Route path="/accessibility" element={<AccessibilityStatementPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
@@ -68,6 +70,7 @@ function App() {
           </main>
           <Footer />
           <AccessibilityWidget />
+          <div className="grain-overlay" aria-hidden="true" />
         </div>
       </BrowserRouter>
     </QueryClientProvider>

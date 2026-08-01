@@ -13,13 +13,21 @@ const formatDate = (iso: string | null): string => {
 const TeamBlock: React.FC<{ team: GameWithTeams['home_team']; align: 'right' | 'left' }> = ({ team, align }) => {
   const inner = (
     <>
+      {/* White circular chip — crops the square backgrounds baked into logo
+          files, matching the header-strip treatment */}
       <div
-        className="w-20 h-20 rounded shrink-0 flex items-center justify-center overflow-hidden"
-        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+        className="w-20 h-20 rounded-full shrink-0 flex items-center justify-center overflow-hidden"
+        style={{
+          background: '#fff',
+          border: '1px solid rgba(255,255,255,0.15)',
+          boxShadow: '0 4px 18px rgba(3,6,18,0.45)',
+          padding: 5,
+          boxSizing: 'border-box',
+        }}
       >
         {team?.logo
-          ? <img src={team.logo} alt={team.name} className="w-full h-full object-contain" />
-          : <span className="text-xs" style={{ color: 'rgba(242,237,230,0.4)' }}>—</span>}
+          ? <img src={team.logo} alt={team.name} className="w-full h-full object-contain" style={{ borderRadius: '50%' }} />
+          : <span className="text-xs" style={{ color: 'rgba(120,120,120,0.7)' }}>—</span>}
       </div>
       <div
         className="text-base font-bold text-center truncate w-full"

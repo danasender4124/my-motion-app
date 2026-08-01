@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { TeamLeaders, LeaderRow } from '../../lib/queries';
 import { playerFullName } from '../../lib/displayName';
+import SectionTitle from '../ui/SectionTitle';
 
 const initials = (first: string, last: string) =>
   (first?.[0] ?? '') + (last?.[0] ?? '');
@@ -50,7 +51,7 @@ const TeamLeadersSection: React.FC<Props> = ({ leaders }) => {
   if (!leaders.ppg && !leaders.rpg && !leaders.apg) return null;
   return (
     <div dir={dir}>
-      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>{t('team.leaders')}</h2>
+      <SectionTitle>{t('team.leaders')}</SectionTitle>
       <div className="flex flex-wrap gap-3">
         <Card label={t('team.leader_points')}   suffix={t('team.per_game')} row={leaders.ppg} />
         <Card label={t('team.leader_rebounds')} suffix={t('team.per_game')} row={leaders.rpg} />

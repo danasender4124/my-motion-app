@@ -54,24 +54,38 @@ const SeasonPicker: React.FC<Props> = ({ seasons, value, onChange, placeholder, 
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="relative flex items-center px-5 py-2.5 bg-[#f15a24] text-white font-semibold min-w-[190px] justify-center transition-colors hover:bg-[#d44d1d]"
+          className="relative flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold text-white min-w-[170px] justify-center transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
+          style={{
+            background: 'var(--grad-orange)',
+            boxShadow: 'var(--sheen-top), 0 4px 14px rgba(214,60,0,0.3)',
+          }}
         >
           <span>{triggerLabel}</span>
-          <ChevronDown className={`w-4 h-4 absolute right-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} style={{ opacity: 0.85 }} />
         </button>
         {open && (
           <ul
-            className="absolute right-0 left-0 top-full mt-1 overflow-hidden shadow-lg z-20 border"
-            style={{ background: '#1a1a1a', borderColor: 'rgba(255,255,255,0.1)' }}
+            className="absolute right-0 left-0 top-full mt-2 overflow-hidden rounded-2xl z-20 p-1"
+            style={{
+              background: 'rgba(16,18,26,0.97)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              boxShadow: 'var(--shadow-1)',
+              backdropFilter: 'blur(14px)',
+            }}
           >
             {seasons.map((s) => (
               <li key={s.id}>
                 <button
                   type="button"
                   onClick={() => { onChange(s.id); setOpen(false); }}
-                  className={`block w-full text-center px-5 py-2.5 transition-colors ${
-                    s.id === value ? 'bg-[#f15a24] text-white' : 'text-white/80 hover:bg-white/10'
-                  }`}
+                  className="block w-full text-center px-5 py-2 rounded-xl text-sm transition-colors"
+                  style={
+                    s.id === value
+                      ? { background: 'var(--grad-orange)', color: '#fff', fontWeight: 800 }
+                      : { color: 'rgba(242,237,230,0.75)' }
+                  }
+                  onMouseEnter={(e) => { if (s.id !== value) e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
+                  onMouseLeave={(e) => { if (s.id !== value) e.currentTarget.style.background = 'transparent'; }}
                 >
                   {s.name}
                 </button>

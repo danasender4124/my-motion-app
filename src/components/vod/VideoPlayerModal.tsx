@@ -36,7 +36,7 @@ const VideoPlayerModal: React.FC<Props> = ({ video, onClose }) => {
         style={{ background: '#0E1018', border: '1px solid rgba(255,255,255,0.12)' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-4 py-3" style={{ background: '#FF4D00' }}>
+        <div className="flex items-center justify-between px-4 py-3" style={{ background: 'var(--grad-orange)', boxShadow: 'var(--sheen-top)' }}>
           <span className="font-black text-white truncate">{video.title}</span>
           <button
             onClick={onClose}

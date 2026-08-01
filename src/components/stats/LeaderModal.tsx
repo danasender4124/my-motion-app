@@ -36,7 +36,7 @@ const LeaderModal: React.FC<Props> = ({ label, rows, formatValue, onClose }) => 
         style={{ background: '#0E1018', border: '1px solid rgba(255,255,255,0.12)' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-4 py-3" style={{ background: '#FF4D00' }}>
+        <div className="flex items-center justify-between px-4 py-3" style={{ background: 'var(--grad-orange)', boxShadow: 'var(--sheen-top)' }}>
           <span className="font-black text-white">{label}</span>
           <button
             onClick={onClose}

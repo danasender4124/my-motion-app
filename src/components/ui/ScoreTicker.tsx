@@ -1,35 +1,48 @@
-import React, { useRef } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { RECENT_RESULTS } from '../../data/league';
+import { useRecentResults, useSeasonsWithAnyGames, pickDefaultSeasonId } from '../../lib/queries';
+import { teamName } from '../../lib/displayName';
 
+/**
+ * Broadcast-style score strip under the main nav — the latest played round,
+ * pulled live from the DB (season = newest with played games). Renders
+ * nothing while loading or when there are no results yet.
+ */
 const ScoreTicker: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const trackRef = useRef<HTMLDivElement>(null);
   const direction: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
 
-  // Duplicate items for seamless loop
-  const items = [...RECENT_RESULTS, ...RECENT_RESULTS];
+  const { data: seasons = [] } = useSeasonsWithAnyGames();
+  const seasonId = pickDefaultSeasonId(seasons);
+  const { data: games = [] } = useRecentResults(seasonId);
+
+  // Latest round only (games arrive date-desc; the first row's round is the
+  // most recent one).
+  const latestRound = games[0]?.round ?? null;
+  const roundGames = latestRound ? games.filter((g) => g.round === latestRound) : games.slice(0, 8);
+  if (roundGames.length === 0) return null;
+
+  // Duplicate for a seamless marquee loop
+  const items = [...roundGames, ...roundGames];
 
   return (
     <div
       className="w-full overflow-hidden"
       style={{ background: '#FF4D00', height: '36px', direction }}
+      aria-label={t('results.tab_results')}
     >
       <div
-        ref={trackRef}
-        className="flex items-center gap-0 h-full"
-        style={{
-          animation: 'ticker 28s linear infinite',
-          whiteSpace: 'nowrap',
-          width: 'max-content',
-        }}
+        className="flex items-center gap-0 h-full score-ticker-track"
+        style={{ whiteSpace: 'nowrap', width: 'max-content' }}
       >
         {items.map((game, i) => {
-          const homeWon = game.homeScore > game.awayScore;
+          const homeWon = (game.home_score ?? 0) > (game.away_score ?? 0);
           return (
-            <div
-              key={i}
-              className="flex items-center gap-3 px-6 border-r"
+            <Link
+              to={`/match/${game.id}`}
+              key={`${game.id}-${i}`}
+              className="flex items-center gap-3 px-6 border-r transition-colors hover:bg-black/15"
               style={{
                 borderColor: 'rgba(255,255,255,0.25)',
                 height: '36px',
@@ -38,23 +51,27 @@ const ScoreTicker: React.FC = () => {
                 fontWeight: 500,
               }}
             >
-              <span style={{ fontWeight: homeWon ? 800 : 400 }}>{game.home}</span>
+              <span style={{ fontWeight: homeWon ? 800 : 400 }}>{game.home_team ? teamName(game.home_team) : ''}</span>
               <span
                 className="px-2 py-0.5 rounded text-xs font-black tabular-nums"
                 style={{ background: 'rgba(0,0,0,0.2)', letterSpacing: '0.05em' }}
               >
-                {game.homeScore}–{game.awayScore}
+                {game.home_score}–{game.away_score}
               </span>
-              <span style={{ fontWeight: !homeWon ? 800 : 400 }}>{game.away}</span>
-              <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: '11px' }}>
-                {t('results.col_round')} {game.round}
-              </span>
-            </div>
+              <span style={{ fontWeight: !homeWon ? 800 : 400 }}>{game.away_team ? teamName(game.away_team) : ''}</span>
+              {game.round && (
+                <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: '11px' }}>
+                  {game.round}
+                </span>
+              )}
+            </Link>
           );
         })}
       </div>
 
       <style>{`
+        .score-ticker-track { animation: ticker 40s linear infinite; }
+        .score-ticker-track:hover { animation-play-state: paused; }
         @keyframes ticker {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-50%); }

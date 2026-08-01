@@ -261,9 +261,9 @@ export const useTeamJerseys = (seasonId: string | undefined, teamId: string | un
     },
   });
 
-export const usePlayer = (id: string | undefined) =>
+export const usePlayer = (id: string | undefined, seasonOverride?: string | null) =>
   useQuery({
-    queryKey: ['player', id],
+    queryKey: ['player', id, seasonOverride ?? 'active'],
     enabled: !!id,
     queryFn: async (): Promise<PlayerProfile | null> => {
       const { data: player, error } = await supabase
@@ -274,10 +274,8 @@ export const usePlayer = (id: string | undefined) =>
       if (error) throw error;
       if (!player) return null;
 
-      // Fetch the current-season team + jersey
-      const { data: activeSeason } = await supabase
-        .from('seasons').select('id').eq('status', 'active').maybeSingle();
-      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      // Team + jersey for the requested season (default: the active one)
+      const seasonId = seasonOverride ?? (await fetchActiveSeasonId());
       let current_team: PlayerProfile['current_team'] = null;
       let current_jersey: number | null = null;
       if (seasonId) {
@@ -298,14 +296,12 @@ export const usePlayer = (id: string | undefined) =>
     },
   });
 
-export const usePlayerStats = (id: string | undefined) =>
+export const usePlayerStats = (id: string | undefined, seasonOverride?: string | null) =>
   useQuery({
-    queryKey: ['player_stats', id],
+    queryKey: ['player_stats', id, seasonOverride ?? 'active'],
     enabled: !!id,
     queryFn: async (): Promise<PlayerStatRow[]> => {
-      const { data: activeSeason } = await supabase
-        .from('seasons').select('id').eq('status', 'active').maybeSingle();
-      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      const seasonId = seasonOverride ?? (await fetchActiveSeasonId());
       if (!seasonId) return [];
 
       const { data: gameIds } = await supabase
@@ -648,6 +644,49 @@ export const pickDefaultSeasonId = (seasons: PublicSeasonOptionExt[]): string | 
   const withData = seasons.find((s) => s.has_played);
   return withData?.id ?? seasons[0]?.id ?? null;
 };
+
+/**
+ * Seasons a player took part in — was on a roster or has recorded game stats —
+ * newest first, flagged with whether she has stats that season. Powers the
+ * season picker on a player page.
+ */
+export const usePlayerSeasons = (playerId: string | undefined) =>
+  useQuery({
+    queryKey: ['player_seasons', playerId],
+    enabled: !!playerId,
+    queryFn: async (): Promise<PublicSeasonOptionExt[]> => {
+      const [ptsRes, statsRes] = await Promise.all([
+        supabase
+          .from('player_team_seasons')
+          .select('season_id')
+          .eq('player_id', playerId!),
+        supabase
+          .from('player_game_stats')
+          .select('game:games(season_id)')
+          .eq('player_id', playerId!),
+      ]);
+      const any = new Set<string>();
+      const played = new Set<string>();
+      for (const r of (ptsRes.data ?? []) as Array<{ season_id: string }>) {
+        any.add(r.season_id);
+      }
+      for (const r of (statsRes.data ?? []) as unknown as Array<{ game: { season_id: string } | null }>) {
+        if (r.game?.season_id) { any.add(r.game.season_id); played.add(r.game.season_id); }
+      }
+      const ids = Array.from(any);
+      if (ids.length === 0) return [];
+      const { data, error } = await supabase
+        .from('seasons')
+        .select('id, name, status, start_date')
+        .in('id', ids);
+      if (error) throw error;
+      const rows = (data ?? []) as unknown as PublicSeasonOption[];
+      return rows
+        .map((r) => ({ ...r, has_played: played.has(r.id) }))
+        .sort((a, b) => (b.start_date ?? '').localeCompare(a.start_date ?? ''));
+    },
+    staleTime: 1000 * 60 * 10,
+  });
 
 export const useLeagueLeaders = (seasonId: string | null | undefined) =>
   useQuery({

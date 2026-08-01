@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { GameWithTeams } from '../../lib/queries';
 import { teamName } from '../../lib/displayName';
+import SectionTitle from '../ui/SectionTitle';
 
 const formatDate = (iso: string | null): string => {
   if (!iso) return '—';
@@ -43,32 +44,28 @@ const TeamSchedule: React.FC<Props> = ({ games, teamId }) => {
 
   return (
     <div dir={dir}>
-      <h2 className="text-xl font-black mb-4" style={{ color: '#F2EDE6' }}>{t('team.schedule')}</h2>
+      <SectionTitle>{t('team.schedule')}</SectionTitle>
 
-      {/* Sub-tabs */}
-      <div className="flex gap-2 mb-4">
-        <button
-          onClick={() => setTab('upcoming')}
-          className="px-4 py-1.5 rounded-full text-sm font-bold transition-colors"
-          style={{
-            background: tab === 'upcoming' ? '#FF4D00' : 'rgba(255,255,255,0.06)',
-            color: tab === 'upcoming' ? '#fff' : 'rgba(242,237,230,0.6)',
-            border: '1px solid ' + (tab === 'upcoming' ? '#FF4D00' : 'rgba(255,255,255,0.1)'),
-          }}
-        >
-          {t('team.sched_upcoming')} ({upcoming.length})
-        </button>
-        <button
-          onClick={() => setTab('past')}
-          className="px-4 py-1.5 rounded-full text-sm font-bold transition-colors"
-          style={{
-            background: tab === 'past' ? '#FF4D00' : 'rgba(255,255,255,0.06)',
-            color: tab === 'past' ? '#fff' : 'rgba(242,237,230,0.6)',
-            border: '1px solid ' + (tab === 'past' ? '#FF4D00' : 'rgba(255,255,255,0.1)'),
-          }}
-        >
-          {t('team.sched_past')} ({past.length})
-        </button>
+      {/* Sub-tabs — same segmented pill language as the site-wide tabs */}
+      <div
+        className="inline-flex items-center gap-1 p-1 rounded-full mb-4"
+        style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+      >
+        {([['upcoming', `${t('team.sched_upcoming')} (${upcoming.length})`], ['past', `${t('team.sched_past')} (${past.length})`]] as const).map(([id, label]) => (
+          <button
+            key={id}
+            onClick={() => setTab(id)}
+            className="px-4 py-1.5 rounded-full text-sm transition-all duration-200 active:scale-[0.98]"
+            style={{
+              background: tab === id ? 'var(--grad-orange)' : 'transparent',
+              color: tab === id ? '#fff' : 'rgba(242,237,230,0.6)',
+              fontWeight: tab === id ? 800 : 500,
+              boxShadow: tab === id ? 'var(--sheen-top), 0 4px 12px rgba(214,60,0,0.3)' : 'none',
+            }}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
       {visible.length === 0 ? (

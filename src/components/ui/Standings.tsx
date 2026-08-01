@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useTeams } from '../../lib/queries';
 import { teamName } from '../../lib/displayName';
 import { STANDINGS_OVERRIDE } from '../../lib/standings-override';
+import SectionTitle from './SectionTitle';
 import { SkeletonTable } from './Skeleton';
 
 const COLS = '2.5rem 1fr 3.5rem 3.5rem 3.5rem 4rem 4rem 4.5rem 3.5rem 4rem';
@@ -27,14 +28,7 @@ const Standings: React.FC = () => {
 
   return (
     <section id="standings" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
-      <div className="flex justify-end mb-6">
-        <span
-          className="text-xs font-medium px-3 py-1"
-          style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00', border: '1px solid rgba(255,77,0,0.3)' }}
-        >
-          {t('standings.title')}
-        </span>
-      </div>
+      <SectionTitle>{t('standings.title')}</SectionTitle>
 
       {teamsQ.isLoading ? (
         <SkeletonTable rows={10} />
@@ -43,7 +37,7 @@ const Standings: React.FC = () => {
           <div className="min-w-[680px] overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.10)' }}>
             <div
               className="grid items-center px-4 py-3 text-sm font-black text-white"
-              style={{ gridTemplateColumns: COLS, background: '#FF4D00', gap: '0.5rem' }}
+              style={{ gridTemplateColumns: COLS, background: 'var(--grad-orange)', boxShadow: 'var(--sheen-top)', gap: '0.5rem' }}
             >
               <span className="text-center">{t('standings.col_rank')}</span>
               <span>{t('standings.col_team')}</span>
