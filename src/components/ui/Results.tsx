@@ -8,14 +8,6 @@ import SectionTabs from './SectionTabs';
 import SeasonPicker from './SeasonPicker';
 import { SkeletonTable } from './Skeleton';
 
-const fadeUp = {
-  hidden:  { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.5, delay: i * 0.07, ease: [0.25, 1, 0.5, 1] },
-  }),
-};
-
 // ─── Icons ────────────────────────────────────────────────────────────────────
 const TvIcon: React.FC<{ size?: number }> = ({ size = 17 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">

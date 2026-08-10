@@ -64,6 +64,7 @@ const MatchPage: React.FC = () => {
                 teamName={game.home_team ? teamName(game.home_team) : ''}
                 teamLogo={game.home_team?.logo ?? null}
                 teamColor={game.home_team?.home_color ?? null}
+                teamThirdColor={game.home_team?.third_color ?? null}
                 rows={homeStats}
                 jerseyByPlayerId={homeJerseysQ.data ?? new Map()}
               />
@@ -73,6 +74,7 @@ const MatchPage: React.FC = () => {
                 teamName={game.away_team ? teamName(game.away_team) : ''}
                 teamLogo={game.away_team?.logo ?? null}
                 teamColor={game.away_team?.away_color ?? null}
+                teamThirdColor={game.away_team?.third_color ?? null}
                 rows={awayStats}
                 jerseyByPlayerId={awayJerseysQ.data ?? new Map()}
               />

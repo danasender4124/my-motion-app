@@ -19,11 +19,6 @@ const fadeUp = (delay = 0, duration = 0.7) => ({
   visible: { opacity: 1, y: 0, transition: { duration, delay, ease: EASE_OUT_EXPO } },
 });
 
-const fadeIn = (delay = 0, duration = 0.6) => ({
-  hidden:  { opacity: 0 },
-  visible: { opacity: 1, transition: { duration, delay, ease: EASE_OUT_QUART } },
-});
-
 // ─── Flame video ──────────────────────────────────────────────────────────────
 const FlameVideo: React.FC = () => (
   <video

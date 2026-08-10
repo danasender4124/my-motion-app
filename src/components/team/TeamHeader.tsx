@@ -56,13 +56,22 @@ const TeamHeader: React.FC<Props> = ({ team, stats }) => {
       </Link>
 
       <div
-        className="rounded-2xl overflow-hidden"
+        className="rounded-2xl overflow-hidden flex items-stretch"
         style={{
           background: 'rgba(255,255,255,0.04)',
           border: '1px solid rgba(255,255,255,0.08)',
           backdropFilter: 'blur(20px)',
         }}
       >
+        {/* Kit-colour rail — same treatment as the admin team card: home always,
+            away/third stripes only when the colour is set */}
+        <div className="flex shrink-0" aria-hidden>
+          <div className="w-1.5" style={{ background: team.home_color || 'rgba(255,255,255,0.15)' }} />
+          {team.away_color && <div className="w-1.5" style={{ background: team.away_color }} />}
+          {team.third_color && <div className="w-1.5" style={{ background: team.third_color }} />}
+        </div>
+
+        <div className="flex-1 min-w-0">
         {/* Identity row — compact so stats and leaders are visible above the fold */}
         <div
           className="px-5 py-4 md:px-7 md:py-5 flex items-center gap-4 md:gap-6"
@@ -113,6 +122,7 @@ const TeamHeader: React.FC<Props> = ({ team, stats }) => {
             <StatTile label={t('team.pa')} value={stats.points_against} />
           </div>
         )}
+        </div>
       </div>
     </div>
   );

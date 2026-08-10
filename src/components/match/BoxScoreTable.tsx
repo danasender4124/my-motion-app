@@ -16,6 +16,7 @@ interface Props {
   teamName: string;
   teamLogo: string | null;
   teamColor: string | null;
+  teamThirdColor?: string | null;
   rows: PlayerGameStat[];
   jerseyByPlayerId?: Map<string, number | null>;
 }
@@ -32,7 +33,7 @@ const contrastText = (hex: string): string => {
   return yiq >= 160 ? '#07080C' : '#fff';
 };
 
-const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows, jerseyByPlayerId }) => {
+const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, teamThirdColor, rows, jerseyByPlayerId }) => {
   const { t, i18n } = useTranslation();
   const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const header = [
@@ -54,8 +55,11 @@ const BoxScoreTable: React.FC<Props> = ({ teamName, teamLogo, teamColor, rows, j
 
   return (
     <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.08)' }} dir={dir}>
-      {/* Team title bar */}
-      <div className="flex items-center gap-3 px-4 py-3" style={{ background: accent }}>
+      {/* Team title bar — a thin edge stripe marks the third kit colour when set */}
+      <div className="relative flex items-center gap-3 px-4 py-3" style={{ background: accent }}>
+        {teamThirdColor && (
+          <div className="absolute inset-y-0 start-0 w-1.5" aria-hidden style={{ background: teamThirdColor }} />
+        )}
         {teamLogo && (
           <div className="w-8 h-8 rounded shrink-0 bg-white/20 flex items-center justify-center overflow-hidden">
             <img src={teamLogo} alt={teamName} className="w-full h-full object-contain" />
