@@ -48,7 +48,25 @@ const StatsIcon: React.FC<{ size?: number }> = ({ size = 16 }) => (
 
 // ─── Grid column templates ────────────────────────────────────────────────────
 // Schedule: תאריך | שעה | אולם | צפיה | מחזור | מארחת | אורחת | פרטים
-const SCHED_COLS = '108px 62px 1fr 80px 64px 1.6fr 1.6fr 52px';
+const SCHED_COLS = '108px 62px 1fr 80px 78px 1.6fr 1.6fr 52px';
+
+/**
+ * Round badge: league rounds ("מחזור 7") render as a compact numbered disc;
+ * cup stages ("מוקדמות", "רבע גמר") get a pill wide enough for the label.
+ */
+const RoundBadge: React.FC<{ round: string }> = ({ round }) => {
+  const num = round.match(/^מחזור\s+(\d+)$/)?.[1];
+  return (
+    <span
+      className={`inline-flex items-center justify-center rounded-full font-black ${
+        num ? 'w-8 h-8 text-xs' : 'px-2.5 h-8 text-[11px] whitespace-nowrap'
+      }`}
+      style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00' }}
+    >
+      {num ?? round}
+    </span>
+  );
+};
 // Results:  תאריך | שעה | אולם | מארחת | אורחת | סטטיסטיקה | תוצאה
 const RES_COLS   = '108px 62px 1fr 1.6fr 1.6fr 80px 110px';
 
@@ -408,12 +426,7 @@ const Results: React.FC = () => {
 
                     {/* מחזור */}
                     <div className="flex justify-center">
-                      <span
-                        className="inline-flex items-center justify-center w-8 h-8 rounded-full text-xs font-black"
-                        style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00' }}
-                      >
-                        {g.round}
-                      </span>
+                      <RoundBadge round={g.round} />
                     </div>
 
                     {/* מארחת — logo + name */}

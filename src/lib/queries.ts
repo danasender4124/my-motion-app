@@ -304,7 +304,7 @@ export const usePlayerStats = (id: string | undefined, seasonOverride?: string |
       if (!seasonId) return [];
 
       const { data: gameIds } = await supabase
-        .from('games').select('id').eq('season_id', seasonId);
+        .from('games').select('id').eq('season_id', seasonId).eq('competition', 'league');
       const ids = (gameIds ?? []).map((r: { id: string }) => r.id);
       if (ids.length === 0) return [];
 
@@ -441,6 +441,7 @@ export const useLeagueStandings = () =>
               .from('games')
               .select('home_team_id, away_team_id, home_score, away_score, status')
               .eq('season_id', seasonId)
+              .eq('competition', 'league')
               .eq('status', 'played')
           : Promise.resolve({ data: [], error: null }),
       ]);
@@ -485,7 +486,8 @@ export const useTeamSeasonStats = (teamId: string | undefined) =>
       if (!seasonId) return { wins: 0, losses: 0, points_for: 0, points_against: 0, position: null };
 
       const [gamesRes, teamsRes] = await Promise.all([
-        supabase.from('games').select(SELECT_GAME).eq('season_id', seasonId),
+        // League games only — cup games (winner_cup etc.) don't count here.
+        supabase.from('games').select(SELECT_GAME).eq('season_id', seasonId).eq('competition', 'league'),
         supabase.from('teams').select('id').eq('status', 'active'),
       ]);
       if (gamesRes.error) throw gamesRes.error;
@@ -509,7 +511,7 @@ export const useTeamLeaders = (teamId: string | undefined, seasonOverride?: stri
       if (!seasonId) return { ppg: null, rpg: null, apg: null };
 
       const { data: gameIds } = await supabase
-        .from('games').select('id').eq('season_id', seasonId);
+        .from('games').select('id').eq('season_id', seasonId).eq('competition', 'league');
       const gids = ((gameIds ?? []) as Array<{ id: string }>).map((r) => r.id);
       if (gids.length === 0) return { ppg: null, rpg: null, apg: null };
 
@@ -748,6 +750,7 @@ export const useLeagueLeaders = (seasonId: string | null | undefined) =>
         .from('games')
         .select('id, status')
         .eq('season_id', seasonId)
+        .eq('competition', 'league')
         .eq('status', 'played');
       if (gamesErr) throw gamesErr;
 
