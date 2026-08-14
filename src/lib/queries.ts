@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from './supabase';
 import { computeTeamSeasonStats, computeLeagueLeaders, type TeamSeasonStats, type LeagueLeaders, type LeaderInputRow } from './aggregations';
-import { findOverrideForTeam, findOverridePosition } from './standings-override';
 
 export type { LeagueLeaders, LeaderInputRow } from './aggregations';
 export type { LeaderCategoryKey, LeagueLeaderRow } from './aggregations';
@@ -413,37 +412,81 @@ export const useTeamGames = (teamId: string | undefined, seasonOverride?: string
     },
   });
 
+export interface StandingRow {
+  team: { id: string; name: string; name_en: string | null; logo: string | null };
+  wins: number;
+  losses: number;
+  points_for: number;
+  points_against: number;
+}
+
+/**
+ * The league table, computed live from the ACTIVE season's played games over
+ * the active teams. Before the first tip-off every team stands at 0-0 in
+ * alphabetical order; from then on the table updates itself as results are
+ * entered in the admin. Sort: wins desc, then point diff, then points scored.
+ */
+export const useLeagueStandings = () =>
+  useQuery({
+    queryKey: ['league_standings'],
+    queryFn: async (): Promise<StandingRow[]> => {
+      const seasonId = await fetchActiveSeasonId();
+      const [teamsRes, gamesRes] = await Promise.all([
+        supabase
+          .from('teams')
+          .select('id, name, name_en, logo')
+          .eq('status', 'active'),
+        seasonId
+          ? supabase
+              .from('games')
+              .select('home_team_id, away_team_id, home_score, away_score, status')
+              .eq('season_id', seasonId)
+              .eq('status', 'played')
+          : Promise.resolve({ data: [], error: null }),
+      ]);
+      if (teamsRes.error) throw teamsRes.error;
+      if (gamesRes.error) throw gamesRes.error;
+
+      const teams = (teamsRes.data ?? []) as StandingRow['team'][];
+      const games = (gamesRes.data ?? []) as unknown as GameWithTeams[];
+      const rows = teams.map((team) => {
+        let wins = 0, losses = 0, pf = 0, pa = 0;
+        for (const g of games) {
+          const isHome = g.home_team_id === team.id;
+          if (!isHome && g.away_team_id !== team.id) continue;
+          if (g.home_score == null || g.away_score == null) continue;
+          const my = isHome ? g.home_score : g.away_score;
+          const opp = isHome ? g.away_score : g.home_score;
+          pf += my; pa += opp;
+          if (my > opp) wins++; else if (my < opp) losses++;
+        }
+        return { team, wins, losses, points_for: pf, points_against: pa };
+      });
+      rows.sort((a, b) =>
+        b.wins - a.wins ||
+        (b.points_for - b.points_against) - (a.points_for - a.points_against) ||
+        b.points_for - a.points_for ||
+        a.team.name.localeCompare(b.team.name, 'he'));
+      return rows;
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+
 export const useTeamSeasonStats = (teamId: string | undefined) =>
   useQuery({
     queryKey: ['team_season_stats', teamId],
     enabled: !!teamId,
     queryFn: async (): Promise<TeamSeasonStats> => {
-      // Single source of truth: pull values from STANDINGS_OVERRIDE so the
-      // team-page stats always match the league standings table, which is
-      // pinned to basket.co.il IBA values.
-      const { data: teamRow } = await supabase
-        .from('teams').select('name').eq('id', teamId!).maybeSingle();
-      const teamName = (teamRow as { name: string } | null)?.name ?? null;
-      const ov = teamName ? findOverrideForTeam(teamName) : null;
-      if (ov) {
-        return {
-          wins: ov.wins,
-          losses: ov.losses,
-          points_for: ov.points_for,
-          points_against: ov.points_against,
-          position: teamName ? findOverridePosition(teamName) : null,
-        };
-      }
-
-      // Fallback — compute from games when no override entry matches.
-      const { data: activeSeason } = await supabase
-        .from('seasons').select('id').eq('status', 'active').maybeSingle();
-      const seasonId = (activeSeason as { id: string } | null)?.id ?? null;
+      // Computed live from the active season's played games — the same math
+      // as the /standings table, so the two always agree. (Until 2026/27 this
+      // was pinned to hard-coded IBA values in standings-override.ts; results
+      // are now entered in the admin, so the DB is the source of truth.)
+      const seasonId = await fetchActiveSeasonId();
       if (!seasonId) return { wins: 0, losses: 0, points_for: 0, points_against: 0, position: null };
 
       const [gamesRes, teamsRes] = await Promise.all([
         supabase.from('games').select(SELECT_GAME).eq('season_id', seasonId),
-        supabase.from('teams').select('id'),
+        supabase.from('teams').select('id').eq('status', 'active'),
       ]);
       if (gamesRes.error) throw gamesRes.error;
       if (teamsRes.error) throw teamsRes.error;
@@ -639,8 +682,14 @@ export const useTeamSeasons = (teamId: string | undefined) =>
     staleTime: 1000 * 60 * 10,
   });
 
-/** The default public season: newest season that has played games. */
+/**
+ * The default public season: the ACTIVE season when it appears in the list —
+ * the new season's fixtures are the default view from day one — otherwise the
+ * newest season that has played games (archive browsing).
+ */
 export const pickDefaultSeasonId = (seasons: PublicSeasonOptionExt[]): string | null => {
+  const active = seasons.find((s) => s.status === 'active');
+  if (active) return active.id;
   const withData = seasons.find((s) => s.has_played);
   return withData?.id ?? seasons[0]?.id ?? null;
 };

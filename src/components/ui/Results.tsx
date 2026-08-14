@@ -99,7 +99,7 @@ const adapt = (g: GameWithTeams): GameRow => ({
 const Results: React.FC = () => {
   const { t, i18n } = useTranslation();
   const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
-  const [tab, setTab] = useState<'results' | 'schedule'>('results');
+  const [tab, setTab] = useState<'results' | 'schedule' | null>(null);
 
   // Season selector — every season with games, newest first; default is the
   // most recent season that has *played* games (empty active season is skipped).
@@ -115,6 +115,12 @@ const Results: React.FC = () => {
 
   const recent = (recentQ.data ?? []).map(adapt);
   const upcoming = (upcomingQ.data ?? []).map(adapt);
+
+  // Until the user picks a tab herself: results when the season has any, the
+  // upcoming fixtures otherwise — a fresh season opens on its schedule instead
+  // of an empty results table.
+  const activeTab: 'results' | 'schedule' =
+    tab ?? (recentQ.data && recent.length === 0 && upcoming.length > 0 ? 'schedule' : 'results');
 
   return (
     <section id="results" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
@@ -136,12 +142,12 @@ const Results: React.FC = () => {
             { id: 'schedule', label: t('results.tab_upcoming') },
             { id: 'results',  label: t('results.tab_results') },
           ]}
-          active={tab}
+          active={activeTab}
           onChange={(id) => setTab(id as 'results' | 'schedule')}
         />
       </div>
 
-      {tab === 'results' ? (
+      {activeTab === 'results' ? (
         /* ── Results: grouped table ───────────────────────────────────────── */
         <>
           {recentQ.isLoading && (

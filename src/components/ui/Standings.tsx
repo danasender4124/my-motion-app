@@ -2,9 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useTeams } from '../../lib/queries';
+import { useLeagueStandings } from '../../lib/queries';
 import { teamName } from '../../lib/displayName';
-import { STANDINGS_OVERRIDE } from '../../lib/standings-override';
 import SectionTitle from './SectionTitle';
 import { SkeletonTable } from './Skeleton';
 
@@ -13,24 +12,18 @@ const COLS = '2.5rem 1fr 3.5rem 3.5rem 3.5rem 4rem 4rem 4.5rem 3.5rem 4rem';
 const Standings: React.FC = () => {
   const { t, i18n } = useTranslation();
   const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
-  const teamsQ = useTeams();
-  const teams = teamsQ.data ?? [];
-
-  // Match each override entry to a real team (by name substring) so we keep logos + click-through
-  // Order is preserved (no sorting) — STANDINGS_OVERRIDE already in final order.
-  const rows = STANDINGS_OVERRIDE
-    .map((ov) => {
-      const team = teams.find((t) => t.name.includes(ov.match));
-      if (!team) return null;
-      return { team, wins: ov.wins, losses: ov.losses, points_for: ov.points_for, points_against: ov.points_against };
-    })
-    .filter((r): r is { team: typeof teams[number]; wins: number; losses: number; points_for: number; points_against: number } => r !== null);
+  // Live table for the active season — all zeros (alphabetical) until the
+  // first tip-off, then self-updating as results are entered in the admin.
+  const standingsQ = useLeagueStandings();
+  const rows = standingsQ.data ?? [];
+  // Rank accents mean nothing while everyone is 0-0.
+  const hasPlayed = rows.some((r) => r.wins + r.losses > 0);
 
   return (
     <section id="standings" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
       <SectionTitle>{t('standings.title')}</SectionTitle>
 
-      {teamsQ.isLoading ? (
+      {standingsQ.isLoading ? (
         <SkeletonTable rows={10} />
       ) : (
         <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
@@ -52,8 +45,8 @@ const Standings: React.FC = () => {
             </div>
 
             {rows.map((r, i) => {
-              const isTop = i === 0;
-              const isUpperHalf = i < 6;
+              const isTop = hasPlayed && i === 0;
+              const isUpperHalf = hasPlayed && i < 6;
               const diff = r.points_for - r.points_against;
               const pts = r.wins * 2 + r.losses;
               const pct = r.wins + r.losses > 0 ? Math.round((r.wins / (r.wins + r.losses)) * 100) : 0;
@@ -61,20 +54,6 @@ const Standings: React.FC = () => {
               const oddBg = 'rgba(255,255,255,0.01)';
               return (
                 <React.Fragment key={r.team.id}>
-                  {i === 6 && (
-                    <div
-                      className="flex items-center gap-3 px-4 py-2 text-xs font-black uppercase tracking-wider"
-                      style={{
-                        background: 'rgba(255,77,0,0.10)',
-                        color: '#FF4D00',
-                        borderTop: '2px solid #FF4D00',
-                        borderBottom: '2px solid #FF4D00',
-                      }}
-                    >
-                      <span>{t('standings.lower_bracket')}</span>
-                      <span style={{ color: 'rgba(242,237,230,0.4)', fontWeight: 500 }}>{t('standings.lower_bracket_note')}</span>
-                    </div>
-                  )}
                   <Link to={`/team/${r.team.id}`}>
                     <motion.div
                       initial={{ opacity: 0, x: 16 }}
