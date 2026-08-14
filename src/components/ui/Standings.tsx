@@ -20,7 +20,7 @@ const Standings: React.FC = () => {
   const hasPlayed = rows.some((r) => r.wins + r.losses > 0);
 
   return (
-    <section id="standings" className="pt-7 pb-16 md:pt-9 md:pb-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
+    <section id="standings" className="pt-4 pb-16 md:pt-5 md:pb-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
       <SectionTitle>{t('standings.title')}</SectionTitle>
 
       {standingsQ.isLoading ? (

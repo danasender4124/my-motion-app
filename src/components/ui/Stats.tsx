@@ -23,8 +23,8 @@ const Stats: React.FC = () => {
   const { data, isLoading, error } = useLeagueLeaders(seasonId);
 
   return (
-    <section id="stats" className="pt-7 pb-16 md:pt-9 md:pb-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
-      <div className="flex justify-center mb-8">
+    <section id="stats" className="pt-4 pb-16 md:pt-5 md:pb-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
+      <div className="flex justify-center mb-6">
         <SeasonPicker
           seasons={seasons}
           value={seasonId}
