@@ -52,14 +52,15 @@ const SCHED_COLS = '108px 62px 1fr 80px 78px 1.6fr 1.6fr 52px';
 
 /**
  * Round badge: league rounds ("מחזור 7") render as a compact numbered disc;
- * cup stages ("מוקדמות", "רבע גמר") get a pill wide enough for the label.
+ * cup stages carry their full name ("מוקדמות גביע ווינר אתנה") and render as
+ * a rounded chip that wraps to as many lines as the label needs.
  */
 const RoundBadge: React.FC<{ round: string }> = ({ round }) => {
   const num = round.match(/^מחזור\s+(\d+)$/)?.[1];
   return (
     <span
-      className={`inline-flex items-center justify-center rounded-full font-black ${
-        num ? 'w-8 h-8 text-xs' : 'px-2.5 h-8 text-[11px] whitespace-nowrap'
+      className={`inline-flex items-center justify-center font-black ${
+        num ? 'w-8 h-8 rounded-full text-xs' : 'px-2 py-1 rounded-xl text-[10px] leading-tight text-center'
       }`}
       style={{ background: 'rgba(255,77,0,0.15)', color: '#FF4D00' }}
     >
