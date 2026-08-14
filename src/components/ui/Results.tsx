@@ -156,10 +156,10 @@ const Results: React.FC = () => {
     tab ?? (recentQ.data && recent.length === 0 && upcoming.length > 0 ? 'schedule' : 'results');
 
   return (
-    <section id="results" className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
+    <section id="results" className="pt-7 pb-16 md:pt-9 md:pb-24 px-4 md:px-8 max-w-7xl mx-auto" dir={dir}>
 
       {/* Season selector */}
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-5">
         <SeasonPicker
           seasons={seasons}
           value={seasonId}
@@ -169,7 +169,7 @@ const Results: React.FC = () => {
       </div>
 
       {/* Section header */}
-      <div className="flex justify-center mb-10">
+      <div className="flex justify-center mb-8">
         <SectionTabs
           tabs={[
             { id: 'schedule', label: t('results.tab_upcoming') },
