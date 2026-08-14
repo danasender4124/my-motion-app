@@ -47,9 +47,9 @@ const TeamBlock: React.FC<{ team: GameWithTeams['home_team']; align: 'right' | '
   return <div className="flex flex-col items-center gap-3 flex-1 min-w-0">{inner}</div>;
 };
 
-interface Props { game: GameWithTeams }
+interface Props { game: GameWithTeams; live?: boolean }
 
-const MatchHeader: React.FC<Props> = ({ game }) => {
+const MatchHeader: React.FC<Props> = ({ game, live }) => {
   const { t, i18n } = useTranslation();
   const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
   const homeWon = game.home_score != null && game.away_score != null && game.home_score > game.away_score;
@@ -83,6 +83,14 @@ const MatchHeader: React.FC<Props> = ({ game }) => {
               <span style={{ color: 'rgba(242,237,230,0.4)' }}>-</span>
               <span style={{ color: awayWon ? '#FF4D00' : '#F2EDE6' }}>{game.away_score}</span>
             </div>
+          ) : live ? (
+            <span
+              className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest flex items-center gap-2"
+              style={{ background: 'rgba(220,38,38,0.18)', color: '#f87171', border: '1px solid rgba(239,68,68,0.4)' }}
+            >
+              <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#ef4444' }} />
+              {t('match.live_chip')}
+            </span>
           ) : (
             <span
               className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest"

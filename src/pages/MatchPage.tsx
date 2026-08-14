@@ -10,6 +10,17 @@ import MatchVideos from '../components/match/MatchVideos';
 import MatchMedia from '../components/match/MatchMedia';
 import MatchLineups from '../components/match/MatchLineups';
 
+// From tip-off until this long after it, a game with no final result yet is
+// treated as live (results are typed in only after the final buzzer).
+const LIVE_WINDOW_MS = 2.5 * 60 * 60 * 1000;
+
+const isLiveNow = (game: { status: string; date: string | null; time: string | null }): boolean => {
+  if (game.status !== 'scheduled' || !game.date || !game.time) return false;
+  const start = new Date(`${game.date}T${game.time.slice(0, 5)}:00`).getTime();
+  const now = Date.now();
+  return now >= start && now - start <= LIVE_WINDOW_MS;
+};
+
 const MatchPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const dir: 'rtl' | 'ltr' = i18n.language === 'en' ? 'ltr' : 'rtl';
@@ -40,11 +51,12 @@ const MatchPage: React.FC = () => {
   const homeStats = stats.filter((s) => s.team_id === game.home_team_id);
   const awayStats = stats.filter((s) => s.team_id === game.away_team_id);
   const referees = (game.referees ?? []).filter((r) => r && r.trim().length > 0);
+  const live = isLiveNow(game);
 
   return (
     <div dir={dir} className="min-h-screen py-12 px-4 md:px-8" style={{ background: '#07080C' }}>
       <div className="max-w-6xl mx-auto space-y-6">
-        <MatchHeader game={game} />
+        <MatchHeader game={game} live={live} />
 
         {referees.length > 0 && (
           <div
@@ -80,12 +92,32 @@ const MatchPage: React.FC = () => {
           </>
         ) : (
           <>
-            <div
-              className="rounded-2xl p-6 text-center"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(242,237,230,0.6)' }}
-            >
-              {t('match.not_played_yet')}
-            </div>
+            {live && (
+              <a
+                href={game.watch_url || 'https://tv.wbpl.co.il'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-2xl p-6 text-center transition-transform hover:scale-[1.01]"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(220,38,38,0.16) 0%, rgba(255,77,0,0.12) 100%)',
+                  border: '1px solid rgba(239,68,68,0.45)',
+                }}
+              >
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <span className="w-2.5 h-2.5 rounded-full animate-pulse" style={{ background: '#ef4444' }} />
+                  <span className="font-black text-lg" style={{ color: '#f87171' }}>{t('match.live_now')}</span>
+                </div>
+                <span
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold text-white"
+                  style={{ background: 'var(--grad-orange)', boxShadow: 'var(--sheen-top), 0 4px 14px rgba(214,60,0,0.35)' }}
+                >
+                  {t('match.watch_live')}
+                </span>
+                <div className="text-xs mt-3" style={{ color: 'rgba(242,237,230,0.55)' }}>
+                  {t('match.watch_live_note')}
+                </div>
+              </a>
+            )}
             {game.home_team && game.away_team && (
               <MatchLineups
                 gameId={game.id}
