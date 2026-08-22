@@ -81,7 +81,6 @@ const HomeNewsFeed: React.FC = () => {
           style={{
             background: '#0D1020',
             borderRight: '1px solid rgba(255,255,255,0.07)',
-            divideColor: 'rgba(255,255,255,0.06)',
           }}
         >
           {/* Header */}

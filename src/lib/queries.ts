@@ -13,6 +13,7 @@ interface TeamRef {
   logo: string | null;
   home_color: string | null;
   away_color: string | null;
+  third_color: string | null;
 }
 
 export interface GameWithTeams {
@@ -85,6 +86,7 @@ export interface TeamProfile {
   logo: string | null;
   home_color: string | null;
   away_color: string | null;
+  third_color: string | null;
   city: string | null;
   hall_address: string | null;
   contact: { phone?: string; email?: string } | null;
@@ -163,8 +165,8 @@ export const calcAverages = (rows: PlayerGameStat[]): SeasonAverages => {
 };
 
 const SELECT_GAME =
-  '*, home_team:teams!games_home_team_id_fkey(id, name, name_en, logo, home_color, away_color),' +
-  ' away_team:teams!games_away_team_id_fkey(id, name, name_en, logo, home_color, away_color)';
+  '*, home_team:teams!games_home_team_id_fkey(id, name, name_en, logo, home_color, away_color, third_color),' +
+  ' away_team:teams!games_away_team_id_fkey(id, name, name_en, logo, home_color, away_color, third_color)';
 
 const fetchActiveSeasonId = async (): Promise<string | null> => {
   const { data } = await supabase
@@ -285,7 +287,7 @@ export const usePlayer = (id: string | undefined, seasonOverride?: string | null
           .eq('season_id', seasonId)
           .maybeSingle();
         if (pts) {
-          const row = pts as { jersey_number: number | null; team: { id: string; name: string; name_en?: string | null; logo: string | null } | null };
+          const row = pts as unknown as { jersey_number: number | null; team: { id: string; name: string; name_en?: string | null; logo: string | null } | null };
           current_team = row.team;
           current_jersey = row.jersey_number;
         }
@@ -372,7 +374,7 @@ export const useTeamRoster = (teamId: string | undefined, seasonOverride?: strin
         .eq('season_id', seasonId);
       if (error) throw error;
 
-      const rows = (data ?? []) as Array<{
+      const rows = (data ?? []) as unknown as Array<{
         jersey_number: number | null;
         player: { id: string; first_name: string; last_name: string; first_name_en?: string | null; last_name_en?: string | null; photo: string | null; position: PlayerProfile['position'] } | null;
       }>;
@@ -529,7 +531,7 @@ export const useTeamLeaders = (teamId: string | undefined, seasonOverride?: stri
         assists: number | null;
         player: { id: string; first_name: string; last_name: string; first_name_en?: string | null; last_name_en?: string | null; photo: string | null } | null;
       };
-      const rows = (data ?? []) as Row[];
+      const rows = (data ?? []) as unknown as Row[];
 
       // Group by player_id
       const byPlayer = new Map<string, { sumP: number; sumR: number; sumA: number; games: number; player: Row['player'] }>();
@@ -1106,7 +1108,7 @@ export const useGameLineupPublic = (
       for (const r of (jerseysRes.data ?? []) as Array<{ player_id: string; jersey_number: number | null }>) {
         jerseyMap.set(r.player_id, r.jersey_number);
       }
-      const players: GameLineupPlayer[] = ((lineupRes.data ?? []) as Array<{
+      const players: GameLineupPlayer[] = ((lineupRes.data ?? []) as unknown as Array<{
         player_id: string;
         player: { id: string; first_name: string; last_name: string; first_name_en?: string | null; last_name_en?: string | null; photo: string | null } | null;
       }>)
